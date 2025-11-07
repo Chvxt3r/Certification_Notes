@@ -1077,3 +1077,77 @@ SSL-Session:
 read R BLOCK
 * OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE LITERAL+ AUTH=PLAIN] HTB-Academy IMAP4 v.0.21.4
 ```
+### SNMP
+> `Simple Network Management Protocol` (SNMP)   
+|Port|Usage|
+|----|-----|
+|`161`|Control Commands|
+|`162`|Traps|
+- MIB's (`Management Information Base`) are used to store device information. These are usually provided by the manufacturere and are a heirarchy of where to find information using `OID`'s(`OBject Identifier`)
+- OID's represents a node in a namespace. OIB's and MIB's can be looked up in the [Object Identifier Registry](https://www.alvestrand.no/objectid/)
+- Community Strings are basically passwords that determine whether requested info can be viewed or not. 
+#### Default Configuration
+- SNMP Daemon
+```bash
+cat /etc/snmp/snmpd.conf | grep -v "#" | sed -r '/^\s*$/d'
+
+sysLocation    Sitting on the Dock of the Bay
+sysContact     Me <me@example.org>
+sysServices    72
+master  agentx
+agentaddress  127.0.0.1,[::1]
+view   systemonly  included   .1.3.6.1.2.1.1
+view   systemonly  included   .1.3.6.1.2.1.25.1
+rocommunity  public default -V systemonly
+rocommunity6 public default -V systemonly
+rouser authPrivUser authpriv -V systemonly
+```
+#### Dangerous Settings
+|Setting|Description|
+|-------|-----------|
+|`rwuser noauth`|Provides access to the full OID tree without authentication.|
+|`rwcommunity <community string> <IPv4 address>`|Provides access to the full OID tree regardless of where the requests were sent from.|
+|`rwcommunity6 <community string> <IPv6 address>`|Same access as with `rwcommunity` with the difference of using IPv6.|
+#### Footprinting
+- SNMPwalk
+> Relies on knowing the community string.   
+```bash
+snmpwalk -v2c -c public 10.129.14.128
+
+iso.3.6.1.2.1.1.1.0 = STRING: "Linux htb 5.11.0-34-generic #36~20.04.1-Ubuntu SMP Fri Aug 27 08:06:32 UTC 2021 x86_64"
+iso.3.6.1.2.1.1.2.0 = OID: iso.3.6.1.4.1.8072.3.2.10
+iso.3.6.1.2.1.1.3.0 = Timeticks: (5134) 0:00:51.34
+iso.3.6.1.2.1.1.4.0 = STRING: "mrb3n@inlanefreight.htb"
+iso.3.6.1.2.1.1.5.0 = STRING: "htb"
+iso.3.6.1.2.1.1.6.0 = STRING: "Sitting on the Dock of the Bay"
+iso.3.6.1.2.1.1.7.0 = INTEGER: 72
+iso.3.6.1.2.1.1.8.0 = Timeticks: (0) 0:00:00.00
+iso.3.6.1.2.1.1.9.1.2.1 = OID: iso.3.6.1.6.3.10.3.1.1
+iso.3.6.1.2.1.1.9.1.2.2 = OID: iso.3.6.1.6.3.11.3.1.1
+iso.3.6.1.2.1.1.9.1.2.3 = OID: iso.3.6.1.6.3.15.2.1.1
+iso.3.6.1.2.1.1.9.1.2.4 = OID: iso.3.6.1.6.3.1
+iso.3.6.1.2.1.1.9.1.2.5 = OID: iso.3.6.1.6.3.16.2.2.1
+iso.3.6.1.2.1.1.9.1.2.6 = OID: iso.3.6.1.2.1.49
+[...SNIP...]
+```
+- OneSixtyOne (Community String Discovery/Brute Force)
+```bash
+onesixtyone -c /opt/useful/seclists/Discovery/SNMP/snmp.txt 10.129.14.128
+
+Scanning 1 hosts, 3220 communities
+10.129.14.128 [public] Linux htb 5.11.0-37-generic #41~20.04.2-Ubuntu SMP Fri Sep 24 09:06:38 UTC 2021 x86_64
+```
+> Of note, community strings can be anything. In a large environment, this is almost guaranteed to follow some kind of pattern. We can use a tool like `Crunch` to build a custom wordlists. Also, try hostnames.   
+- Braa (Brute Force OID's)
+```bash
+braa <community string>@<IP>:.1.3.6.* # Syntax
+braa public@10.129.14.128:.1.3.6.*
+10.129.14.128:20ms:.1.3.6.1.2.1.1.1.0:Linux htb 5.11.0-34-generic #36~20.04.1-Ubuntu SMP Fri Aug 27 08:06:32 UTC 2021 x86_64
+10.129.14.128:20ms:.1.3.6.1.2.1.1.2.0:.1.3.6.1.4.1.8072.3.2.10
+10.129.14.128:20ms:.1.3.6.1.2.1.1.3.0:548
+10.129.14.128:20ms:.1.3.6.1.2.1.1.4.0:mrb3n@inlanefreight.htb
+10.129.14.128:20ms:.1.3.6.1.2.1.1.5.0:htb
+10.129.14.128:20ms:.1.3.6.1.2.1.1.6.0:US
+10.129.14.128:20ms:.1.3.6.1.2.1.1.7.0:78
+[...SNIP...]
+```
