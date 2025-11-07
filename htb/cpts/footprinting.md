@@ -1194,6 +1194,8 @@ symbolic-links=0
 |`secure_file_priv`|This variable is used to limit the effect of data import and export operations.|
 ### Footprinting
 #### Nmap
+> Be careful trusting script results. Verify the results. For example, in the below scan, the root user has a static password set, but the script is showing root/no password as valid credentials.  
+
 ```bash
 sudo nmap 10.129.14.128 -sV -sC -p3306 --script mysql*
 
