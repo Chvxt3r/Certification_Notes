@@ -2,7 +2,7 @@
 
 ## Notes for Various Certifications
 
-###PJPT/PNPT
+### PJPT/PNPT
 - PEH 200
 
 ### CPTS
