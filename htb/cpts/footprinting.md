@@ -1,13 +1,13 @@
 # Footprinting
-## Intro
-### Methodology
-#### Enumeration Layers
+# Intro
+## Methodology
+### Enumeration Layers
 |Level|Layers|
 |-----|------|
 |`Infrastructure`|Internet Presence, Gateway|
 |`Host-Based`|Accessible Services, Processes|
 |`OS-Based`|Privileges, OS Setup|
-#### 6 Layers of Footprinting
+### 6 Layers of Footprinting
 |Layer|Description|Information Categories|
 |-----|-----------|----------------------|
 |`1. Internet Presence`|Identification of internet presence and externally accessible infrastructure.|Domains, Subdomains, vHosts, ASN, Netblocks, IP Addresses, Cloud Instances, Security Measures|
@@ -24,13 +24,13 @@
 * Priviliges: Identify and understand what and what is not possible with a given set of priviliges.
 * OS Setup: Understand how the admin's manage the environment and what useful/sensitive information we can get from them.
 
-## Infrastructure Based Enumeration
-### Domain Information
-#### Get an understanding of the company and it's services
+# Infrastructure Based Enumeration
+## Domain Information
+### Get an understanding of the company and it's services
 * What does the company do?
 * What technologies does the target company employ to accomplish it's mission?
 * 
-#### Online Presence
+### Online Presence
 > Online presense can include the website, DNS records, basically any available information regarding the target's infrastructure.  
 * Review the actual certificate in your browser.
 * [crt.sh](https://crt.sh/) - Review the `SSL Cert` for the domain.
@@ -54,32 +54,32 @@ for i in $(cat ip-addresses.txt);do shodan host $i;done
 ```bash
 dig any [domain]
 ```
-### Cloud Resources
-#### Google Dorks for cloud resources
+## Cloud Resources
+### Google Dorks for cloud resources
 * Google searchs of `inurl:` and `intext:`
 * Amazon - `intext:[search term] inurl:amazonaws.com`
 * Azure - `intext:[search term] inurl:blob.core.windows.net`
-#### Code Review
+### Code Review
 * Review the code of the website and any downloadable files for pointers to cloud storage
-#### [GrayHatWarfare](https://buckets.grayhatwarfare.com/)
+### [GrayHatWarfare](https://buckets.grayhatwarfare.com/)
 * useful for search AWS/Azure/Google buckets and their contents
 * make sure to search for credentials (SSH keys, admin portals, etc)
-### Staff
-#### LinkedIn
+## Staff
+### LinkedIn
 * Review job posting to learn about infrastructure
 * Review photo's for badge information and inadvertant information disclosure on screens, TV's, Signs, etc.
-#### Github
+### Github
 * If you can track down an employee or company github, review the code for emails, JWT tokens, SSH keys, etc.
-## Host Based Enumeration
-### FTP
+# Host Based Enumeration
+## FTP
 * Check for anonymous sessions
 * Active - Client initiates the connection on port 21 and then informs the sever which port to reply on.
 * Passive - Server advertises the port the client should connect on (Great for firewall evasion)
-#### TFTP
+### TFTP
 * Provides simple transfer of files
 * Does not provide any kind of client authentication
 * TFTP does not have a directory list function. 
-#### Default Configurations
+### Default Configurations
 * vsFTPd default settings file
 ```bash
 cat /etc/vsftpd.conf | grep -v "#"
@@ -88,7 +88,7 @@ cat /etc/vsftpd.conf | grep -v "#"
 ```bash
 cat /etc/ftpusers
 ```
-#### Dangerous Settings
+### Dangerous Settings
 * Check for these `optional` configuration settings  
 
 |Setting|Description|
@@ -100,7 +100,7 @@ cat /etc/ftpusers
 |`anon_root=/home/username/ftp`|Directory for anonymous.|
 |`write_enable=YES`|Allow the usage of FTP commands: STOR, DELE, RNFR, RNTO, MKD, RMD, APPE, and SITE?|
 
-#### FTP Commands
+### FTP Commands
 |Command|Description|
 |-------|-----------|
 |`status`|Shows some of the settings of the server|
@@ -112,7 +112,7 @@ cat /etc/ftpusers
 |`wget -m --no-passive ftp://anonymous:anonymous@[IP]`|Download all the files we have access to|
 |`put`|Upload a file|
 
-#### Nmap FTP Scripts
+### Nmap FTP Scripts
 ```bash
 find / -type f -name ftp* 2>/dev/null | grep scripts
 
@@ -125,7 +125,7 @@ find / -type f -name ftp* 2>/dev/null | grep scripts
 /usr/share/nmap/scripts/ftp-anon.nse
 /usr/share/nmap/scripts/ftp-brute.nse
 ```
-#### Service Interaction
+### Service Interaction
 ```bash
 # netcat
 nc -nv 10.129.14.136 21
@@ -158,9 +158,9 @@ Server certificate
 MIIENTCCAx2gAwIBAgIUD+SlFZAWzX5yLs2q3ZcfdsRQqMYwDQYJKoZIhvcNAQEL
 ...SNIP...
 ```
-### SMB
-#### Samba (SMB/CIFS for linux)
-##### Default Configuration
+## SMB
+### Samba (SMB/CIFS for linux)
+#### Default Configuration
 ```bash
 cat /etc/samba/smb.conf | grep -v "#\|\;" 
 
@@ -199,7 +199,7 @@ cat /etc/samba/smb.conf | grep -v "#\|\;"
    read only = yes
    guest ok = no
 ```
-##### Invidvidual Share Settings
+#### Invidvidual Share Settings
 |Settings|Description|
 |--------|-----------|
 |`[sharename]`|The name of the network share.|
@@ -214,7 +214,7 @@ cat /etc/samba/smb.conf | grep -v "#\|\;"
 |`read only = yes`|Allow users to read files only?|
 |`create mask = 0700`|What permissions need to be set for newly created files?|
 
-##### Dangerous Settings
+#### Dangerous Settings
 |Settings|Description|
 |--------|-----------|
 |`browseable = yes`|Allow listing available shares in the current share?|
@@ -227,7 +227,7 @@ cat /etc/samba/smb.conf | grep -v "#\|\;"
 |`logon script = script.sh`|What script needs to be executed on the user's login?|
 |`magic script = script.sh`|Which script should be executed when the script gets closed?|
 |`magic output = script.out`|Where the output of the magic script needs to be stored?|
-##### Sample Share (Add to /etc/samba/smb.conf
+#### Sample Share (Add to /etc/samba/smb.conf
 ```bash
 [notes]
     comment = CheckIT
@@ -246,7 +246,7 @@ cat /etc/samba/smb.conf | grep -v "#\|\;"
 ```bash
 sudo systemctl restart smbd
 ```
-### SMB Client
+## SMB Client
 * No Credentials, list all shares
 ```bash
 smbclient -N -L //[IP]
@@ -263,12 +263,12 @@ get [filename]
 ```bash
 smbstatus
 ```
-### Footprinting SMB
-#### Nmap
+## Footprinting SMB
+### Nmap
 ```bash
 sudo nmap [IP] -sVC -p139,445
 ```
-#### RPCclient
+### RPCclient
 ```bash
 rpclient -U '' [IP]
 ```
@@ -290,20 +290,20 @@ for i in $(seq 500 1100);do rpcclient -N -U "" 10.129.14.128 -c "queryuser 0x$(p
 ```bash
 impacket-samrdump [IP]
 ```
-#### SMBMap
+### SMBMap
 ```bash
 smbmap -H [IP]
 ```
-#### Netexec
+### Netexec
 ```bash
 nxc smb [IP] --shares -u '' -p''
 ```
-#### [Enum4Linux-ng](https://github.com/cddmp/enum4linux-ng)
+### [Enum4Linux-ng](https://github.com/cddmp/enum4linux-ng)
 ```bash
 ./enum4linux-ng [IP] -A
 ```
-### NFS
-#### Default configuration
+## NFS
+### Default configuration
 * Stored in /etc/exports
 ```bash
 cat /etc/exports 
@@ -318,7 +318,7 @@ cat /etc/exports
 # /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 ```
-#### Config Options
+### Config Options
 |Option|Description|
 |------|-----------|
 |`rw`|Read and write permissions.|
@@ -329,7 +329,7 @@ cat /etc/exports
 |`insecure`|Ports above 1024 will be used.|
 |`no_subtree_check`|This option disables the checking of subdirectory trees.|
 |`root_squash`|Assigns all permissions to files of root UID/GID 0 to the UID/GID of anonymous, which prevents root from accessing files on an NFS mount.|
-#### Sample Config Creation
+### Sample Config Creation
 ```bash
 root@nfs:~# echo '/mnt/nfs  10.129.14.0/24(sync,no_subtree_check)' >> /etc/exports
 root@nfs:~# systemctl restart nfs-kernel-server 
@@ -337,27 +337,27 @@ root@nfs:~# exportfs
 
 /mnt/nfs        10.129.14.0/24
 ```
-#### Dangerous Settings
+### Dangerous Settings
 |Option|Description|
 |------|-----------|
 |`rw`|Read and write permissions.|
 |`insecure`|Ports above 1024 will be used.|
 |`nohide`|If another file system was mounted below an exported directory, this directory is exported by its own exports entry.|
 |`no_root_squash`|All files created by root are kept with the UID/GID 0.|
-### Footprinting NFS
-#### Simple nmap scan
+## Footprinting NFS
+### Simple nmap scan
 ```bash
 sudo nmap -sCV [IP] -p111,2049
 ```
-#### nmap script scan
+### nmap script scan
 ```bash
 sudo nmap --script nfs* [IP] -sV -p111,2049
 ```
-#### Show available shares
+### Show available shares
 ```bash
 showmount -e [IP]
 ```
-#### Mount NFS Share
+### Mount NFS Share
 ```bash
 # Make a local folder to map the share to.
 mkdir target-NFS
@@ -368,21 +368,21 @@ cd target-NFS
 # List everything
 tree .
 ```
-#### List contents with Username & Group names
+### List contents with Username & Group names
 ```bash
 ls -l mnt/nfs/
 ```
-#### List Contents with UIDs & GUIDs
+### List Contents with UIDs & GUIDs
 ```bash
 ls -n mnt/nfs/
 ```
-#### Unmounting the share
+### Unmounting the share
 ```bash
 cd ..
 sudo umount ./target-NFS
 ```
-### DNS
-#### Default Configuration
+## DNS
+### Default Configuration
 * 3 Different configuration files
   1. `named.conf.local`
   2. `named.conf.options`
@@ -461,7 +461,7 @@ $TTL 86400
 7    IN     MX     mx.domain.com.
 ...SNIP...
 ```
-#### Dangerous Settings
+### Dangerous Settings
 |Option|Description|
 |------|-----------|
 |`allow-query`|Defines which hosts are allowed to send requests to the DNS server.|
@@ -469,7 +469,7 @@ $TTL 86400
 |`allow-transfer`|Defines which hosts are allowed to receive zone transfers from the DNS server.|
 |`zone-statistics`|Collects statistical data of zones.|
 
-#### Footprinting DNS
+### Footprinting DNS
 * Dig - NS Query
 ```bash
 dig ns inlanefreight.htb @10.129.14.128
@@ -595,7 +595,7 @@ internal.inlanefreight.htb. 604800 IN   SOA     inlanefreight.htb. root.inlanefr
 ;; WHEN: So Sep 19 18:53:11 CEST 2021
 ;; XFR size: 15 records (messages 1, bytes 664)
 ```
-#### Subdomain Brute Forcing
+### Subdomain Brute Forcing
 * Bash Script
 ```bash
 for sub in $(cat /opt/useful/seclists/Discovery/DNS/subdomains-top1million-110000.txt);do dig $sub.inlanefreight.htb @10.129.14.128 | grep -v ';\|SOA' | sed -r '/^\s*$/d' | grep $sub | tee -a subdomains.txt;done
@@ -608,8 +608,8 @@ dnsenum --dnsserver 10.129.14.128 --enum -p 0 -s 0 -o subdomains.txt -f /opt/use
 ```bash
 ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://<Domain or IP> -H "Host:FUZZ.<Domain or IP" -ac
 ```
-### SMTP (Simple Mail Transfer Protocol)
-#### Summary
+## SMTP (Simple Mail Transfer Protocol)
+### Summary
 * Mail Flow
 Client(MUA) -> Submission Agent(MSA) -> Relay(MTA) -> Delivery Agent(MDA) -> Mailbox(POP3/IMAP/ActiveSync/etc)
 * Useful Ports
@@ -618,7 +618,7 @@ Client(MUA) -> Submission Agent(MSA) -> Relay(MTA) -> Delivery Agent(MDA) -> Mai
 |`25`|SMTP(Uncencrypted) - Open Relay and no user authentication supported|
 |'465`|Legacy Secure SMTP|
 |`587`|SMTP Submission Default (Supports StartTLS|
-#### Default Configuration
+### Default Configuration
 ```bash
 cat /etc/postfix/main.cf | grep -v "#" | sed -r "/^\s*$/d"
 
@@ -642,7 +642,7 @@ inet_protocols = ipv4
 smtpd_helo_restrictions = reject_invalid_hostname
 home_mailbox = /home/postfix
 ```
-#### SMTP Commands
+### SMTP Commands
 |Command|Description|
 |-------|-----------|
 |`AUTH PLAIN`|AUTH is a service extension used to authenticate the client.|
@@ -655,7 +655,7 @@ home_mailbox = /home/postfix
 |`EXPN`|The client also checks if a mailbox is available for messaging with this command.|
 |`NOOP`|The client requests a response from the server to prevent disconnection due to time-out.|
 |`QUIT`|The client terminates the session.|
-#### Using Telnet to interact with SMTP
+### Using Telnet to interact with SMTP
 ```bash
 telnet 10.129.14.128 25
 
@@ -765,13 +765,13 @@ QUIT
 221 2.0.0 Bye
 Connection closed by foreign host.
 ```
-#### Dangerous Settings
+### Dangerous Settings
 * Open Relay Configuration
 > This configuration will allow anyone to relay emails through the server. Useful for relaying spam.  
 ```bash
 mynetworks = 0.0.0.0/0
 ```
-#### Footprinting SMTP
+### Footprinting SMTP
 * Nmap
 > default nmap scripts contain `smtp-commands`, which uses `EHLO` to enumerate commands that can be executed on the server.  
 ```bash
@@ -841,8 +841,8 @@ Read data files from: /usr/bin/../share/nmap
 Nmap done: 1 IP address (1 host up) scanned in 0.48 seconds
            Raw packets sent: 2 (72B) | Rcvd: 2 (72B)
 ```
-### IMAP/POP3
-#### Default Configuration
+## IMAP/POP3
+### Default Configuration
 - IMAP Commands  
 
 |Command|Description|
@@ -872,7 +872,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.48 seconds
 |`CAPA`|Requests the server to display the server capabilities.|
 |`RSET`|Requests the server to reset the transmitted information.|
 |`QUIT`|Closes the connection with the POP3 server.|
-#### Dangerous Settings
+### Dangerous Settings
 |Settings|Description|
 |--------|-----------|
 |`auth_debug`|Enables all authentication debug logging.|
@@ -880,7 +880,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.48 seconds
 |`auth_verbose`|Logs unsuccessful authentication attempts and their reasons.|
 |`auth_verbose_passwords`|Passwords used for authentication are logged and can also be truncated.|
 |`auth_anonymous_username`|This specifies the username to be used when logging in with the ANONYMOUS SASL mechanism.|
-#### Footprinting IMAP/POP3
+### Footprinting IMAP/POP3
 |Protocol|Port|
 |--------|----|
 |SMTP|`143`,`993`|
@@ -1077,7 +1077,7 @@ SSL-Session:
 read R BLOCK
 * OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE LITERAL+ AUTH=PLAIN] HTB-Academy IMAP4 v.0.21.4
 ```
-### SNMP
+## SNMP
 > `Simple Network Management Protocol` (SNMP)   
 
 |Port|Usage|
@@ -1087,7 +1087,7 @@ read R BLOCK
 - MIB's (`Management Information Base`) are used to store device information. These are usually provided by the manufacturere and are a heirarchy of where to find information using `OID`'s(`OBject Identifier`)
 - OID's represents a node in a namespace. OIB's and MIB's can be looked up in the [Object Identifier Registry](https://www.alvestrand.no/objectid/)
 - Community Strings are basically passwords that determine whether requested info can be viewed or not. 
-#### Default Configuration
+### Default Configuration
 - SNMP Daemon
 ```bash
 cat /etc/snmp/snmpd.conf | grep -v "#" | sed -r '/^\s*$/d'
@@ -1103,13 +1103,13 @@ rocommunity  public default -V systemonly
 rocommunity6 public default -V systemonly
 rouser authPrivUser authpriv -V systemonly
 ```
-#### Dangerous Settings
+### Dangerous Settings
 |Setting|Description|
 |-------|-----------|
 |`rwuser noauth`|Provides access to the full OID tree without authentication.|
 |`rwcommunity <community string> <IPv4 address>`|Provides access to the full OID tree regardless of where the requests were sent from.|
 |`rwcommunity6 <community string> <IPv6 address>`|Same access as with `rwcommunity` with the difference of using IPv6.|
-#### Footprinting
+### Footprinting
 - SNMPwalk
 > Relies on knowing the community string.   
 ```bash
