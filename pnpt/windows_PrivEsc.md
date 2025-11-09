@@ -375,7 +375,7 @@ Description:
 This CVE exploit tend to abuse the UAC windows Certificate Dialog to execute the certificate issuer link as an NT Authority User and open a browser that is under NT Authority User. Then we can use that to prompt a shell as a NT Authority User.
 
 Steps:
-```shell
+```
 1) find a program that can trigger the UAC prompt screen
 
 2) select "Show more details"
