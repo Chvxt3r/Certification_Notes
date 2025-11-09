@@ -367,7 +367,31 @@ Check for unquoted services in the services section
 - Drop an executable with the same name as a folder that has a space in it. See example above.
 
 ## CVE-2019-1388
+### CVE-2019-1388 Abuse UAC Windows Certificate Dialog
+Description:
 
+Description:
+
+This CVE exploit tend to abuse the UAC windows Certificate Dialog to execute the certificate issuer link as an NT Authority User and open a browser that is under NT Authority User. Then we can use that to prompt a shell as a NT Authority User.
+
+Steps:
+```shell
+1) find a program that can trigger the UAC prompt screen
+
+2) select "Show more details"
+
+3) select "Show information about the publisher's certificate"
+
+4) click on the "Issued by" URL link it will prompt a browser interface.
+
+5) wait for the site to be fully loaded & select "save as" to prompt a explorer window for "save as".
+
+6) on the explorer window address path, enter the cmd.exe full path:
+C:\WINDOWS\system32\cmd.exe
+
+7) now you'll have an escalated privileges command prompt. 
+```
+Video PoC: https://www.youtube.com/watch?v=RW5l6dQ8H-8
 
 # Todo
-- Find out if winPEAS detects the same as PowerUP
+
