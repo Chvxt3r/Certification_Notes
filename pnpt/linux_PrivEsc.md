@@ -103,6 +103,11 @@ Basically the same as linpeas
 ## LinuxPrivChecker.py
 
 # Escalation Path: Kernel Exploits
+Basically google search for the version of your distribution (uname -a) and possibly download and compile the exploit. Normally we are looking for `Privilege Escalation` or `RCE`.     
+```
+# Automated
+./linux-exploit-suggester.py
+```
 
 # Escalation Path: Passwords & File Permissions
 
