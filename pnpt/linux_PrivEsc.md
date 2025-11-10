@@ -126,5 +126,5 @@ Basically google search for the version of your distribution (uname -a) and poss
 # Escalation Path: Docker
 
 # todo
-- Everything
-- and then some
+- Continue on Escalation Path: Passwords & File Permissions
+- Get links for linpeas, linenum, linux-exploit-suggester
