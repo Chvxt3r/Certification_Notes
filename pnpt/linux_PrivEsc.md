@@ -85,6 +85,22 @@ find / -name authorized_keys 2> /dev/null
 ```
 
 # Exploring Automated Tools
+## LinPEAS
+```
+./linpeas.sh
+
+# Look for the red and yellow
+```
+
+## LinEnum
+Basically the same as linpeas
+
+## Linux-Exploit-Suggester
+```
+./linux-exploit_suggester.sh
+
+```
+## LinuxPrivChecker.py
 
 # Escalation Path: Kernel Exploits
 
