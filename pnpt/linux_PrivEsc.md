@@ -103,13 +103,47 @@ Basically the same as linpeas
 ## LinuxPrivChecker.py
 
 # Escalation Path: Kernel Exploits
-Basically google search for the version of your distribution (uname -a) and possibly download and compile the exploit. Normally we are looking for `Privilege Escalation` or `RCE`.     
+Basically google search for the version of your distribution (uname -a) and download and possibly compile the exploit. Normally we are looking for `Privilege Escalation` or `RCE`.     
 ```
 # Automated
 ./linux-exploit-suggester.py
 ```
 
 # Escalation Path: Passwords & File Permissions
+## Stored Passwords
+> Look at [PayloadAllTheThings](https://swisskyrepo.github.io/InternalAllTheThings/redteam/escalation/linux-privilege-escalation/#files-containing-passwords)  
+
+- Bash/zsh History
+```
+# history command
+history
+
+# Cat the history
+cat .bash_history
+```
+- Searching the local directory
+```
+find . -type f -exec grep -i -I "PASSWORD" {} /dev/null \;
+```
+- Old passwords in /etc/security/opasswd
+```
+cat /etc/security/opasswd
+```
+## Weak File Permissions
+Do we have access to a file we shouldn't be able to access as a normal user?
+- Check file permissions /etc/passwd and /etc/shadow
+```
+# Check permissions on /etc/passwd /etc/shadow
+ls -la /etc/passwd
+ls -la /etc/passwd
+
+# Using unshadow to combine passwd and shadow
+unshadow passwd shadow
+# After combining the two files, we can delete users who don't have a hash, save that to another file, and run it through hashcat.
+```
+  If `/etc/passwd` or `/etc/shadow` are modifiable, we can escalate by changing the password or changing group membership
+
+## SSH Keys
 
 # Escalation Path: Sudo
 
