@@ -1365,3 +1365,61 @@ msdb
 Transactions
 
 ```
+## Oracle TNS
+The `Oracle Transparent Network Substrate (TNS)` server is a communication protocol that facilitates communication between Oracle databases and applications over networks
+### Default Configuration
+- Listens on port 1521
+- Supports `TCP/IP, IPX/SPX, UDP, and AppleTalk`
+- Remote management available in `Oracle 8i/9i` but not in Oracle 10g/11g.
+- Lisstener will only accept connections from authorized hosts
+- Performs basic auth based on hostnames, IP's, usernames, and passwords
+- Config files: `tnsnames.ora` & `listener.ora` and are located in `$ORACLE_HOME/network/admin`
+- Default passwords:
+  * Oracle 9 - `CHANGE_ON_INSTALL`
+  * DBSNMP - `sbsnmp`
+- Each DB or Service has a unique name in `tnsnames.ora`
+- Clients use `tnsnames.ora` to resolve network addresses, `listener.ora` runs on the server side to tell the server name what to listen to.
+**Tnsnames.ora**
+```
+ORCL =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 10.129.11.102)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = orcl)
+    )
+  )
+```
+**Listener.ora**
+```
+SID_LIST_LISTENER =
+  (SID_LIST =
+    (SID_DESC =
+      (SID_NAME = PDB1)
+      (ORACLE_HOME = C:\oracle\product\19.0.0\dbhome_1)
+      (GLOBAL_DBNAME = PDB1)
+      (SID_DIRECTORY_LIST =
+        (SID_DIRECTORY =
+          (DIRECTORY_TYPE = TNS_ADMIN)
+          (DIRECTORY = C:\oracle\product\19.0.0\dbhome_1\network\admin)
+        )
+      )
+    )
+  )
+
+LISTENER =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = orcl.inlanefreight.htb)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+    )
+  )
+
+ADR_BASE_LISTENER = C:\oracle
+```
+- `PlsqlExclusionList` is a user created blacklist of packages or types that should be excluded from execution
+  * located in `$ORACLE_HOME/sqldeveloper`
+  * Cannot be accessed through the Oracle Application Server
+- [ ] Continue at `settings` table
