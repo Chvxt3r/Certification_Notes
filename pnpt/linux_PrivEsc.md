@@ -271,7 +271,6 @@ Exploit's vary. Refer to GTFOBins
 # Escalation Path: Docker
 
 # todo
-- [ ] Continue on Escalation Path: Passwords & File Permissions
+- [ ] Continue on Escalation Path: Other SUID Escalation/Escalation via Shared Object
 - [ ] Get links for linpeas, linenum, linux-exploit-suggester
 - [ ] Add a table at the top of all the tools used.
-- [ ] Test
