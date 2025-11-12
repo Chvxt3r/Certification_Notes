@@ -181,7 +181,7 @@ Using the intended functionality of an application to be able to exploit a syste
 
 ## Escalation via LD_Preload
 Basically, preloading a malicious library to run as sudo
-- Enumeration
+- Enumeration  
     We're Looking for `env_keep+=LD_PRELOAD`
 ```
 sudo -l
