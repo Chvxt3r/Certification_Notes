@@ -253,10 +253,8 @@ See [GTFOBins](https://gtfobins.github.io/) for a more exhaustive list of exploi
 ls -la /usr/bin/sudo
 -rwsr-xr-x 1 root root 306456 Aug 17 03:41 /usr/bin/sudo
 ```
-
-    Finding all executables with the suid bit set  
-
 ```
+# Finding all executables with the suid bit set
 find / -perm -u=s -type f 2>/dev/null
 ```
 
