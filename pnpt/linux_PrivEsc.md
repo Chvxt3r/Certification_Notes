@@ -246,6 +246,17 @@ $ perl -e 'print(("A" x 100 . "\x{00}") x 50)' | sudo -S id
 Password: Segmentation fault
 ```
 # Escalation Path: SUID
+See [GTFOBins](https://gtfobins.github.io/) for a more exhaustive list of exploits
+- Enumeration  
+    We're looking for executables that have the `suid` bit set. Basically an `s` in the 4th column of permissions
+```
+ls -la /usr/bin/sudo
+-rwsr-xr-x 1 root root 306456 Aug 17 03:41 /usr/bin/sudo
+```
+    Finding all executables with the suid bit set
+```
+find / -perm -u=s -type f 2>/dev/null
+```
 
 # Escalation Path: Other SUID Escalation
 
