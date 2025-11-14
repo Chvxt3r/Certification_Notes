@@ -1580,10 +1580,9 @@ msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > run
 [*] Scanned 1 of 1 hosts (100% complete)
 [*] Auxiliary module execution completed
 ```
-# Remote Managment Protocols
-## Linux
-### SSH
-#### 6 Authentication Methods
+# Linux Remote Managment Protocols
+## SSH
+### 6 Authentication Methods
 1. Password
 2. Public-key
 3. Host-based
@@ -1591,7 +1590,7 @@ msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > run
 5. Challenge-response
 6. GSSAPI
 
-#### Public Key Authentication
+### Public Key Authentication
 SSH server and client authenticate to each other. The server sends it's `public host key` to the client, which the client uses to verify the servers identity. The `host key` cannot be imitated because it is a unique public-private key pair.  
 After server authentication, however, the client must also prove to the server that it has access authorization. However, the SSH server is already in possession of the encrypted hash value of the password set for the desired user.
 An alternative option is the use of public key and private key pair.
@@ -1610,7 +1609,7 @@ PrintMotd no
 AcceptEnv LANG LC_*
 Subsystem       sftp    /usr/lib/openssh/sftp-server
 ```
-#### Dangerous Settings  
+### Dangerous Settings  
 |Setting|Description|
 |-------|-----------|
 |`PasswordAuthentication yes`|Allows password-based authentication.|
@@ -1621,7 +1620,7 @@ Subsystem       sftp    /usr/lib/openssh/sftp-server
 |`AllowTcpForwarding yes`|Allows forwarding of TCP ports.|
 |`PermitTunnel`|Allows tunneling.|
 |`DebianBanner yes`|Displays a specific banner when logging in.
-#### Footprinting  
+### Footprinting  
 - **SSH Audit**
 ```
 git clone https://github.com/jtesta/ssh-audit.git && cd ssh-audit
@@ -1681,7 +1680,7 @@ debug1: Next authentication method: password
 
 cry0l1t3@10.129.14.132's password:
 ```
-### RSYNC
+## RSYNC
 Check out [this guide](https://book.hacktricks.xyz/network-services-pentesting/873-pentesting-rsync) for details on exploiting rsync
 
 RSYNC uses port 873 and is capable of piggy-backing on SSH.
@@ -1707,7 +1706,7 @@ rsync -av --list-only rsync://127.0.0.1/dev
 # Sync all files from the server
 rsync -av rsync://127.0.0.1/dev
 ```
-### R-Services
+## R-Services
 Suite of services to enable remote access or issue commands between Unix hosts. r-services transmit data unencrypted(plain text) so they are easily intercepted. Rservices are not commonly used now due to their security flaws.
 They use ports `512`,`513`, and `514` and are only accessible through `r-commands`
 Most commonly used by commersion OS's including `Solaris`, `HP-UX`, and `AIX`
@@ -1768,4 +1767,96 @@ rusers -al 10.0.17.5
 
 htb-student     10.0.17.5:console          Dec 2 19:57     2:25
 ```
+# Windows Remote Management Protocols
+## RDP
+Utilizes port 3389. Uses `TLS/SSL` since Windows Vista. Many systems do not require `SSL/TLS`. It is installed by default on Windows Servers, but by default only allows connections using `NLA`
+### Footprinting
+- **Scanning with nmap**
+```
+nmap -sV -sC 10.129.201.248 -p3389 --script rdp*
+```
+- **Using `--packet-trace`**
+```
+nmap -sV -sC 10.129.201.248 -p3389 --packet-trace --disable-arp-ping -n
 
+Starting Nmap 7.92 ( https://nmap.org ) at 2021-11-06 16:23 CET
+SENT (0.2506s) ICMP [10.10.14.20 > 10.129.201.248 Echo request (type=8/code=0) id=8338 seq=0] IP [ttl=53 id=5122 iplen=28 ]
+SENT (0.2507s) TCP 10.10.14.20:55516 > 10.129.201.248:443 S ttl=42 id=24195 iplen=44  seq=1926233369 win=1024 <mss 1460>
+SENT (0.2507s) TCP 10.10.14.20:55516 > 10.129.201.248:80 A ttl=55 id=50395 iplen=40  seq=0 win=1024
+SENT (0.2517s) ICMP [10.10.14.20 > 10.129.201.248 Timestamp request (type=13/code=0) id=8247 seq=0 orig=0 recv=0 trans=0] IP [ttl=38 id=62695 iplen=40 ]
+RCVD (0.2814s) ICMP [10.129.201.248 > 10.10.14.20 Echo reply (type=0/code=0) id=8338 seq=0] IP [ttl=127 id=38158 iplen=28 ]
+SENT (0.3264s) TCP 10.10.14.20:55772 > 10.129.201.248:3389 S ttl=56 id=274 iplen=44  seq=2635590698 win=1024 <mss 1460>
+RCVD (0.3565s) TCP 10.129.201.248:3389 > 10.10.14.20:55772 SA ttl=127 id=38162 iplen=44  seq=3526777417 win=64000 <mss 1357>
+NSOCK INFO [0.4500s] nsock_iod_new2(): nsock_iod_new (IOD #1)
+NSOCK INFO [0.4500s] nsock_connect_tcp(): TCP connection requested to 10.129.201.248:3389 (IOD #1) EID 8
+NSOCK INFO [0.4820s] nsock_trace_handler_callback(): Callback: CONNECT SUCCESS for EID 8 [10.129.201.248:3389]
+Service scan sending probe NULL to 10.129.201.248:3389 (tcp)
+NSOCK INFO [0.4830s] nsock_read(): Read request from IOD #1 [10.129.201.248:3389] (timeout: 6000ms) EID 18
+NSOCK INFO [6.4880s] nsock_trace_handler_callback(): Callback: READ TIMEOUT for EID 18 [10.129.201.248:3389]
+Service scan sending probe TerminalServerCookie to 10.129.201.248:3389 (tcp)
+NSOCK INFO [6.4880s] nsock_write(): Write request for 42 bytes to IOD #1 EID 27 [10.129.201.248:3389]
+NSOCK INFO [6.4880s] nsock_read(): Read request from IOD #1 [10.129.201.248:3389] (timeout: 5000ms) EID 34
+NSOCK INFO [6.4880s] nsock_trace_handler_callback(): Callback: WRITE SUCCESS for EID 27 [10.129.201.248:3389]
+NSOCK INFO [6.5240s] nsock_trace_handler_callback(): Callback: READ SUCCESS for EID 34 [10.129.201.248:3389] (19 bytes): .........4.........
+Service scan match (Probe TerminalServerCookie matched with TerminalServerCookie line 13640): 10.129.201.248:3389 is ms-wbt-server.  Version: |Microsoft Terminal Services|||
+
+...SNIP...
+
+NSOCK INFO [6.5610s] nsock_write(): Write request for 54 bytes to IOD #1 EID 27 [10.129.201.248:3389]
+NSE: TCP 10.10.14.20:36630 > 10.129.201.248:3389 | 00000000: 03 00 00 2a 25 e0 00 00 00 00 00 43 6f 6f 6b 69    *%      Cooki
+00000010: 65 3a 20 6d 73 74 73 68 61 73 68 3d 6e 6d 61 70 e: `mstshash=nmap`
+00000020: 0d 0a 01 00 08 00 0b 00 00 00  
+
+...SNIP...
+
+NSOCK INFO [6.6820s] nsock_write(): Write request for 57 bytes to IOD #2 EID 67 [10.129.201.248:3389]
+NSOCK INFO [6.6820s] nsock_trace_handler_callback(): Callback: WRITE SUCCESS for EID 67 [10.129.201.248:3389]
+NSE: TCP 10.10.14.20:36630 > 10.129.201.248:3389 | SEND
+NSOCK INFO [6.6820s] nsock_read(): Read request from IOD #2 [10.129.201.248:3389] (timeout: 5000ms) EID 74
+NSOCK INFO [6.7180s] nsock_trace_handler_callback(): Callback: READ SUCCESS for EID 74 [10.129.201.248:3389] (211 bytes)
+NSE: TCP 10.10.14.20:36630 < 10.129.201.248:3389 | 
+00000000: 30 81 d0 a0 03 02 01 06 a1 81 c8 30 81 c5 30 81 0          0  0
+00000010: c2 a0 81 bf 04 81 bc 4e 54 4c 4d 53 53 50 00 02        NTLMSSP
+00000020: 00 00 00 14 00 14 00 38 00 00 00 35 82 8a e2 b9        8   5
+00000030: 73 b0 b3 91 9f 1b 0d 00 00 00 00 00 00 00 00 70 s              p
+00000040: 00 70 00 4c 00 00 00 0a 00 63 45 00 00 00 0f 49  p L     cE    I
+00000050: 00 4c 00 46 00 2d 00 53 00 51 00 4c 00 2d 00 30  L F - S Q L - 0
+00000060: 00 31 00 02 00 14 00 49 00 4c 00 46 00 2d 00 53  1     I L F - S
+00000070: 00 51 00 4c 00 2d 00 30 00 31 00 01 00 14 00 49  Q L - 0 1     I
+00000080: 00 4c 00 46 00 2d 00 53 00 51 00 4c 00 2d 00 30  L F - S Q L - 0
+00000090: 00 31 00 04 00 14 00 49 00 4c 00 46 00 2d 00 53  1     I L F - S
+000000a0: 00 51 00 4c 00 2d 00 30 00 31 00 03 00 14 00 49  Q L - 0 1     I
+000000b0: 00 4c 00 46 00 2d 00 53 00 51 00 4c 00 2d 00 30  L F - S Q L - 0
+000000c0: 00 31 00 07 00 08 00 1d b3 e8 f2 19 d3 d7 01 00  1
+000000d0: 00 00 00
+
+...SNIP...
+```
+> In this example, we can see that the `RDP cookies`(`mstshash=nmap`) that is used by Nmap to interact with the server can be identified. This can trigger alerts to threat hunters and EDR software.   
+
+### Interacting via RDP
+Most commonly used methods for interaction are `xfreerdp`,`rdesktop`, or `Remmina`
+```
+xfreerdp /u:[user] /p:[pass] /v:[IP/Hostname]
+```
+## WinRM (Windows Remote Management)
+Uses `TCP 5985 & 5986` and  `SOAP` to establish connections and must be explicitly enabled and configured starting with `Win10` and is enabled by default staring with `Windows Server 2012`
+`WinRS`(Windows Remote Shell) allows command line execution on remote systems.
+### Footprinting
+- **with nmap**
+```
+nmap -sV -sC 10.129.201.248 -p5985,5986 --disable-arp-ping -n
+```
+- **Testing for remote shell with `evil-winrm`**
+```
+evil-winrm -i [IP/Hostname] -u [user] -p [password]
+```
+## WMI - Windows Management Instrumentation
+MS's implementation and extension of the Common Information Model. Allows read/write access to almost all windows settings.
+### Footprinting
+- **with WMIexec.py**
+```
+impacket-wmiexec [User]:[password]@[IP/Hostname] [command]
+```
+# Todo
+- [ ] Done
