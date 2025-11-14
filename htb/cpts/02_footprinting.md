@@ -1681,4 +1681,91 @@ debug1: Next authentication method: password
 
 cry0l1t3@10.129.14.132's password:
 ```
+### RSYNC
+Check out [this guide](https://book.hacktricks.xyz/network-services-pentesting/873-pentesting-rsync) for details on exploiting rsync
+
+RSYNC uses port 873 and is capable of piggy-backing on SSH.
+
+- **Scanning for shares**
+```
+# Enumeration with nmap
+sudo nmap -sV -p 873 127.0.0.1
+
+# Probing for shares
+nc -nv 127.0.0.1 873
+
+(UNKNOWN) [127.0.0.1] 873 (rsync) open
+@RSYNCD: 31.0
+@RSYNCD: 31.0
+#list
+dev             Dev Tools
+@RSYNCD: EXIT
+
+# Share Enumeration
+rsync -av --list-only rsync://127.0.0.1/dev
+
+# Sync all files from the server
+rsync -av rsync://127.0.0.1/dev
+```
+### R-Services
+Suite of services to enable remote access or issue commands between Unix hosts. r-services transmit data unencrypted(plain text) so they are easily intercepted. Rservices are not commonly used now due to their security flaws.
+They use ports `512`,`513`, and `514` and are only accessible through `r-commands`
+Most commonly used by commersion OS's including `Solaris`, `HP-UX`, and `AIX`
+- **List of R-Commands **  
+    - rcp (`remote copy`)
+    - rexec (`remote execution`)
+    - rlogin ('remote login`)
+    - rsh ('remote shell`)
+    - rstat
+    - ruptime
+    - rwho (`remote show`)
+- **Most abused commands**  
+|Command|Daemon|Port|Protocol|Description|
+|-------|------|----|--------|-----------|
+|`rcp`|`rshd`|514|TCP|Copy a file or directory bidirectionally from the local system to the remote system (or vice versa) or from one remote system to another. It works like the `cp` command on Linux but `provides no warning to the user for overwriting existing files on a system`.|
+|`rsh`|`rshd`|514|TCP|Opens a shell on a remote machine without a login procedure. Relies upon the trusted entries in the `/etc/hosts.equiv` and `.rhosts` files for validation.|
+|`rexec`|`rexecd`|512|TCP|Enables a user to run shell commands on a remote machine. Requires authentication through the use of a `username` and `password` through an unencrypted network socket. Authentication is overridden by the trusted entries in the `/etc/hosts.equiv` and `.rhosts` files.|
+|`rlogin`|`rlogind`|513|TCP|Enables a user to log in to a remote host over the network. It works similarly to `telnet` but can only connect to Unix-like hosts. Authentication is overridden by the trusted entries in the `/etc/hosts.equiv` and `.rhosts` files.|
+- **/etc/hosts.equiv** - contains a list of trusted hosts
+```
+cat /etc/hosts.equiv
+
+# <hostname> <local username>
+pwnbox cry0l1t3
+```
+- **Scanning for R-Services**
+```
+sudo nmap -sV -p 512,513,514 [IP]
+```
+- **Access Control & Trusted Relationships**  
+Primary concern for `r-services` is that they rely on trusted information sent from the client to the server. By default, they use `pam authentication` for user auth. However, they bypass this auth using `/etc/hosts.equiv` and `.rhosts`. These files contain lists that are trusted by the server.
+`hosts.equiv` is the global configuration, whereas `.hosts` provides per-user configuration.
+- **Sample .rhosts**
+```
+cat .rhosts
+
+htb-student     10.0.17.5
++               10.0.17.10
++               +
+```
+The `+` modifier can be used within these files as a wildcard to specify anything. In this example, the `+` modifier allows any external user to access r-commands from the `htb-student` user account via the host with the IP address `10.0.17.10`.
+- ** Logging in Using Rlogin**
+```
+rlogin 10.0.17.2 -l htb-student
+
+Last login: Fri Dec  2 16:11:21 from localhost
+```
+- **Listing Authenticated Users with Rwho**
+```
+rwho
+
+root     web01:pts/0 Dec  2 21:34
+htb-student     workstn01:tty1  Dec  2 19:57  2:25
+```
+- **Listing Authenticated Users with RUsers**
+```
+rusers -al 10.0.17.5
+
+htb-student     10.0.17.5:console          Dec 2 19:57     2:25
+```
 
