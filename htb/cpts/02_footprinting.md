@@ -1599,7 +1599,7 @@ Private Keys are created individually for the users computer, and are stored loc
 Public keys are stored on the server. The server creates a problem that can only be solved by the users private key, and present that problem to the client. The client solves the problem and sends the solution back to the server, thus proving it's authorization and then the server allows the connection.
 - Default Configuration
 The configuration is stored in `/etc/ssh/sshd_config`
--```
+```
 cat /etc/ssh/sshd_config  | grep -v "#" | sed -r '/^\s*$/d'
 
 Include /etc/ssh/sshd_config.d/*.conf
