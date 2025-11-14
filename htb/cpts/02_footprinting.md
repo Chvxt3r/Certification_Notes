@@ -1580,3 +1580,105 @@ msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > run
 [*] Scanned 1 of 1 hosts (100% complete)
 [*] Auxiliary module execution completed
 ```
+# Remote Managment Protocols
+## Linux
+### SSH
+#### 6 Authentication Methods
+1. Password
+2. Public-key
+3. Host-based
+4. Keyboard
+5. Challenge-response
+6. GSSAPI
+
+#### Public Key Authentication
+SSH server and client authenticate to each other. The server sends it's `public host key` to the client, which the client uses to verify the servers identity. The `host key` cannot be imitated because it is a unique public-private key pair.  
+After server authentication, however, the client must also prove to the server that it has access authorization. However, the SSH server is already in possession of the encrypted hash value of the password set for the desired user.
+An alternative option is the use of public key and private key pair.
+Private Keys are created individually for the users computer, and are stored locally in `~/.ssh/id_rsa`. We may need to enter a passphrase to open access to the private key.
+Public keys are stored on the server. The server creates a problem that can only be solved by the users private key, and present that problem to the client. The client solves the problem and sends the solution back to the server, thus proving it's authorization and then the server allows the connection.
+- Default Configuration
+The configuration is stored in `/etc/ssh/sshd_config`
+-```
+cat /etc/ssh/sshd_config  | grep -v "#" | sed -r '/^\s*$/d'
+
+Include /etc/ssh/sshd_config.d/*.conf
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem       sftp    /usr/lib/openssh/sftp-server
+```
+#### Dangerous Settings  
+|Setting|Description|
+|-------|-----------|
+|`PasswordAuthentication yes`|Allows password-based authentication.|
+|`PermitEmptyPasswords yes`|Allows the use of empty passwords.|
+|`PermitRootLogin yes`|Allows to log in as the root user.|
+|`Protocol 1`|Uses an outdated version of encryption.|
+|`X11Forwarding yes`|Allows X11 forwarding for GUI applications.|
+|`AllowTcpForwarding yes`|Allows forwarding of TCP ports.|
+|`PermitTunnel`|Allows tunneling.|
+|`DebianBanner yes`|Displays a specific banner when logging in.
+#### Footprinting  
+- **SSH Audit**
+```
+git clone https://github.com/jtesta/ssh-audit.git && cd ssh-audit
+./ssh-audit.py 10.129.14.132
+
+# general
+(gen) banner: SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.3
+(gen) software: OpenSSH 8.2p1
+(gen) compatibility: OpenSSH 7.4+, Dropbear SSH 2018.76+
+(gen) compression: enabled (zlib@openssh.com)
+
+# key exchange algorithms
+(kex) curve25519-sha256                     -- [info] available since OpenSSH 7.4, Dropbear SSH 2018.76                            
+(kex) curve25519-sha256@libssh.org          -- [info] available since OpenSSH 6.5, Dropbear SSH 2013.62
+(kex) ecdh-sha2-nistp256                    -- [fail] using weak elliptic curves
+                                            `- [info] available since OpenSSH 5.7, Dropbear SSH 2013.62
+(kex) ecdh-sha2-nistp384                    -- [fail] using weak elliptic curves
+                                            `- [info] available since OpenSSH 5.7, Dropbear SSH 2013.62
+(kex) ecdh-sha2-nistp521                    -- [fail] using weak elliptic curves
+                                            `- [info] available since OpenSSH 5.7, Dropbear SSH 2013.62
+(kex) diffie-hellman-group-exchange-sha256 (2048-bit) -- [info] available since OpenSSH 4.4
+(kex) diffie-hellman-group16-sha512         -- [info] available since OpenSSH 7.3, Dropbear SSH 2016.73
+(kex) diffie-hellman-group18-sha512         -- [info] available since OpenSSH 7.3
+(kex) diffie-hellman-group14-sha256         -- [info] available since OpenSSH 7.3, Dropbear SSH 2016.73
+
+# host-key algorithms
+(key) rsa-sha2-512 (3072-bit)               -- [info] available since OpenSSH 7.2
+(key) rsa-sha2-256 (3072-bit)               -- [info] available since OpenSSH 7.2
+(key) ssh-rsa (3072-bit)                    -- [fail] using weak hashing algorithm
+                                            `- [info] available since OpenSSH 2.5.0, Dropbear SSH 0.28
+                                            `- [info] a future deprecation notice has been issued in OpenSSH 8.2: https://www.openssh.com/txt/release-8.2
+(key) ecdsa-sha2-nistp256                   -- [fail] using weak elliptic curves
+                                            `- [warn] using weak random number generator
+could reveal the key
+                                            `- [info] available since OpenSSH 5.7, Dropbear SSH 2013.62
+(key) ssh-ed25519                           -- [info] available since OpenSSH 6.5
+...SNIP...
+```
+- **Change Authentication Method**
+```
+# Enumerate supported methods
+ssh -v cry0l1t3@10.129.14.132
+
+OpenSSH_8.2p1 Ubuntu-4ubuntu0.3, OpenSSL 1.1.1f  31 Mar 2020
+debug1: Reading configuration data /etc/ssh/ssh_config 
+...SNIP...
+debug1: Authentications that can continue: publickey,password,keyboard-interactive
+
+# Specify the preferred Auth Method
+ssh -v cry0l1t3@10.129.14.132 -o PreferredAuthentications=password
+
+OpenSSH_8.2p1 Ubuntu-4ubuntu0.3, OpenSSL 1.1.1f  31 Mar 2020
+debug1: Reading configuration data /etc/ssh/ssh_config
+...SNIP...
+debug1: Authentications that can continue: publickey,password,keyboard-interactive
+debug1: Next authentication method: password
+
+cry0l1t3@10.129.14.132's password:
+```
+
