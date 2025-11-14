@@ -1749,7 +1749,7 @@ htb-student     10.0.17.5
 +               +
 ```
 The `+` modifier can be used within these files as a wildcard to specify anything. In this example, the `+` modifier allows any external user to access r-commands from the `htb-student` user account via the host with the IP address `10.0.17.10`.
-- ** Logging in Using Rlogin**
+- **Logging in Using Rlogin**
 ```
 rlogin 10.0.17.2 -l htb-student
 
