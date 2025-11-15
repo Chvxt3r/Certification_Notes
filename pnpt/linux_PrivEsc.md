@@ -518,7 +518,7 @@ chmod +s /tmp/mountme/exploit
 ```
 - on our victim machine
 ```
-# escalate in to our root shell
+# escalate to our root shell
 /tmp/exploit
 ```
 # Escalation Path: Docker
