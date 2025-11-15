@@ -357,7 +357,8 @@ gcc service.c -o service
     4. Run our `SUID` command/example
 
 ### Exploitation if our malicious `SUID` uses an explicit path
-- Summary
+- Summary  
+
 In this example, instead of changing the path, we're going to create a function and then export that function to hijack a process/command
 - Sample Function
 ```
