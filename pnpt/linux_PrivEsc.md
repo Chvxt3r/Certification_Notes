@@ -257,7 +257,7 @@ ls -la /usr/bin/sudo
 # Finding all executables with the suid bit set
 find / -perm -u=s -type f 2>/dev/null
 ```
-- Exploitation
+- Exploitation  
 Exploit's vary. Refer to GTFOBins
 
 # Escalation Path: Other SUID Escalation
