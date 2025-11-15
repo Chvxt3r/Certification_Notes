@@ -427,7 +427,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 **Asterisks across the board - Scheduled task happens every minute**
 
 ### Escalation via Cron Paths
-- Enumeration & Escalation
+- **Enumeration & Escalation**  
 We can use this when there is a cronjob that runs an executable or script that may be missing or mis-located.
 For example, if our path is:
 ```
