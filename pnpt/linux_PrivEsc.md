@@ -277,7 +277,7 @@ strace [path to so] 2>&1
 # Look for `No such file or directory`
 strace [path to so] 2>&1 | grep -i -E "open|access|no such file"
 ```
-Using the results above, find a missing file that in a folder that you have write access to, so you can upload a malicious file that the `so` can load. Usually a revshell or /bin/bash
+Using the results above, find a missing file in a folder that you have write access to, so you can upload a malicious file that the `so` can load. Usually a revshell or /bin/bash
 
 ### Exploitation
 - Example of malicious file in c
@@ -296,8 +296,27 @@ gcc -shared -fPIC -o [output path] [input path]
 ```
 - Compare results to [gtfobins](https://gtfobins.github.io/)
 
-
 ## Binary Symlinks
+Vulnerability exists in `nginx` log files. [CVE-2016-1247](https://legalhackers.com/advisories/Nginx-Exploit-Deb-Root-PrivEsc-CVE-2016-1247.html)
+
+### Enumeration
+- Automated
+```
+./linux-exploit-suggester.py
+```
+- Manual via **find**
+```
+# Looking for SUID on sudo
+find / -type f -perm -04000 -ls 2>/dev/null
+
+# Permissions on /var/log/nginx
+ls -la /var/log/nginx
+```
+Look for SUID bit set on `sudo` and read/write in `/var/log/nginx`
+
+### Exploitation
+Exploit via [CVE-2016-1247](https://legalhackers.com/advisories/Nginx-Exploit-Deb-Root-PrivEsc-CVE-2016-1247.html)
+
 ## Environmental Variabls
 
 # Escalation Path: Capabilities
