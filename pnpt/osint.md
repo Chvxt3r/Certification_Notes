@@ -1,4 +1,5 @@
 # What is OSINT?
+?
 # Sock Puppets
 ## Summary
 A sock puppet is an online identity that is a deliberate mis-representation of you. Think fake accounts, alternate identities, etc. The whole point is not to draw attention back to yourself. Ideally, we don't want anyone to know that we are looking in to them.
