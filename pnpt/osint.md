@@ -46,3 +46,4 @@ A sock puppet is an online identity that is a deliberate mis-representation of y
 # Report Writing
 # todo
 - [ ] Create a sock puppet account
+- [ ] Resume at Image OSINT
