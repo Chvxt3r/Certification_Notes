@@ -488,7 +488,7 @@ echo 'cp /bin/bash /tmp/bash; chmod +s /tmp/bash' >> /usr/local/bin/overwrite.sh
 
 # Escalation Path: NFS Root Squashing
 ## Summary
-`no_root_squash` or `root_squash` is designed to manage your permissions when mounting an NFS share. `no_root_squash` means you get to keep your root privileges when you mount an NFS share. We can use this to our advantage by creating a script from our attack machine that set's a SUID bit on /bin/bash and executing it as root on the target system.
+`no_root_squash` or `root_squash` is designed to manage your permissions when mounting an NFS share. `no_root_squash` means you get to keep your root privileges when you mount an NFS share. We can use this to our advantage by creating a script from our attack machine with the `SUID` bit set and executing it as root on the target system.
 ## Enumeration
 We look for `no_root_squash` in `/etc/exports`.
 ```
