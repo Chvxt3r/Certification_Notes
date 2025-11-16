@@ -535,6 +535,5 @@ docker run -v /:/mnt --rm -it bash chroot /mnt sh
 ```
 
 # todo
-- [ ] Continue on Escalation Path: Other SUID Escalation/Escalation via Shared Object
 - [ ] Get links for linpeas, linenum, linux-exploit-suggester
 - [ ] Add a table at the top of all the tools used.
