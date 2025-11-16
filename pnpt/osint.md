@@ -29,6 +29,8 @@ A sock puppet is an online identity that is a deliberate mis-representation of y
 - **Subtract results** - Use the `-` operator to remove something from search
 - **`intext:`** - Search the text of available documents for a string. Example: `site:twitter.com "Chvxt3r" intext:password`
 - **`inurl:`** - Search for text that appears in the url
+- **`intitle:`** - Search the title of pages.
+- **[Google Advanced Search](https://www.google.com/advanced_search)** - Useful if you can't remember an operator. Can also limit time.
 # Image
 # Email
 # Password
