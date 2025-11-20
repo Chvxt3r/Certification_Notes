@@ -91,6 +91,7 @@ sudo tcpdump --version
 |`and / &&`|`and` `&&` can be used to concatenate two different filters together. for example, src host AND port.|
 |`or`|`or` allows for a match on either of two conditions. It does not have to meet both. It can be tricky.|
 |`not`|`not` is a modifier saying anything but x. For example, not UDP.|
+
 **Syntax Examples**
 ```
 # Host
