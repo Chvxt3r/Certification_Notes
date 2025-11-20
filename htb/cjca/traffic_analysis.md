@@ -46,6 +46,114 @@ The process is the same as in the descriptive analysis, we're just trying to inf
 - Unique events (Why is a host reaching out to a server on the internet via smb? Why is it's user-agent string different than anything we use?)
 
 # Tcpdump
+## Summary
+Command-line Packet Sniffer for directly capture packets and interpreting data frames.
+
+**Requires root permissions**
+### Installation
+```
+sudo apt install tcpdump
+```
+### Validation
+```
+which tcpdump
+sudo tcpdump --version
+```
+## Capturing Traffic
+### Basic Capture Options
+|switch|Result|
+|------|------|
+|`D`|Will display any interfaces available to capture from.|
+|`i`|Selects an interface to capture from. ex. -i eth0|
+|`n`|Do not convert addresses (i.e., host addresses, port numbers, etc.) to names.|
+|`e`|Will grab the ethernet header along with upper-layer data.|
+|`X`|Show Contents of packets in hex and ASCII.|
+|`XX`|Same as X, but will also specify ethernet headers. (like using Xe)|
+|`v, vv, vvv`|Increase the verbosity of output shown and saved.|
+|`c`|Grab a specific number of packets, then quit the program.|
+|`s`|Defines how much of a packet to grab.|
+|`S`|change relative sequence numbers in the capture display to absolute sequence numbers. (13248765839 instead of 101)|
+|`q`|Print less protocol information.|
+|`r file.pcap`|Read from a file.|
+|`w file.pcap`|Write into a file|
+**Switch Combinations** - Best practice is to chain them together under a single `-`. Ex: `sudo tcpdump -i eth0 --nnvXX`
+
+### Helpful Capture Filters
+|Filter|Result|
+|------|------|
+|`host`|filter visible traffic to show anything involving the designated host. Bi-directional|
+|`src / dest`|`src` and `dest` are modifiers. We can use them to designate a source or destination host or port.|
+|`net`|`net` will show us any traffic sourcing from or destined to the network designated. It uses CIDR notation.|
+|`proto`|will filter for a specific protocol type. (ether, TCP, UDP, and ICMP as examples)|
+|`port`|`port` is bi-directional. It will show any traffic with the specified port as the source or destination.|
+|`portrange`|`portrange` allows us to specify a range of ports. (0-1024)|
+|`less / greater "< >"`|`less` and `greater` can be used to look for a packet or protocol option of a specific size.|
+|`and / &&`|`and` `&&` can be used to concatenate two different filters together. for example, src host AND port.|
+|`or`|`or` allows for a match on either of two conditions. It does not have to meet both. It can be tricky.|
+|`not`|`not` is a modifier saying anything but x. For example, not UDP.|
+**Syntax Examples**
+```
+# Host
+## Syntax: host [IP]
+sudo tcpdump -i eth0 host 172.16.146.2
+
+# Source/Destination Filter
+## Syntax: src/dst [host|net|port] [IP|Network Range|Port]
+sudo tcpdump -i eth0 src host 172.16.146.2
+
+# Using Source with Port as a filter
+sudo tcpdump -i eth0 tcp src port 80
+
+# Destination in combination with Net
+sudo tcpdump -i eth0 dest net 172.16.146.0/24
+
+# Protocol Filter with common name
+## Syntax: [tcp/udp/icmp]
+sudo tcpdump -i eth0 udp
+
+# Protocol Filter with port number
+sudo tcpdump -i eth0 proto 17
+
+# Port Filter
+## Syntax: port [port number]
+sudo tcpdump -i eth0 tcp port 443
+
+# Port Range Filter
+## Syntax: portrange [portrange 0-65535]
+sudo tcpdump -i eth0 portrange 0-1024
+
+# Lesser/Greater Filter
+## Syntax: less/greater [size in bytes]
+sudo tcpdump -i eth0 less 64
+
+# AND Filter
+## Syntax: and [requirement]
+sudo tcpdump -i eth0 host 192.168.0.1 and port 23
+
+# OR Filter
+## Syntax: or/|| [requirement]
+sudo tcpdump -r sus.pcap icmp or host 172.16.146.1
+
+# NOT Filter
+## Syntax: not/! [requirement]
+sudo tcpdump -r sus.pcap not icmp
+```
+**Reminder** - If specifying port 80, it will capture all traffic on port 80 (TCP, UDP, ICMP). Remember to specify the transport protocol in your filter.
+### Tips and Tricks
+Using the `-S` switch will display absolute sequence numbers, which can be extremely long. Typically, tcpdump displays relative sequence numbers, which are easier to track and read. However, if we look for these values in another tool or log, we will only find the packet based on absolute sequence numbers. For example, 13245768092588 to 100.
+
+The `-v`, `-X`, and `-e` switches can help you increase the amount of data captured, while the `-c`, `-n`, `-s`, `-S`, and `-q` switches can help reduce and modify the amount of data written and seen.
+
+Many handy options that can be used but are not always directly valuable for everyone are the `-A` and `-l` switches. A will show only the ASCII text after the packet line, instead of both ASCII and Hex. `L` will tell tcpdump to output packets in a different mode. `L` will line buffer instead of pooling and pushing in chunks. It allows us to send the output directly to another tool such as grep using a pipe |.
+
+**Piping to Grep**
+```
+sudo tcpdump -Ar http.cap -l | grep 'mailto:*'
+```
+**Looking for TCP Protocol Flags**
+```
+tcpdump -i eth0 'tcp[13] &2 != 0'
+```
 
 # Wireshark
 
