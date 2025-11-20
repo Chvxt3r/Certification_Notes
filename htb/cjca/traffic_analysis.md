@@ -13,7 +13,47 @@ Traffic Analysis is a `detailed examination of an event or process`, determining
 |`In-line Placement`|`[ ]`|`[x]`|Placing a Tap in-line requires a topology change for the network you are working in. The source and destination hosts will not notice a difference in the traffic, but for the sake of routing and switching, it will be an invisible next hop the traffic passes through on its way to the destination.|
 |`Network Tap or Host With Multiple NIC's`|`[ ]`|`[x]`|A computer with two NIC's, or a device such as a Network Tap is required to allow the data we are inspecting to flow still. Think of it as adding another router in the middle of a link. To actively capture the traffic, we will be duplicating data directly from the sources. The best placement for a tap is in a layer three link between switched segments. It allows for the capture of any traffic routing outside of the local network. A switched port or VLAN segmentation does not filter our view here.|
 |`Storage and Processing Power`|`[x]`|`[x]`|You will need plenty of storage space and processing power for traffic capture off a tap. Much more traffic is traversing a layer three link than just inside a switched LAN. Think of it like this; When we passively capture traffic inside a LAN, it's like pouring water into a cup from a water fountain. It's a steady stream but manageable. Actively grabbing traffic from a routed link is more like using a water hose to fill up a teacup. There is a lot more pressure behind the flow, and it can be a lot for the host to process and store.|
+## In Practice
+### Descriptive Analysis
+1. Define the issue
+    - Breach, Networking issue, etc.
+2. Define the scope and the goal
+    - Target
+    - When?
+    - Supporting info
+3. Define targets (net/host(s)/protocol)
+### Diagnostic Analysis
+4. Capture Network Traffic
+5. Identification of required network traffic components (filtering)
+6. Understand the capture
+### Predictive Analysis
+7. Note taking of found results
+8. Summary of the analysis (reporting)
+
+### Prescriptive Analysis
+**Summary:** Prescriptive analysis aims to narrow down what actions to take to eliminate or prevent a future problem or trigger a specific activity or process.  
+The process is the same as in the descriptive analysis, we're just trying to influence a decision with our report, rather than solve a problem.
+
+### Key Components
+- Know the environment
+- Placement of the packet capturing host
+- Persistence (This is a lot of data and what your looking for may not be obvious)
+
+### Easy Wins
+- Standard Protocols first, then the austere and specific
+- Look for Patterns (Is a host checking in with something on the daily?)
+- Look for Host to Host communication. (There's no reason in a well-built network client machines should talk to each other)
+- Unique events (Why is a host reaching out to a server on the internet via smb? Why is it's user-agent string different than anything we use?)
 
 # Tcpdump
 
 # Wireshark
+
+# Interesting filters. (To be placed later, these are just ones I happen to come across in the course.
+## Capture Filters
+## Display Filters
+`ftp-data`
+`http.request.method == "GET"`
+`http.request.method == "POST"`
+# Todo
+
