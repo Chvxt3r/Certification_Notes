@@ -207,6 +207,17 @@ Wireshark is a free and open-source network traffic analyzer much like tcpdump b
     * Choose a file, then filter for `ftp-data`. Select a packet that corresponds with our file of interest and follow the TCP stream that correlates to it.
     * Once done, Change "Show and save data as" to "Raw" and save the content as the original file name.
     * Validate the extraction by checking the file type.
+### Decrypting RDP Connections
+> Note: you won't see alot of traffic until you interecept the TLS Key.
+- Check for RDP connections in the traffic
+    * Display Filter `tcp.port == 3389`
+- Extract the server certificate from the tcp stream
+    * Locate the certificate tcp stream
+    * follow stream
+    * export certificate (file -> export objects -> X509AF)
+- Extract the public key from the certificate
+    * ``` openssl x509 -in [server cert file] -pubkey ```
+    * `REQUIRES FURTHER RESEACH`
 
 # Interesting filters. (To be placed later, these are just ones I happen to come across in the course.
 ## Capture Filters
