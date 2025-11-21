@@ -49,7 +49,7 @@
     * `T1021 Remote SErvices` - Refers to adversaries using proctocols like RDP, SSH, or SMB for lateral movement.
 - Sub-techniques are children of techniques that capture a particular implementation
     * `T1003.001 - OS Credentials: LSASS Memory` - Refers to attackers dumping credentials from LSASS process memory
-    * `T1021.002 - Remote Services: SMB/Windows Admin Shares` - Refers to attackers interacting with shares using valid credentials
+    * `T1021.002 - Remote Services: SMB/Windows Admin Shares` - Refers to attackers interacting with shares using valid credentials  
 **MITRE Pyramid of Pain**
 - Illustrates how much effor it takes for an adversary to change tactics.
 ![MITRE Pyarmid of Pain](../images/ir_mitre.png)
