@@ -15,4 +15,5 @@
         * Installation of malware and `RATs`
 - `Incident Handling` is a clearly defined set of procedures for managing and responding to security incidents in a computer or network environment.
 - Incident Handling lifecycle
+![Incident Handling Lifecycle](../images/ir-lifecycle.png)
 
