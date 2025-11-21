@@ -157,6 +157,56 @@ tcpdump -i eth0 'tcp[13] &2 != 0'
 ```
 
 # Wireshark
+## Summary
+Wireshark is a free and open-source network traffic analyzer much like tcpdump but with a graphical interface.
+
+## Capturing Traffic
+### Capture Filters
+|Capture Filter|Result|
+|--------------|------|
+|host x.x.x.x|Capture only traffic pertaining to a certain host|
+|net x.x.x.x/24|Capture traffic to or from a specific network (using slash notation to specify the mask)|
+|src/dst net x.x.x.x/24|Using src or dst net will only capture traffic sourcing from the specified network or destined to the target network|
+|port #|will filter out all traffic except the port you specify|
+|not port #|will capture everything except the port specified|
+|port # and #|AND will concatenate your specified ports|
+|portrange x-x|portrange will grab traffic from all ports within the range only|
+|ip / ether / tcp|These filters will only grab traffic from specified protocol headers.|
+|broadcast / multicast / unicast|Grabs a specific type of traffic. one to one, one to many, or one to all.|
+
+### Display Filters
+|Display Filters|Result|
+|---------------|------|
+|ip.addr == x.x.x.x|Capture only traffic pertaining to a certain host. This is an OR statement.|
+|ip.addr == x.x.x.x/24|Capture traffic pertaining to a specific network. This is an OR statement.|
+|ip.src/dst == x.x.x.x|Capture traffic to or from a specific host|
+|dns / tcp / ftp / arp / ip|filter traffic by a specific protocol. There are many more options.|
+|tcp.port == x|filter by a specific tcp port.|
+|tcp.port / udp.port != x|will capture everything except the port specified|
+|and / or / not|AND will concatenate, OR will find either of two options, NOT will exclude your input option.|
+> Keep in mind, while utilizing Display filters traffic is processed to show only what is requested but the rest of the capture file will not be overwritten. Applying Display filters and analysis options will cause Wireshark to reprocess the pcap data in order to apply.
+
+## Advanced Usage
+### Follow a TCP Stream
+- right-click on a packet from the stream we wish to recreate.
+- select follow → TCP
+- this will open a new window with the stream stitched back together. From here, we can see the entire conversation.
+- Alternatively, you can use the filter `tcp.stream eq #` to find and track a conversation
+### Extracting Data and File from a capture
+- Stop the capture
+- Select the File radial → Export → , then select the protocol format to extract from.
+- (DICOM, HTTP, SMB, etc.)
+### FTP Extraction
+- `ftp` will display anything about the FTP Protocol
+- `ftp.request.command` will show any commands sent across the control channel. Useful for `usernames` and `passwords`.
+- `ftp-data` will show any data sent over the data channel.
+    * We can use this to caputre anything sent during the conversation. We can reconstruct anything transferred by placing the raw data back in to a new file and naming it appropriately
+- Step-by-step
+    * Identify any FTP traffic using the `ftp` display filter.
+    * Look at the command controls sent between the server and hosts to determine if anything was transferred and who did so with the `ftp.request.command` filter.
+    * Choose a file, then filter for `ftp-data`. Select a packet that corresponds with our file of interest and follow the TCP stream that correlates to it.
+    * Once done, Change "Show and save data as" to "Raw" and save the content as the original file name.
+    * Validate the extraction by checking the file type.
 
 # Interesting filters. (To be placed later, these are just ones I happen to come across in the course.
 ## Capture Filters
