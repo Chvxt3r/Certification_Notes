@@ -218,6 +218,15 @@ Wireshark is a free and open-source network traffic analyzer much like tcpdump b
 - Extract the public key from the certificate
     * ``` openssl x509 -in [server cert file] -pubkey ```
     * `REQUIRES FURTHER RESEACH`
+- Import the RDP Key
+    * Edit -> Preferences -> Protocols -> TLS
+    * Edit RSA Keys list
+    * Click the + to add a key
+    * Type in the IP address of the RDP server
+    * Type in the port used
+    * Protocol filed equals `tpkt` or `blank`
+    * Browse to the server key file and add it in the key file section
+    * save and refresh the pcap file.
 
 # Interesting filters. (To be placed later, these are just ones I happen to come across in the course.
 ## Capture Filters
@@ -226,4 +235,5 @@ Wireshark is a free and open-source network traffic analyzer much like tcpdump b
 `http.request.method == "GET"`
 `http.request.method == "POST"`
 # Todo
+- [ ] Research how to pull the RSA Private key from the TLS certificate for wireshark
 
