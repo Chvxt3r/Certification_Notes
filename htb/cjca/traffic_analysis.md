@@ -215,7 +215,7 @@ Wireshark is a free and open-source network traffic analyzer much like tcpdump b
     * Locate the certificate tcp stream
     * follow stream
     * export certificate (file -> export objects -> X509AF)
-- Extract the public key from the certificate
+- Extract the private key from the certificate
     * ``` openssl x509 -in [server cert file] -pubkey ```
     * `REQUIRES FURTHER RESEACH`
 - Import the RDP Key
