@@ -51,7 +51,8 @@ sudo nmap [IP] --top-ports=10
 
 ### Packet Tracing Interpretation
 ```
-# Example Response
+### Analyzing Responses
+**Example Response**
 ```
 sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping
 
