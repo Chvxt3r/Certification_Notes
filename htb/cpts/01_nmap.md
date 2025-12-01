@@ -52,6 +52,7 @@ sudo nmap [IP] --top-ports=10
 ### Packet Tracing Interpretation
 ```
 # Example Response
+```
 sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping
 
 Starting Nmap 7.80 ( https://nmap.org ) at 2020-06-15 15:39 CEST
