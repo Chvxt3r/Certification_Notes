@@ -92,7 +92,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.07 seconds
 Attempts to connect to the port. The port is considered open if the target port responds with a `SYN-ACK` and closed if it respondes with a `RST`  
 > The connect scan is not stealthy. These connections maybe logged and flagged by SIEM.   
 
-**Filtered Ports**
+**Filtered Ports**  
 Ports show as filtered for several reasons. They can either be `dropped` or `rejected`. We can use `--packet-trace` to determine which.  
 `dropped` - Nmap received no response from the target(--max-retries=10). If still no response, port is marked filtered  
 `rejected` - Firewall will responed with an ICMP type=3/code=3 rejection, indicating the port is unreachable  
