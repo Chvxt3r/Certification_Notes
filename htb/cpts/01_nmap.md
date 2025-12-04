@@ -99,14 +99,63 @@ Ports show as filtered for several reasons. They can either be `dropped` or `rej
 `rejected` - Firewall will responed with an ICMP type=3/code=3 rejection, indicating the port is unreachable  
 
 ### Open UDP Ports.
+```
+sudo nmap [IP] -F -sU
+```
+> No connection state to verify connection, so UDP is much slower. UDP only responds if the application is configured to respond.  
+
+```
+sudo nmap [IP] -sU -Pn -n --disable-arp-ping --packet-trace -p 100 --reason
+```
+We can rely on `--packet-trace` to tell us if the port is actually closed by the `ICMP` responde code (`error code 3`)
+
+### Version Scanning
+> `-sV`  
+```
+sudo nmap [IP] -Pn -n -sV --disable-arp-ping --packet-trace --reason
+```
 
 ## Saving the Results
+|Switch|Output|
+|------|------|
+|`-oN`|Normal Output with the `.nmap` extension|
+|`-oG`|Grepable Output with `.gnmap` extension|
+|`-oX`|XML output with the `.xml` extension|
+|`-oA`|Outputs all 3|
+
+### Converting to HTML
+```
+xsltproc target.xml -o target.html
+```
 
 ## Service Enumeration
+> `-sV`  
+### Useful Options
+- `--stats-every=5s` - Gives stats every 5 seconds. Can use `s` or `m`
+- `-v`/`-vv` - Increase the verbosity level
+### Banner Grabbing
+> Nmap automatically tries to grab and display the banner. If it can't, it will try and identification through signatures.  
 
 ## Scripting Engine
+### Categories
+|Category|Description|
+|--------|-----------|
+|`auth`|Determination of authentication credentials.|
+|`broadcast`|Scripts, which are used for host discovery by broadcasting and the discovered hosts, can be automatically added to the remaining scans.|
+|`brute`|Executes scripts that try to log in to the respective service by brute-forcing with credentials.|
+|`default`|Default scripts executed by using the `-sC` option.|
+|`discovery`|Evaluation of accessible services.|
+|`dos`|These scripts are used to check services for denial of service vulnerabilities and are used less as it harms the services.|
+|`exploit`|This category of scripts tries to exploit known vulnerabilities for the scanned port.|
+|`external`|Scripts that use external services for further processing.|
+|`fuzzer``|This uses scripts to identify vulnerabilities and unexpected packet handling by sending different fields, which can take much time.|
+|`intrusive`|Intrusive scripts that could negatively affect the target system.|
+|`malware`|Checks if some malware infects the target system.|
+|`safe`|Defensive scripts that do not perform intrusive and destructive access.|
+|`version`|Extension for service detection.|
+|`vuln`|Identification of specific vulnerabilities.|
 
 ## Performance Tuning
 
 # Todo
-- [ ] Resume at Open UDP Ports
+- [ ] Resume at Nmap scripting engine/Default Scripts.
