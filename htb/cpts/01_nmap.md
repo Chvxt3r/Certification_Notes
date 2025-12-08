@@ -204,6 +204,36 @@ sudo nmap [target] --min-rate 300
 |`-T 5`|insane|
 
 ## Firewall and IDS/IPS Evasion
+### Determine Firewall Presence and Their Rules
+* Import to remember the difference between `dropped` and `rejected`. Dropped = no response, rejected = RST packet received.
+* The reason for the rejection may be important. 
+* For Firewall evasion, using a TCP ACK (`-sA`) scan might pass, because the firewall doesn't know what to do with it.
+
+### IDS/IPS Detection
+* The easiest way to determine IDS/IPS presence is if you get blocked.
+    * If we do get blocked, we may get blocked permanently.
+    * Use of a stealthier scan may be called for
+* Decoy Scan
+    * Useful if the target is blocking specific regions or IPS has blocked us.
+    ```
+    sudo nmap [target] -D RND:5
+    ```
+    * Manually specify the source address using `-S`. Useful when a service may only be accessible from a specific subnet.
+    ```
+    sudo nmap [target] -S [source address]
+    ```
+
+### DNS Proxying
+* Specifying an internal DNS server may be more beneficial in a DMZ than the internet servers
+```
+sudo nmap [target] --dns-server [server1],[server2]
+```
+* We can also use port 53 as a source port. If the firewall/IDS/IPS is misconfigured, it may allow DNS queries through
+```
+sudo nmap [target] --source-port 53
+```
+If we can get a good (`non-filtered`) result scan back, we maybe able to connect to services with something like netcat by specifying the source port.
+
 
 # Todo
-- [ ] Resume at Nmap scripting engine/Default Scripts.
+- [x] Finished
