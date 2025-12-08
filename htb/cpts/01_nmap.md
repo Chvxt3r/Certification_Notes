@@ -155,7 +155,55 @@ xsltproc target.xml -o target.html
 |`version`|Extension for service detection.|
 |`vuln`|Identification of specific vulnerabilities.|
 
+### Default Scripts
+Run with `-sC`
+
+### Specific Scripts Category
+```
+sudo nmap [target] --script [category]
+```
+
+### Specifying Scripts
+```
+sudo nmap [target] --script [script name],[script name],...
+```
+
+### Vulnerability Assessment
+```
+sudo nmap [target] -p [port] -sV --script vuln
+```
+
 ## Performance Tuning
+### Timeouts
+Default is 100ms
+```
+sudo nmap [target] --iniital-rtt-timeout 50ms --max-rtt-timeout 100ms
+```
+
+### Max Retries
+- Default Value is 10
+```
+sudo nmap [target] --max-retries 0
+```
+
+### Rates
+* Specifies the number of packets sent per second. Useful for white-box, but noisy otherwise.
+```
+sudo nmap [target] --min-rate 300
+```
+
+### Timing
+* Useful for black-box, where we are trying to be surreptitious. Determines how aggressive the scan is.
+|Setting|Description|
+|-------|-----------|
+|`-T 0`|paranoid|
+|`-T 1`|sneaky|
+|`-T 2`|polite|
+|`-T 3`|normal|
+|`-T 4`|aggressive|
+|`-T 5`|insane|
+
+## Firewall and IDS/IPS Evasion
 
 # Todo
 - [ ] Resume at Nmap scripting engine/Default Scripts.
