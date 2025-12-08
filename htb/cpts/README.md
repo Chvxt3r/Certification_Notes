@@ -2,11 +2,10 @@
  - 01_nmap.md
  - 02_footprinting.md
 
-
 # Work in Progress
+- 03_information_gathering.md
 
 # Waiting to start
-- 03_information_gathering.md
 - 04_vuln_assessment.md
 - 05_file_transfers.md
 - 06_shells_payloads.md
