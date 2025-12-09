@@ -70,7 +70,50 @@ Insecure Coding is the most common type of Verb Tampering. Most commonly found i
 - Check and see if both files were created.
 
 # Insecure Direct Object Reference (IDOR)
+IDOR vulnerabilities occur when a web application exposes a direct reference to an object, like a file or a database resource, which the end-user can directly control to obtain access to other similar objects. If any user can access any resource due to the lack of a solid access control system, the system is considered to be vulnerable.
+
+For example, if users request access to a file they recently uploaded, they may get a link to it such as (download.php?file_id=123). So, as the link directly references the file with (file_id=123), what would happen if we tried to access another file (which may not belong to us) with (download.php?file_id=124)?
+
 ## Identifying IDOR
+### URL Parameters and APIs
+- Look for URL parameters or API's (`?uid=1` or `?filename=file_1.pdf`) in the request
+    - Try incrementing the parameter (if numerical). Example: `?uid=2` or `?filename=file_2.pdf`
+
+### AJAX Calls
+- Looking for functions in the front end code
+    - Developers may put all of the functions in the front end code, but only surface the ones needed based on the users authorization level. However, the code will still remain and may be accessible.
+Example Java Code:
+```javascript
+function changeUserPassword() {
+    $.ajax({
+        url:"change_password.php",
+        type: "post",
+        dataType: "json",
+        data: {uid: user.uid, password: user.password, is_admin: is_admin},
+        success:function(result){
+            //
+        }
+    });
+}
+```
+The above function may never be called as a non-admin user, but if we find it in the front-end code, we may still be able to use it.
+
+### Hashing/Encoding
+- Some web apps may encode the object reference.
+    In that case, we can attempt to decode it, change it, and then recode it to view the object.
+- Some objects may hash the object reference.
+    - Reviewing the source code of the site may reveal that the hashing function is buried in the front end, like the code below.
+    ````
+    $.ajax({
+    url:"download.php",
+    type: "post",
+    dataType: "json",
+    data: {filename: CryptoJS.MD5('file_1.pdf').toString()},
+    success:function(result){
+        //
+    }
+});
+```
 ## Mass IDOR Enumeration
 ## Bypassing Encoded References
 ## IDOR in Insecure APIs
