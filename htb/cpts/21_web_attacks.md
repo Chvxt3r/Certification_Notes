@@ -103,7 +103,7 @@ The above function may never be called as a non-admin user, but if we find it in
     In that case, we can attempt to decode it, change it, and then recode it to view the object.
 - Some objects may hash the object reference.
     - Reviewing the source code of the site may reveal that the hashing function is buried in the front end, like the code below.
-    ```
+    ```javascript
     $.ajax({
     url:"download.php",
     type: "post",
