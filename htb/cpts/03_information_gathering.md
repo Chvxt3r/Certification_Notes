@@ -150,6 +150,7 @@ The above contains the following directives:
 
 ## Well-Known URLS
 > The `/.well-known/` directory contains a centralized repository of a website metadata.  
+
 |URI Suffix|Description|Status|Reference|
 |----------|-----------|------|---------|
 |`security.txt`|Contains contact information for security researchers to report vulnerabilities.|Permanent|RFC 9116|
