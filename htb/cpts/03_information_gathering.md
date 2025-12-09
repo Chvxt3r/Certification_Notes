@@ -98,11 +98,65 @@ The above command get's all the domains of facebook.com that contain 'dev'
 - `sort -u`: This sorts the results alphabetically and removes duplicates.
 
 # Fingerprinting
+## Purpose
+- Targeted Attacks
+- Identifying misconfigurations
+- Prioritizing targets
+- Building a comprehensive profile
+
+## Techniques
+- Banning Grabbing
+- Analyzing headers
+- Probing for unique responses
+- Analyzing page content
+
+### Banner Grabbing
+Using Curl
+```
+curl -I [domain]
+```
+> Don't forget to grab the banners of any redirects  
+
+### Fingerprinting Web Application Firewalls
+Using wafw00f
+```
+wafw00f [domain]
+```
+### Fingerprinting using Nikto
+```
+nikto -h [domain] -Tuning b
+```
 
 # Crawling
 ## Crawling
 ## Robots.txt
+### Example
+```
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Allow: /public/
+
+User-agent: Googlebot
+Crawl-delay: 10
+
+Sitemap: https://www.example.com/sitemap.xml
+```
+The above contains the following directives:
+- All user agents are disallowed from accessing the /admin/ and /private/ directories.
+- All user agents are allowed to access the /public/ directory.
+- The Googlebot (Google's web crawler) is specifically instructed to wait 10 seconds between requests.
+- The sitemap, located at https://www.example.com/sitemap.xml, is provided for easier crawling and indexing.
+
 ## Well-Known URLS
+> The `/.well-known/` directory contains a centralized repository of a website metadata.  
+|URI Suffix|Description|Status|Reference|
+|----------|-----------|------|---------|
+|`security.txt`|Contains contact information for security researchers to report vulnerabilities.|Permanent|RFC 9116|
+|`/.well-known/change-password`|Provides a standard URL for directing users to a password change page.|Permanent|https://w3c.github.io/webappsec-change-password-url/#the-change-password-well-known-uri|
+|`openid-configuration`|Defines configuration details for OpenID Connect, an identity layer on top of the OAuth 2.0 protocol.|Permanent|http://openid.net/specs/openid-connect-discovery-1_0.html|
+|`assetlinks.json`|Used for verifying ownership of digital assets (e.g., apps) associated with a domain.|Permanent|https://github.com/google/digitalassetlinks/blob/master/well-known/specification.md|
+|`mta-sts.txt`|Specifies the policy for SMTP MTA Strict Transport Security (MTA-STS) to enhance email security.|Permanent|RFC 8461|
 
 # Search Engine Discovery
 
@@ -111,4 +165,4 @@ The above command get's all the domains of facebook.com that contain 'dev'
 # Automated Recon
 
 # TODO
-- [ ] Pick up at Certificate Transparency Logs
+- [x] Done
