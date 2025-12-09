@@ -55,6 +55,19 @@ In the above example, the sanitization check is only being performed on the `GET
 - See if we still get an auth prompt.
 
 ## Bypassing Security Filters
+Insecure Coding is the most common type of Verb Tampering. Most commonly found in security filters that only process one type of request, and leave the other requests open.
+
+### Identification
+- Try and use special characters in the functionality and see if they are removed. Example file upload function: `test;!`.
+    - See if the special characters are removed or the functionality is just blocked
+
+### Exploitation
+- Intercept the request in burp and change the verb.
+- See if the functionality works even with the special character (It may just strip the special characters)
+- Check and see if the function even works, if it does, we may have Command Execution on the server.
+- Using our file manager example, we can try and add 2 files.
+    - `file1; touch file 2`
+- Check and see if both files were created.
 
 # Insecure Direct Object Reference (IDOR)
 ## Identifying IDOR
