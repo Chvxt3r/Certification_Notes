@@ -114,6 +114,26 @@ The above function may never be called as a non-admin user, but if we find it in
         }
     });
     ```
+
+### Compare User Roles
+- Register multiple users and compare HTTP requests and object references.
+- Example: 2 different users, one of them can view their salary after making the following API call.
+```json
+{
+  "attributes" : 
+    {
+      "type" : "salary",
+      "url" : "/services/data/salaries/users/1"
+    },
+  "Id" : "1",
+  "Name" : "User1"
+
+}
+```
+- The 2nd user may not have all of these API parameters and shouldn't be able to make the same call as user 1. 
+- We can try repeating the call with user 2 and see if the webapp returns anything.
+- This will work if the webapp only requires a valid session to make the API call but has no access control on the backend to compare the callers session with the data being called.
+
 ## Mass IDOR Enumeration
 ## Bypassing Encoded References
 ## IDOR in Insecure APIs
