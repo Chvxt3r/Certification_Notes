@@ -85,8 +85,17 @@ dig axfr @[dns server] [domain]
 gobuster vhost -u http://<target_IP_address> -w <wordlist_file> --append-domain
 ```
 
-
 ## Certificate Transparency Logs
+> Public, append-only ledgers that record the issuance of SSL/TLS certificates
+
+### [crt.sh](https://crt.sh/)
+```
+curl -s "https://crt.sh/?q=facebook.com&output=json" | jq -r '.[] | select(.name_value | contains("dev")) | .name_value' | sort -u
+```
+The above command get's all the domains of facebook.com that contain 'dev'
+- `curl -s "https://crt.sh/?q=facebook.com&output=json"`: This command fetches the JSON output from crt.sh for certificates matching the domain facebook.com.
+- `jq -r '.[] | select(.name_value | contains("dev")) | .name_value'`: This part filters the JSON results, selecting only entries where the name_value field (which contains the domain or subdomain) includes the string "dev". The -r flag tells jq to output raw strings.
+- `sort -u`: This sorts the results alphabetically and removes duplicates.
 
 # Fingerprinting
 
