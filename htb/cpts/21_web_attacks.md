@@ -36,6 +36,24 @@ if(preg_match($pattern, $_GET["code"])) {
 In the above example, the sanitization check is only being performed on the `GET` request `if(preg_match($pattern, $_GET["code"])) {`. However, the actual query (`$query`) is built using the `$_REQUEST["code"]` parameters. This will allow a `POST` request to bypass the sanitization check. 
 
 ## Bypassing Basic Authentication
+### Identification
+- Look for `401 Unauthorized` page or HTTP basic auth prompt.
+- Identify the URL the button or function points to.
+- Determine whether it's the page or the folder that is restricted. (ie: is `admin/reset.php` restricted or is the entire admin folder?)
+    - Visit just the folder, and see if you get a basic auth prompt. Example: visit `http://www.example.com/admin` and see if you get a prompt.
+
+### Exploitation
+- Analyze the page in burp and not what kind of request is being sent. (`GET`, `POST`, etc.)
+- Try a different request type.
+    - Check which verbs are available on the server.
+    ```
+    curl -i -X OPTION http://[server]:[port]/
+    ```
+    - In burp, either right-click the request and select `Change Request Method` or send to repeater and change manually.
+    - For `GET` requests in particular, try using `HEAD`.
+        - No output from `HEAD`, but may still trigger the functionality.
+- See if we still get an auth prompt.
+
 ## Bypassing Security Filters
 
 # Insecure Direct Object Reference (IDOR)
