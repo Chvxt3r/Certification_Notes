@@ -105,13 +105,13 @@ The above function may never be called as a non-admin user, but if we find it in
     - Reviewing the source code of the site may reveal that the hashing function is buried in the front end, like the code below.
     ```javascript
     $.ajax({
-    url:"download.php",
-    type: "post",
-    dataType: "json",
-    data: {filename: CryptoJS.MD5('file_1.pdf').toString()},
-    success:function(result){
-        //
-    }
+        url:"download.php",
+        type: "post",
+        dataType: "json",
+        data: {filename: CryptoJS.MD5('file_1.pdf').toString()},
+        success:function(result){
+            //
+        }
     });
     ```
 ## Mass IDOR Enumeration
