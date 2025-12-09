@@ -43,7 +43,7 @@ In the above example, the sanitization check is only being performed on the `GET
     - Visit just the folder, and see if you get a basic auth prompt. Example: visit `http://www.example.com/admin` and see if you get a prompt.
 
 ### Exploitation
-- Analyze the page in burp and not what kind of request is being sent. (`GET`, `POST`, etc.)
+- Analyze the page in burp and to determine what kind of request is being sent. (`GET`, `POST`, etc.)
 - Try a different request type.
     - Check which verbs are available on the server.
     ```
