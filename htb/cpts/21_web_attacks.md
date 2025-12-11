@@ -192,4 +192,5 @@ done
 ## Local file Disclosure
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
-
+# todo
+- [ ] Resume at Bypassing Encoded References
