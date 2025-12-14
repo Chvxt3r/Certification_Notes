@@ -207,8 +207,8 @@ function downloadContract(uid) {
 }
 ```
 *Example obfuscation function*
-- Code Analysis
-Funciton appears to send a post request with the contract parameter. The value it sends is an md5 hash from CryptoJS. The value being hashed is a base64(btoa) encoded string of the UID variable. The UID is our previously discovered UID in the original IDOR. In this case, 1. So all this code does is MD5 the base64 hash of 1 (the UID).
+- Code Analysis  
+    Function appears to send a post request with the contract parameter. The value it sends is an md5 hash from CryptoJS. The value being hashed is a base64(btoa) encoded string of the UID variable. The UID is our previously discovered UID in the original IDOR. In this case, 1. So all this code does is MD5 the base64 hash of 1 (the UID).
 
 We can test this with the following.
 ```bash
