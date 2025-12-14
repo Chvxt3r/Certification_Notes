@@ -185,6 +185,18 @@ done
 *This script only works on employees 1-10. We'll need to adjust it for further use*
 
 ## Bypassing Encoded References
+### Examples
+![contracts.php](images/web_attacks_idor_contracts.jpg)
+*Employee manager web application contracts*
+
+![download.php](images/web_attacks_idor_download_contract.jpg)
+*Employee manager contracts download.php*
+
+### Enumeration
+We see that the download functionality is sending a post request with the parameter:
+```php
+contract=cdd96d3cc73d1dbdaffa03cc6cd7339b
+```
 ## IDOR in Insecure APIs
 ## Chaining IDOR Vulnerabilities
 
