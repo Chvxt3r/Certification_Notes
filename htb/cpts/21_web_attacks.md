@@ -214,7 +214,7 @@ We can test this with the following and seeing if our hashes line up.
 ```bash
 echo -n 1 | base64 -w 0 | md5sum
 ```
-    > Note: Use `-n` and `-w` to avoiding adding newlines.
+> Note: Use `-n` and `-w` to avoiding adding newlines.
 
 ### Exploitation
 Now that we've reversed the obfuscation, we can write another bash script to download everyones contract.
