@@ -253,7 +253,7 @@ done
             - Note: `PUT` is often used to update fields, whereas `POST` is often used to create new, `DELETE` is used to delete, and `GET` to retrieve.
 
 ### Exploitation
-Things to try in this example:  
+- Things to try in this example:  
     - Change the UID
     - Change the UUID
     - Change the cookie to something like `admin`
