@@ -234,6 +234,32 @@ done
 ```
 
 ## IDOR in Insecure APIs
+### Example Site
+![idor_employee_manager](images/web_attacks_idor_employee_manager.jpg)
+*Example Employee Manager*
+
+![idor_edit_profile.jpg](images/web_attacks_idor_edit_profile.jpg)
+*Example Employee Edit Profile*
+
+### Enumeration
+- Verify that any changes made persist through refreshes (Indicates they are stored in a db)
+- Interecept the request
+    ![idor_update_request](images/web_aattacks_idor_update_request.jpg)
+    *Intercepted update request*
+    - Things to note from our intercepted request
+        - Hidden Fields. Namely the `UID`,`UUID`, and `role` fields
+        - Cookie defines our access level.
+        - Using the `PUT` method to update
+            - Note: `PUT` is often used to update fields, whereas `POST` is often used to create new, `DELETE` is used to delete, and `GET` to retrieve.
+
+### Exploitation
+Things to try in this example:
+    - Change the UID
+    - Change the UUID
+    - Change the cookie to something like `admin`
+    - Change the role to something like `admin`
+    - Change the method to `POST` and see if we can create a new user
+
 ## Chaining IDOR Vulnerabilities
 
 # XML External Entity (XXE) Injection
