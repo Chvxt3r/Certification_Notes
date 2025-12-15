@@ -244,7 +244,7 @@ done
 ### Enumeration
 - Verify that any changes made persist through refreshes (Indicates they are stored in a db)
 - Interecept the request
-    ![idor_update_request](images/web_aattacks_idor_update_request.jpg)
+    ![idor_update_request](images/web_attacks_idor_update_request.jpg)
     *Intercepted update request*
     - Things to note from our intercepted request
         - Hidden Fields. Namely the `UID`,`UUID`, and `role` fields
