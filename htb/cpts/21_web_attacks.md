@@ -367,10 +367,10 @@ Once an entity has been created, it can be referenced with an ampersand `&` and 
 
 This works similar to internal XML entities stored within documents. When refererenced, the parser will replace the entity with its value stored in the external file.
 
-When the XML is parsed on the server-side, in cases like SOAP APIs or wweb forms, then an entity can reference a file stored on the back-end server, which can then be disclosed to use when we reference the entity.
+When the XML is parsed on the server-side, in cases like SOAP APIs or web forms, then an entity can reference a file stored on the back-end server, which can then be disclosed to use when we reference the entity.
 
 ## Local file Disclosure
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
 # todo
-- [ ] Resume at Bypassing Encoded References
+- [ ] Resume at XXE Injection Local File Disclosure
