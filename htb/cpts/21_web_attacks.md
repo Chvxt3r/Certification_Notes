@@ -280,6 +280,42 @@ done
 - Once we've done some recon and identified roles, we can change the role and create a new user.
 
 # XML External Entity (XXE) Injection
+## Summary
+XML External Entity Injection occurs when XML data is taken from a user-controlled input without properly sanitizing or safely parsing it, which may allow us to use XML features to perform malicious actions.
+### XML
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<email>
+  <date>01-01-2022</date>
+  <time>10:00 am UTC</time>
+  <sender>john@inlanefreight.com</sender>
+  <recipients>
+    <to>HR@inlanefreight.com</to>
+    <cc>
+        <to>billing@inlanefreight.com</to>
+        <to>payslips@inlanefreight.com</to>
+    </cc>
+  </recipients>
+  <body>
+  Hello,
+      Kindly share with me the invoice for the payment made on January 1, 2022.
+  Regards,
+  John
+  </body> 
+</email>
+```
+*XML Example*
+
+Key Elements  
+|Key|Definition|Example|
+|---|----------|-------|
+|`Tag`|The keys of an XML document, usually wrapped with (</>) characters.|`<date>`|
+|`Entity`|XML variables, usually wrapped with (&/;) characters.|`&lt;`|
+|`Element`|The root element or any of its child elements, and its value is stored in between a start-tag and an end-tag.|`<date>01-01-2022</date>`|
+|`Attribute`|Optional specifications for any element that are stored in the tags, which may be used by the XML parser.|`version="1.0"/encoding="UTF-8"`|
+|`Declaration`|Usually the first line of an XML document, and defines the XML version and encoding to use when parsing it.|`<?xml version="1.0" encoding="UTF-8"?>`|
+
+### XML DTD
 ## Local file Disclosure
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
