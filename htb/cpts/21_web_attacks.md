@@ -316,6 +316,59 @@ Key Elements
 |`Declaration`|Usually the first line of an XML document, and defines the XML version and encoding to use when parsing it.|`<?xml version="1.0" encoding="UTF-8"?>`|
 
 ### XML DTD
+XML Document Type Definition (DTD) allows the validation of an XML document against a pre-defined document structure. The pre-defined structure can be defined in the document itself or an external file.
+```xml
+<!DOCTYPE email [
+  <!ELEMENT email (date, time, sender, recipients, body)>
+  <!ELEMENT recipients (to, cc?)>
+  <!ELEMENT cc (to*)>
+  <!ELEMENT date (#PCDATA)>
+  <!ELEMENT time (#PCDATA)>
+  <!ELEMENT sender (#PCDATA)>
+  <!ELEMENT to  (#PCDATA)>
+  <!ELEMENT body (#PCDATA)>
+]>
+```
+*Example DTD for the XML above*
+
+The DTD can be placed within the XML document itself, right after the declaration in the first line, or it may be an external file and then referenced in the XML with the `SYSTEM` keyword.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE email SYSTEM "email.dtd">
+```
+*Referencing an external DTD with `SYSTEM`*
+
+The DTD can also be referenced through a URL:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE email SYSTEM "http://inlanefreight.com/email.dtd">
+```
+
+### XML Entities
+We can define custom entities (i.e. XML variables) in XML DTDs, to allow refactoring of variables and reduce repetitive data.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE email [
+  <!ENTITY company "Inlane Freight">
+]>
+```
+*Creation of an XML Entity named 'company'*
+
+Once an entity has been created, it can be referenced with an ampersand `&` and a semi-colon `;`, like `&company;`. Whenever an entity  is referenced, it will be replaced with its value by the XML parser. Interestingly, we can reference `External XML Entities` with the `SYSTEM` keyword, followed by the entity's path.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE email [
+  <!ENTITY company SYSTEM "http://localhost/company.txt">
+  <!ENTITY signature SYSTEM "file:///var/www/html/signature.txt">
+]>
+```
+*referencing an external entity's company and signature*
+> NOTE: We may also use the `PUBLIC` keyword instead of `SYSTEM` for loading external resources. `PUBLIC` is used with publicly declared entities and standards, such as language code.  
+
+This works similar to internal XML entities stored within documents. When refererenced, the parser will replace the entity with its value stored in the external file.
+
+When the XML is parsed on the server-side, in cases like SOAP APIs or wweb forms, then an entity can reference a file stored on the back-end server, which can then be disclosed to use when we reference the entity.
+
 ## Local file Disclosure
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
