@@ -392,6 +392,8 @@ If a web app trusts unfiltered XML from user input, we can abuse that to referen
   <!ENTITY company "Inlane Freight">
 ]>
 ```
+*New XML Entity*
+
 ![web_attakcs_xxe_new_entity](images/web_attacks_xxe_new_entity.jpg)
 *We've added our entity, and referenced it in the email field*
 
