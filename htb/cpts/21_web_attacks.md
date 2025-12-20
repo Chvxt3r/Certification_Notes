@@ -370,6 +370,33 @@ This works similar to internal XML entities stored within documents. When refere
 When the XML is parsed on the server-side, in cases like SOAP APIs or web forms, then an entity can reference a file stored on the back-end server, which can then be disclosed to use when we reference the entity.
 
 ## Local file Disclosure
+### Summary
+If a web app trusts unfiltered XML from user input, we can abuse that to reference a DTD document and create a new entity. If we define an entity that references a local file, we can then make the web page show that file.
+
+### Enumeration
+- First, we need to find a web page that accepts XML User input
+![web_attacks_xxe_identify](images/web_attacks_xxe_identify.jpg)
+*Example contact form*
+
+    - If we intercept the request in burp, we can see that it formats our input as XML
+![web_attacks_xxe_request](images/web_attacks_xxe_request.jpg)
+
+    - If fill out the form and submit the request, we get the following, telling use the email field may be vulnerable (Because it displays our information back to us).
+![web_attacks_xxe_response](images/web_attacks_xxe_response.jpg)
+
+- Take note of which fields are being displayed back to us
+
+- Now to test our potential finding, we can add an entity, and then reference it (in this case, in the email field).
+```xml
+<!DOCTYPE email [
+  <!ENTITY company "Inlane Freight">
+]>
+```
+![web_attakcs_xxe_new_entity](images/web_attacks_xxe_new_entity.jpg)
+*We've added our entity, and referenced it in the email field*
+
+- From the reply, we can see that it referenced our entity, so we have an XXE vulnerability
+
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
 # todo
