@@ -399,6 +399,36 @@ If a web app trusts unfiltered XML from user input, we can abuse that to referen
 
 - From the reply, we can see that it referenced our entity, so we have an XXE vulnerability
 
+### Exploitation
+Since we know we can define new entities, let's see if we can point those at the file system.
+
+- Pretty much the same as above, but we alter our XML entity to reference a file, similar to the following:
+```xml
+<!DOCTYPE email [
+  <!ENTITY company SYSTEM "file:///etc/passwd">
+]>
+```
+- Referencing our test site above, we try it and get back the following:
+![web_attacks_xxe_external_entity](images/web_attacks_xxe_external_entity.jpg)
+*The response showing that we were able to access /etc/passwd*
+
+- Now we have local file disclose, and we can use that to get the source code of the web app, or other valuable info.
+
+### Reading Source Code
+We can't use the above method for source code because some special characters may be included that are not allowed in XML, such as `<`/`>`/`&`.
+
+PHP in particular provides a wrapper that allows us to base64 encode certain resources, and the final base64 should not break the xml output.
+
+- Instead of using `file` in our entity, we will use PHP's `php://filter/wrapper/`, specifying the `convert.base64-encode` encoder as our filter.
+```XML
+<!DOCTYPE email [
+  <!ENTITY company SYSTEM "php://filter/convert.base64-encode/resource=index.php">
+]>
+```
+*using base64 php filter to exfiltrate source code*
+
+### Remote Code Execution
+
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
 # todo
