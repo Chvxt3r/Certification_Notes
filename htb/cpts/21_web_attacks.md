@@ -449,7 +449,7 @@ sudo python3 -m http.server 80
 ```
 > Note: We replaced all of the spaces with `$IFS` to avoid breaking the XML.
 
-> Note: The expect module is not enabled/installed by default on modern PHP server5s.
+> Note: The expect module is not enabled/installed by default on modern PHP servers.
 
 ## Advanced File Disclosure
 ## Blind Data Exfiltration
