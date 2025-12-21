@@ -512,4 +512,4 @@ We may find ourselves in a situation where the web app doesn't write any output,
 
 ## Blind Data Exfiltration
 # todo
-- [ ] Resume at XXE Injection Local File Disclosure
+- [ ] Resume at Blind Data Exfiltration 
