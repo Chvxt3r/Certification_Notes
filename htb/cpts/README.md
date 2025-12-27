@@ -1,9 +1,11 @@
 # Complete
  - 01_nmap.md
  - 02_footprinting.md
+ - 03_information_gathering.md
+ - 21_web_attacks.md
 
 # Work in Progress
-- 03_information_gathering.md
+- 20_command_injection
 
 # Waiting to start
 - 04_vuln_assessment.md
