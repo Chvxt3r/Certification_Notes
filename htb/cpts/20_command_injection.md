@@ -59,7 +59,10 @@ If the input is not sanitized and escaped before it used with the ping command, 
 |Sub-Shell|`$()`|`%24%28%29`|Both (Linux-only)|
 
 *Table of Command Injection Methods*
+> Note: Any of the above CI Methods should work on any web framework, with the exection of the semicolon `;`. The semicolon will not work in windows command line, but will work in powershell.
 
+To perform the injection, we would write out the expected input (in this case an IP), add one of our methods, and then add thee command we would like to run.
+Example: 127.0.0.1 \n whoami
 ## Injecting Commands
 ## Other Injection Operators
 
