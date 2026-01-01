@@ -32,6 +32,7 @@ The above NodeJS is vulnerable because it again uses the filename parameter with
 # Exploitation
 ## Detection
 The Process for detecting OS command injection is the same as the process for exploiting it. We attempt to append our malicious command through various methods.
+> Note: We should always try our final command on our local machine to make sure it works
 
 ### Example Host Checker App
 Below we see a sample host checker app that asks for an IP address to verify whether the host is up or not.
@@ -92,6 +93,13 @@ Another way may be to review the source code. In our IP address example, we can 
 In the above, we can see the `pattern` that is allowed in this particular web app.
 
 ## Other Injection Operators
+### AND (&&) Operator
+The AND operator requires that both commands are successful. 
+Eample: If we try and just use the AND operator without an IP (Payload = `ip=%26%26+whoami`), then both will fail because the `ping` command will exit code 1, meaning it errored out, and our additional command will not process.
+
+### OR (||) Operator
+The OR operator only executes if our first command fails to execute.
+Example: If we use the same example as above, and just swap the `&&` for `\|\|`, we'll see the command succeed, because the first command (ping) errored out, and the second command can run. However, if the first command had not errored out and exited code 0, our command would not have run, because the first command completed successfully.
 
 # Filter Evasion
 ## Identifying filters
