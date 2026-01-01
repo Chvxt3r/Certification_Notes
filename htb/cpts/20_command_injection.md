@@ -62,8 +62,35 @@ If the input is not sanitized and escaped before it used with the ping command, 
 > Note: Any of the above CI Methods should work on any web framework, with the exection of the semicolon `;`. The semicolon will not work in windows command line, but will work in powershell.
 
 To perform the injection, we would write out the expected input (in this case an IP), add one of our methods, and then add thee command we would like to run.
-Example: 127.0.0.1 \n whoami
+Example: 127.0.0.1\n whoami
+
 ## Injecting Commands
+If our attempt to inject a command fails, we need to determine where the input sanitization is happening. The easiest way to do this is through Developer tools.
+
+We can open firefox developer tools with `CTRL-SHIFT-E` and observe the network tab to see if our request is even sent or if the front-end blocked it. If no request is sent (nothing appears in the network tab) then the front-end is doing the input sanitazation. 
+
+### Bypassing Front-End Validation
+The easiest way to bypass the front end is to send the request manually using a proxy like burp.
+- First we capture a standard request. In this case, just an IP
+- Then we tack our payload on to the end of the of the parameter we're trying to inject on.
+    >Note: We may need to URL-Encode any spaces or special characters  
+
+Another way may be to review the source code. In our IP address example, we can look at the source code and see what characters are allowed and what pattern they follow. 
+```html
+<body>
+  <div class="main">
+    <h1>Host Checker</h1>
+
+    <form method="post" action="">
+      <label>Enter an IP Address</label>
+      <input type="text" name="ip" placeholder="127.0.0.1" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$">
+      <button type="submit">Check</button>
+    </form>
+```
+*Sample input validation*
+
+In the above, we can see the `pattern` that is allowed in this particular web app.
+
 ## Other Injection Operators
 
 # Filter Evasion
