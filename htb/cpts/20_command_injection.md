@@ -99,7 +99,7 @@ Eample: If we try and just use the AND operator without an IP (Payload = `ip=%26
 
 ### OR (||) Operator
 The OR operator only executes if our first command fails to execute.
-Example: If we use the same example as above, and just swap the `&&` for `\|\|`, we'll see the command succeed, because the first command (ping) errored out, and the second command can run. However, if the first command had not errored out and exited code 0, our command would not have run, because the first command completed successfully.
+Example: If we use the same example as above, and just swap the `&&` for `||`, we'll see the command succeed, because the first command (ping) errored out, and the second command can run. However, if the first command had not errored out and exited code 0, our command would not have run, because the first command completed successfully.
 
 # Filter Evasion
 ## Identifying filters
