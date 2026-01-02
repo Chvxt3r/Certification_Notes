@@ -122,6 +122,15 @@ Referencing the above code, if our string contains any of the characters in `$bl
 - The easiest way to evaluate the blacklist (if we can't see the code), is to append each character to a valid input and see what get's blocked and what doesn't.
 
 ## Bypassing Space Filters
+### Bypass Blacklisted Spaces
+- Spaces are a commonly blacklisted character
+- Use Tabs (`%09`)
+- Use $IFS (Linux Only)
+    - `ip=127.0.0.1%0a${IFS}`
+    - Linux only
+- Use Brace Expansion (Bash Only)
+    - `{ls,-la}`
+> Note: More bypass at [PayloadAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection#bypass-without-space)
 
 ## Bypassing Other Blacklisted Characters
 ## Bypassing Blacklisted Commands
