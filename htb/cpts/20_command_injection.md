@@ -103,7 +103,26 @@ Example: If we use the same example as above, and just swap the `&&` for `||`, w
 
 # Filter Evasion
 ## Identifying filters
+### Filter/WAF Detection
+- If an error message is displayed on a different page (a redirect), with information like ouir IP and our request, we were probably denied by WAF.
+
+### Blacklisted Characters
+```PHP
+$blacklist = ['&', '|', ';', ...SNIP...];
+foreach ($blacklist as $character) {
+    if (strpos($_POST['ip'], $character) !== false) {
+        echo "Invalid input";
+    }
+}
+```
+*Example PHP code for with blacklisted characters*
+
+Referencing the above code, if our string contains any of the characters in `$blacklist`, we'll be denied.
+
+- The easiest way to evaluate the blacklist (if we can't see the code), is to append each character to a valid input and see what get's blocked and what doesn't.
+
 ## Bypassing Space Filters
+
 ## Bypassing Other Blacklisted Characters
 ## Bypassing Blacklisted Commands
 ## Advanced Command Obfuscation
