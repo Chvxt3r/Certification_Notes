@@ -133,6 +133,48 @@ Referencing the above code, if our string contains any of the characters in `$bl
 > Note: More bypass at [PayloadAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection#bypass-without-space)
 
 ## Bypassing Other Blacklisted Characters
+We can use environment variables to pick a special character contained in that variable to insert in to our command injections.
+
+### Linux
+We can use environment variables to bypass Filters much like we did with `${IFS}`
+
+- Using `$PATH` (or any other variable)
+```bash
+echo ${PATH}
+
+/usr/local/bin:/usr/bin:/bin:/usr/games
+```
+If we start at 0, and take a string length of 1, we can isolate the `\` and use it in our commmand.
+```bash
+echo ${PATH:0:1}
+
+/
+```
+> Note: Don't use `echo` in your command, we are just using that for demonstration purposes  
+
+We can do the same thing with `$HOME` or `$PWD` environment variables as well. We can use the `printenv` variable to find which characters are in which variables that we can use.
+
+### Windows
+The same concept can be used in windows. We can use the echo command, combined with a starting position and a negative ending position.
+```cmd
+C:\Users\chvxt3r>echo %HOMEPATH%
+\Users\chvxt3r
+
+C:\Users\chvxt3r>echo %HOMEPATH:~6,-7%
+\
+```
+*Example to demonstrate getting a `/` out of the path variable.*
+> Note: echoing windows variables requires a `%` on either end.
+
+We can use `Get-ChildItem Env:` Powershell command to print all environment variables to pick and choose the variable and character we need.
+
+### Character shifting
+We can use character shifting to insert a character that may be filtered. In the example below the `[` is 1 ascii character up from `\`. Therefore, we can shift that character down to the `\`.
+```bash
+man ascii     # \ is on 92, before it is [ on 91
+echo $(tr '!-}' '"-~'<<<[)
+```
+
 ## Bypassing Blacklisted Commands
 ## Advanced Command Obfuscation
 ## Evasion Tools
