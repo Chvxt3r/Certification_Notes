@@ -296,6 +296,101 @@ dwBoAG8AYQBtAGkA
 ```
 
 ## Evasion Tools
+### Linux ([Bashfuscator](https://github.com/Bashfuscator/Bashfuscator))
+- Installation
+```bash
+git clone https://github.com/Bashfuscator/Bashfuscator
+cd Bashfuscator
+pip3 install setuptools==65
+python3 setup.py install --user
+```
+- Usage
+After install, the command can be run out of `./bashfuscator/bin` directory.
+```bash
+Chvxt3r@hackbox[/workspace/tools]$ cd ./bashfuscator/bin/
+Chvxt3r@hackbox[/workspace/tools]$ ./bashfuscator -h
+
+usage: bashfuscator [-h] [-l] 
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Program Options:
+  -l, --list            List all the available obfuscators, compressors, and encoders
+  -c COMMAND, --command COMMAND
+                        Command to obfuscate
+```
+*bashfuscator -h*
+
+We can start using it by just providing the `-c` flag and a command
+```bash
+Chvxt3r@hackbox[/workspace/tools]$ ./bashfuscator -c 'cat /etc/passwd'
+
+[+] Mutators used: Token/ForCode -> Command/Reverse
+[+] Payload:
+ ${*/+27\[X\(} ...SNIP...  ${*~}   
+[+] Payload size: 1664 characters
+```
+*Generating a payload*
+> Note: This runs the tool with random obfuscators, and may produce an exceedingly long payload.
+
+We can use some of the flags to generate a smaller payload.
+```bash
+Chvxt3r@hackbox[/workspace/tools]$ ./bashfuscator -c 'cat /etc/passwd' -s 1 -t 1 --no-mangling --layers 1
+
+[+] Mutators used: Token/ForCode
+[+] Payload:
+eval "$(W0=(w \  t e c p s a \/ d);for Ll in 4 7 2 1 8 3 2 4 8 5 7 6 6 0 9;{ printf %s "${W0[$Ll]}";};)"
+[+] Payload size: 104 characters
+```
+
+- Testing the payload
+```bash
+Chvxt3r@hackbox[/workspace/tools]$ bash -c 'eval "$(W0=(w \  t e c p s a \/ d);for Ll in 4 7 2 1 8 3 2 4 8 5 7 6 6 0 9;{ printf %s "${W0[$Ll]}";};)"'
+
+root:x:0:0:root:/root:/bin/bash
+```
+
+### Windows ([DOSfuscation](https://github.com/danielbohannon/Invoke-DOSfuscation))
+Unlike Bashfuscator, this is an interactive tool
+
+- Installation
+```ps
+PS C:\htb> git clone https://github.com/danielbohannon/Invoke-DOSfuscation.git
+PS C:\htb> cd Invoke-DOSfuscation
+PS C:\htb> Import-Module .\Invoke-DOSfuscation.psd1
+PS C:\htb> Invoke-DOSfuscation
+Invoke-DOSfuscation> help
+
+HELP MENU :: Available options shown below:
+[*]  Tutorial of how to use this tool             TUTORIAL
+...SNIP...
+
+Choose one of the below options:
+[*] BINARY      Obfuscated binary syntax for cmd.exe & powershell.exe
+[*] ENCODING    Environment variable encoding
+[*] PAYLOAD     Obfuscated payload via DOSfuscation
+```
+*DOSfuscation installation*
+
+- Usage
+```ps
+Invoke-DOSfuscation> SET COMMAND type C:\Users\htb-student\Desktop\flag.txt
+Invoke-DOSfuscation> encoding
+Invoke-DOSfuscation\Encoding> 1
+
+...SNIP...
+Result:
+typ%TEMP:~-3,-2% %CommonProgramFiles:~17,-11%:\Users\h%TMP:~-13,-12%b-stu%SystemRoot:~-4,-3%ent%TMP:~-19,-18%%ALLUSERSPROFILE:~-4,-3%esktop\flag.%TMP:~-13,-12%xt
+```
+*DOSfuscation usage*
+
+- Verification
+```cmd
+C:\chvxt3r> typ%TEMP:~-3,-2% %CommonProgramFiles:~17,-11%:\Users\h%TMP:~-13,-12%b-stu%SystemRoot:~-4,-3%ent%TMP:~-19,-18%%ALLUSERSPROFILE:~-4,-3%esktop\flag.%TMP:~-13,-12%xt
+```
+> Note: This can be run through `pwsh` if you don't have access to a windows VM.
+
 
 # Prevention
 
