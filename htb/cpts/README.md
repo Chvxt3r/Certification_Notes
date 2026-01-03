@@ -3,9 +3,10 @@
  - 02_footprinting.md
  - 03_information_gathering.md
  - 21_web_attacks.md
+ - 20_command_injection.md
 
 # Work in Progress
-- 20_command_injection
+ -06_shells_payloads.md
 
 # Waiting to start
 - 04_vuln_assessment.md
