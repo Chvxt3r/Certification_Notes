@@ -49,4 +49,57 @@ mysql> USE users;
 
 Database changed
 ```
+### Tables
+- Databases store information in tables. Tables consist of rows and columns (Like a spreadsheet) and the intersection of these are called cells (also like a spreadsheet)
+- Tables are created with a fixed number of columns, where each column is a particular data type.
+- Command data types include: `numbers`, `strings`, `date`, `time`, and `binary data`
+- We use the `CREATE TABLE` command to create a new Table
 
+```sql
+CREATE TABLE logins (
+    id INT,
+    username VARCHAR(100),
+    password VARCHAR(100),
+    date_of_joining DATETIME
+    );
+```
+
+- We can obtain a list of current tables using the `SHOW TABLES` statement
+- We can use the `DESCRIBE` statement.
+
+```bash
+mysql> DESCRIBE logins;
+
++-----------------+--------------+
+| Field           | Type         |
++-----------------+--------------+
+| id              | int          |
+| username        | varchar(100) |
+| password        | varchar(100) |
+| date_of_joining | date         |
++-----------------+--------------+
+4 rows in set (0.00 sec)
+```
+
+#### Table Properties
+- Within `CREATE TABLE`, we can assign properties.`AUTO_INCREMENT` and `NOT NULL` are often used in `id` fields. `AUTO_INCREMENT` automatically increments the `id` cell every time a new record is created. `NOT NULL` specifies that this field can not be blank (Required Field).
+
+Common Properties
+|Property|Description|
+|########|###########|
+|`AUTO_INCREMENT`|Automatically increments the field|
+|`NOT NULL`|This cell cannot be empty (Required Field|
+|`UNIQUE`|Ensures that this cell is unique. Usefull for usernames|
+|`DEFAULT`|Specifies a default value. Usefull for join dates, etc. ```sql date_of_joining DATETIME DEFAULT NOW(), ```|
+|`PRIMARY KEY`|Uniquely identifies each record in the table|
+
+Example `CREATE TABLE` query:
+```sql
+CREATE TABLE logins (
+    id INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    date_of_joining DATETIME DEFAULT NOW(),
+    PRIMARY KEY (id)
+    );
+```
