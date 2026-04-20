@@ -240,7 +240,7 @@ mysql> SHOW TABLES;
 
 Empty set (0.00 sec)
 ```
-> :warning: This will permanently delete the table or database from the server with no confirmation. Use with caution
+> :warning: This will permanently delete the table or database from the server with no confirmation. Use with caution :warning:
 
 
 #### Alter
