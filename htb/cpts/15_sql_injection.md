@@ -44,6 +44,15 @@ mysql> DESCRIBE logins;
 4 rows in set (0.00 sec)
 ```
 
+Select records in a table
+```bash
+# Select all from a table
+SELECT * FROM table_name;
+
+# Select only specific columns
+SELECT column1, column2 FROM table_name;
+```
+
 # Study Notes
 ## Intro to MySQL
 ### Structured Query Language
