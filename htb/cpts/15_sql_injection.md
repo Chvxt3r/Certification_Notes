@@ -282,3 +282,29 @@ Query OK, 0 rows affected (0.01 sec)
 > :warning: Drop will remove a column with no confirmation. Use Cauting :warning:
 
 #### Update
+`UPDATE` is used to update specific records within a table, based on conditions
+Syntax:
+```bash
+UPDATE table_name SET column1=newvalue1, column2=newvalue2, ... WHERE <condition>;
+```
+Example:
+```bash
+mysql> UPDATE logins SET password = 'change_password' WHERE id > 1;
+
+Query OK, 3 rows affected (0.00 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+
+mysql> SELECT * FROM logins;
+
++----+---------------+-----------------+---------------------+
+| id | username      | password        | date_of_joining     |
++----+---------------+-----------------+---------------------+
+|  1 | admin         | p@ssw0rd        | 2020-07-02 00:00:00 |
+|  2 | administrator | change_password | 2020-07-02 11:30:50 |
+|  3 | john          | change_password | 2020-07-02 11:47:16 |
+|  4 | tom           | change_password | 2020-07-02 11:47:16 |
++----+---------------+-----------------+---------------------+
+4 rows in set (0.00 sec)
+```
+> Note: We have to specify the `WHERE` clause with `UPDATE` in order to specify which records to update.
