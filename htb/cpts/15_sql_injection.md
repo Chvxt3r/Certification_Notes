@@ -1,5 +1,29 @@
-# SQL Injection Fundamentals
+# Methods
+Connect to a database
+```bash
+mysql -u root -h host.example.com -P 3306 -p
+```
 
+View a list of databases
+```bash
+mysql> SHOW DATABASES;
+
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| users              |
++--------------------+
+```
+
+Use a specific database
+```bash
+mysql> USE users;
+```
+# Study Notes
 ## Intro to MySQL
 ### Structured Query Language
 - Required to follow the [ISO Standard](https://en.wikipedia.org/wiki/ISO/IEC_9075)
