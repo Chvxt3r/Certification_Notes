@@ -138,7 +138,8 @@ mysql> DESCRIBE logins;
 #### Table Properties
 - Within `CREATE TABLE`, we can assign properties.`AUTO_INCREMENT` and `NOT NULL` are often used in `id` fields. `AUTO_INCREMENT` automatically increments the `id` cell every time a new record is created. `NOT NULL` specifies that this field can not be blank (Required Field).
 
-Common Properties
+Common Properties:
+
 |Property|Description|
 |########|###########|
 |`AUTO_INCREMENT`|Automatically increments the field|
