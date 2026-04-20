@@ -141,7 +141,7 @@ mysql> DESCRIBE logins;
 Common Properties:
 
 |Property|Description|
-|########|###########|
+|--------|-----------|
 |`AUTO_INCREMENT`|Automatically increments the field|
 |`NOT NULL`|This cell cannot be empty (Required Field|
 |`UNIQUE`|Ensures that this cell is unique. Usefull for usernames|
