@@ -251,6 +251,34 @@ Empty set (0.00 sec)
 ```
 > :warning: This will permanently delete the table or database from the server with no confirmation. Use with caution :warning:
 
-
 #### Alter
+`ALTER` can be used to change the name, fields, or add a new column to an existing table.
+Notice the `ALTER` command requires a target and a verb.
+Examples:
+Adding a column using `ADD`:
+```bash
+mysql> ALTER TABLE logins ADD newColumn INT;
+
+Query OK, 0 rows affected (0.01 sec)
+```
+Renaming a column using `RENAME COLUMN` verb:
+```bash
+mysql> ALTER TABLE logins RENAME COLUMN newColumn TO newerColumn;
+
+Query OK, 0 rows affected (0.01 sec)
+```
+Changing a columns datatype with `MODIFY`:
+```bash
+mysql> ALTER TABLE logins MODIFY newerColumn DATE;
+
+Query OK, 0 rows affected (0.01 sec)
+```
+Dropping a column using `DROP`:
+```bash
+mysql> ALTER TABLE logins DROP newerColumn;
+
+Query OK, 0 rows affected (0.01 sec)
+```
+> :warning: Drop will remove a column with no confirmation. Use Cauting :warning:
+
 #### Update
