@@ -5,7 +5,7 @@ mysql -u root -h host.example.com -P 3306 -p
 ```
 
 View a list of databases
-```bash
+```sql
 mysql> SHOW DATABASES;
 
 +--------------------+
@@ -20,7 +20,7 @@ mysql> SHOW DATABASES;
 ```
 
 Use a specific database
-```bash
+```sql
 mysql> USE users;
 ```
 # Study Notes
