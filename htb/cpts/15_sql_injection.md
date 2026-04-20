@@ -283,6 +283,7 @@ Query OK, 0 rows affected (0.01 sec)
 
 #### Update
 `UPDATE` is used to update specific records within a table, based on conditions
+
 Syntax:
 ```bash
 UPDATE table_name SET column1=newvalue1, column2=newvalue2, ... WHERE <condition>;
