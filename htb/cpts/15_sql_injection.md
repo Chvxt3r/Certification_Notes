@@ -162,8 +162,9 @@ mysql> INSERT INTO logins VALUES(1, 'admin', 'p@ssw0rd', '2020-07-02');
 
 Query OK, 1 row affected (0.00 sec)
 ```
->:warning: Skipping columns with the `NOT NULL` constraing will result in an error (Required Value). The above example requires the user to fill in values for all the columns present in the table
-Syntax (Skipping columsn with default values)
+>:warning: Skipping columns with the `NOT NULL` constraint will result in an error (Required Value). The above example requires the user to fill in values for all the columns present in the table
+
+Syntax (Skipping columns with default values)
 ```sql
 INSERT INTO table_name(column2, column3, ...) VALUES (column2_value, column3_value, ...);
 ```
@@ -182,6 +183,9 @@ mysql> INSERT INTO logins(username, password) VALUES ('john', 'john123!'), ('tom
 Query OK, 2 rows affected (0.00 sec)
 Records: 2  Duplicates: 0  Warnings: 0
 ```
+> The above example inserts 2 new records, with values separated by a comma
+
+
 #### Select
 #### Drop
 #### Alter
