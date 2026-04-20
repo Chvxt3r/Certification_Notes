@@ -310,3 +310,154 @@ mysql> SELECT * FROM logins;
 4 rows in set (0.00 sec)
 ```
 > Note: We have to specify the `WHERE` clause with `UPDATE` in order to specify which records to update.
+
+### Query Results
+#### Sorting Results
+Use `ORDER BY` and specify the columnb to sort by
+
+Example:
+```bash
+mysql> SELECT * FROM logins ORDER BY password;
+
++----+---------------+------------+---------------------+
+| id | username      | password   | date_of_joining     |
++----+---------------+------------+---------------------+
+|  2 | administrator | adm1n_p@ss | 2020-07-02 11:30:50 |
+|  3 | john          | john123!   | 2020-07-02 11:47:16 |
+|  1 | admin         | p@ssw0rd   | 2020-07-02 00:00:00 |
+|  4 | tom           | tom123!    | 2020-07-02 11:47:16 |
++----+---------------+------------+---------------------+
+4 rows in set (0.00 sec)
+```
+
+By Default, results are sorted in ascending order. Use `ASC` or `DSC` to change.
+
+Example:
+```bash
+mysql> SELECT * FROM logins ORDER BY password DESC;
+
++----+---------------+------------+---------------------+
+| id | username      | password   | date_of_joining     |
++----+---------------+------------+---------------------+
+|  4 | tom           | tom123!    | 2020-07-02 11:47:16 |
+|  1 | admin         | p@ssw0rd   | 2020-07-02 00:00:00 |
+|  3 | john          | john123!   | 2020-07-02 11:47:16 |
+|  2 | administrator | adm1n_p@ss | 2020-07-02 11:30:50 |
++----+---------------+------------+---------------------+
+4 rows in set (0.00 sec)
+```
+
+Sort by multiple columns
+
+Example:
+```bash
+mysql> SELECT * FROM logins ORDER BY password DESC, id ASC;
+
++----+---------------+-----------------+---------------------+
+| id | username      | password        | date_of_joining     |
++----+---------------+-----------------+---------------------+
+|  1 | admin         | p@ssw0rd        | 2020-07-02 00:00:00 |
+|  2 | administrator | change_password | 2020-07-02 11:30:50 |
+|  3 | john          | change_password | 2020-07-02 11:47:16 |
+|  4 | tom           | change_password | 2020-07-02 11:50:20 |
++----+---------------+-----------------+---------------------+
+4 rows in set (0.00 sec)
+```
+
+#### Limit Results
+In the case of large query returns, we can `LIMIT` the results
+
+Example:
+```bash
+mysql> SELECT * FROM logins LIMIT 2;
+
++----+---------------+------------+---------------------+
+| id | username      | password   | date_of_joining     |
++----+---------------+------------+---------------------+
+|  1 | admin         | p@ssw0rd   | 2020-07-02 00:00:00 |
+|  2 | administrator | adm1n_p@ss | 2020-07-02 11:30:50 |
++----+---------------+------------+---------------------+
+2 rows in set (0.00 sec)
+```
+
+We can also limit with an offset:
+```bash
+mysql> SELECT * FROM logins LIMIT 1, 2;
+
++----+---------------+------------+---------------------+
+| id | username      | password   | date_of_joining     |
++----+---------------+------------+---------------------+
+|  2 | administrator | adm1n_p@ss | 2020-07-02 11:30:50 |
+|  3 | john          | john123!   | 2020-07-02 11:47:16 |
++----+---------------+------------+---------------------+
+2 rows in set (0.00 sec)
+```
+> Note: In the command above, the offset `1` denotes the last record to exclude. The results will begin with the number after `1`, and include 2 records.
+
+#### `WHERE` Clause
+Used for filtering for specific data and to fine tune results
+
+Syntax:
+```sql
+SELECT * FROM table_name WHERE <condition>;
+```
+
+Example (Returns results of User ID greater than 1):
+```bash
+mysql> SELECT * FROM logins WHERE id > 1;
+
++----+---------------+------------+---------------------+
+| id | username      | password   | date_of_joining     |
++----+---------------+------------+---------------------+
+|  2 | administrator | adm1n_p@ss | 2020-07-02 11:30:50 |
+|  3 | john          | john123!   | 2020-07-02 11:47:16 |
+|  4 | tom           | tom123!    | 2020-07-02 11:47:16 |
++----+---------------+------------+---------------------+
+3 rows in set (0.00 sec)
+```
+> Note: The filter is not inclusive. ID 1 is not included in the results
+
+Example (Searching for a username):
+```bash
+        shellsession
+mysql> SELECT * FROM logins where username = 'admin';
+
++----+----------+----------+---------------------+
+| id | username | password | date_of_joining     |
++----+----------+----------+---------------------+
+|  1 | admin    | p@ssw0rd | 2020-07-02 00:00:00 |
++----+----------+----------+---------------------+
+1 row in set (0.00 sec)
+```
+> Note: String and data types should be surrounded by single or double quotes.
+
+#### `LIKE` Clause
+Returns records that match a certain patter.
+
+Example (Returns all usernames that start with 'admin'):
+```bash
+mysql> SELECT * FROM logins WHERE username LIKE 'admin%';
+
++----+---------------+------------+---------------------+
+| id | username      | password   | date_of_joining     |
++----+---------------+------------+---------------------+
+|  1 | admin         | p@ssw0rd   | 2020-07-02 00:00:00 |
+|  4 | administrator | adm1n_p@ss | 2020-07-02 15:19:02 |
++----+---------------+------------+---------------------+
+2 rows in set (0.00 sec)
+```
+> Note: The `%` is a wildcard and matches all characters after 'admin' and will match zero or more characters. Similarly, the underscore `\_` is used to match exactly one character. The below example matches all usernames with 3 characters in them
+
+Example:
+```bash
+mysql> SELECT * FROM logins WHERE username like '___';
+
++----+----------+----------+---------------------+
+| id | username | password | date_of_joining     |
++----+----------+----------+---------------------+
+|  3 | tom      | tom123!  | 2020-07-02 15:18:56 |
++----+----------+----------+---------------------+
+1 row in set (0.01 sec)
+```
+
+### SQL Logical Operators
