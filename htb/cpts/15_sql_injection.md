@@ -446,7 +446,7 @@ mysql> SELECT * FROM logins WHERE username LIKE 'admin%';
 +----+---------------+------------+---------------------+
 2 rows in set (0.00 sec)
 ```
-> Note: The `%` is a wildcard and matches all characters after 'admin' and will match zero or more characters. Similarly, the underscore `\_` is used to match exactly one character. The below example matches all usernames with 3 characters in them
+> Note: The `%` is a wildcard and matches all characters after 'admin' and will match zero or more characters. Similarly, the underscore '\_' is used to match exactly one character. The below example matches all usernames with 3 characters in them
 
 Example:
 ```bash
