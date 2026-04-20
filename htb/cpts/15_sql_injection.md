@@ -185,8 +185,63 @@ Records: 2  Duplicates: 0  Warnings: 0
 ```
 > The above example inserts 2 new records, with values separated by a comma
 
-
 #### Select
+Used to retrieve data from the database
+General Syntax:
+```sql
+SELECT * FROM table_name;
+```
+> Note the use of a wildcard `\*`. This will select all of the records from that table.
+
+Grabbing data from specific columns
+```sql
+SELECT column1, column2 FROM table_name;
+```
+> This example will grab all of the data from just those 2 columns
+
+Examples:
+```bash
+mysql> SELECT * FROM logins;
+
++----+---------------+------------+---------------------+
+| id | username      | password   | date_of_joining     |
++----+---------------+------------+---------------------+
+|  1 | admin         | p@ssw0rd   | 2020-07-02 00:00:00 |
+|  2 | administrator | adm1n_p@ss | 2020-07-02 11:30:50 |
+|  3 | john          | john123!   | 2020-07-02 11:47:16 |
+|  4 | tom           | tom123!    | 2020-07-02 11:47:16 |
++----+---------------+------------+---------------------+
+4 rows in set (0.00 sec)
+
+
+mysql> SELECT username,password FROM logins;
+
++---------------+------------+
+| username      | password   |
++---------------+------------+
+| admin         | p@ssw0rd   |
+| administrator | adm1n_p@ss |
+| john          | john123!   |
+| tom           | tom123!    |
++---------------+------------+
+4 rows in set (0.00 sec)
+```
+
 #### Drop
+The `DROP` statement is used to remove tables from databases and databases from servers.
+Examples:
+```bash
+mysql> DROP TABLE logins;
+
+Query OK, 0 rows affected (0.01 sec)
+
+
+mysql> SHOW TABLES;
+
+Empty set (0.00 sec)
+```
+> :warning: This will permanently delete the table or database from the server with no confirmation. Use with caution
+
+
 #### Alter
 #### Update
