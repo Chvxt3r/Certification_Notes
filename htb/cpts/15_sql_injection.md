@@ -1,4 +1,4 @@
-# Methods
+# Common
 Connect to a database
 ```bash
 mysql -u root -h host.example.com -P 3306 -p
@@ -23,6 +23,27 @@ Use a specific database
 ```sql
 mysql> USE users;
 ```
+
+Show all tables within a DB
+```sql
+mysql> SHOW TABLES;
+```
+
+Describe table (Shows valid data types)
+```sql
+mysql> DESCRIBE logins;
+
++-----------------+--------------+
+| Field           | Type         |
++-----------------+--------------+
+| id              | int          |
+| username        | varchar(100) |
+| password        | varchar(100) |
+| date_of_joining | date         |
++-----------------+--------------+
+4 rows in set (0.00 sec)
+```
+
 # Study Notes
 ## Intro to MySQL
 ### Structured Query Language
