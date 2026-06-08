@@ -463,6 +463,7 @@ mysql> SELECT * FROM logins WHERE username like '___';
 ### SQL Logical Operators
 
 * 3 Main Operators
+
 |Operator|Symbol|Result|
 |********|******|******|
 |`AND`|`&&`|Takes in 2 conditions and returns true if both conditions evaluate to true|
