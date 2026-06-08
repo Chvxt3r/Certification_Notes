@@ -470,3 +470,10 @@ mysql> SELECT * FROM logins WHERE username like '___';
 |`OR`|`\|\|`|Takes in 2 conditions and returns true if at least one of the conditions is true|
 |`NOT`|`!`|Simply toggles a boolean value. A True expression will be flipped to false|
 
+* Operator Precedence
+** Division (`/`), Multiplication (`*`), and Modulus (`%`)
+** Addition (`+`) and subtraction (`-`)
+** Comparison (`=`, `>`, `<`, `<=`, `>=`, `!=`, `LIKE`)
+** NOT (`!`)
+** AND (`&&`)
+** OR (`||`)
