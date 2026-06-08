@@ -467,6 +467,6 @@ mysql> SELECT * FROM logins WHERE username like '___';
 |Operator|Symbol|Result|
 |--------|------|------|
 |`AND`|`&&`|Takes in 2 conditions and returns true if both conditions evaluate to true|
-|`OR`|`\|\|`|Takes in 2 conditions and returns true if at lest one of the conditions is true|
-|`NOT`|`!`|Simply toggles a boolean value. ex: If an expressions returns true it will be converted to false.|
+|`OR`|`\|\|`|Takes in 2 conditions and returns true if at least one of the conditions is true|
+|`NOT`|`!`|Simply toggles a boolean value. ex: If an expressions returns true it will be converted to false|
 
