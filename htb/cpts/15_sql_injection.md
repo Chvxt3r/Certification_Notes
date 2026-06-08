@@ -471,9 +471,9 @@ mysql> SELECT * FROM logins WHERE username like '___';
 |`NOT`|`!`|Simply toggles a boolean value. A True expression will be flipped to false|
 
 * Operator Precedence
-** Division (`/`), Multiplication (`*`), and Modulus (`%`)
-** Addition (`+`) and subtraction (`-`)
-** Comparison (`=`, `>`, `<`, `<=`, `>=`, `!=`, `LIKE`)
-** NOT (`!`)
-** AND (`&&`)
-** OR (`||`)
+Division (`/`), Multiplication (`*`), and Modulus (`%`)
+Addition (`+`) and subtraction (`-`)
+Comparison (`=`, `>`, `<`, `<=`, `>=`, `!=`, `LIKE`)
+NOT (`!`)
+AND (`&&`)
+OR (`||`)
