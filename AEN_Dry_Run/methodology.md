@@ -27,4 +27,12 @@ ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt:FUZZ -u http://
 ```
 * Add all discovered hosts to /etc/hosts
 
+## Low Hanging Fruit
+* Exploit the FTP anon login
+
+## Web Enum & Exploitation
+* Eyewitness to enumerate a large number of subdomains
+```bash
+eyewitness -f ilfreight_subdomains -d ilfreight_subdomain_eyewitness
+```
 
