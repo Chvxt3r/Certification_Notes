@@ -25,3 +25,6 @@ curl -s -I http://10.129.203.101 -H "HOST: defnotvalid.inlanefreight.local" | gr
 # FFUF for additional valid subdomains
 ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt:FUZZ -u http://10.129.229.147/ -H 'Host:FUZZ.inlanefreight.local' -fs 15157
 ```
+* Add all discovered hosts to /etc/hosts
+
+
