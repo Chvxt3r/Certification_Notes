@@ -63,5 +63,5 @@ Transforms the raw data into a suitable format for machine learning.
 
 ## Handling Invalid Entries
 - Dropping Invalid Entires
-- Imputing missing values
+- Imputing missing values  
 ** `imputing` is the process of replacing missing or invalid values in the dataset with estimated values
