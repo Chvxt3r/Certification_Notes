@@ -83,6 +83,6 @@ Transforms the raw data into a suitable format for machine learning.
 ** prevents models from misinterpreting category values as numeric hierarchies, but can increase the number of featurs if the category has alot of unique values.
 - `LabelEncoder` - for integer codes (may imply unintended order).
 - `HashingEncoder` - or frequency-based methods to handle high-cardinality featurs and control feature space size.
-> After encoding, verify that the transofmred features are meaningful and do not introduce artificial ordering.  
+> After encoding, verify that the transformed features are meaningful and do not introduce artificial ordering.  
 ### Handling Skewed Data (Unevenly distributed values, usually clustered at one end with a few outliers stretching out the distribution)
 
