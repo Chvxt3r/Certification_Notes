@@ -54,4 +54,4 @@ conda --version
 ```bash
 conda init
 ```
-:warning You may need to restart your shell for the changes to take effect.
+:warning: You may need to restart your shell for the changes to take effect.
