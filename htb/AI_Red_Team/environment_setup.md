@@ -49,7 +49,8 @@ conda --version
 ```
 
 ## Init
-> Unknown if this needs to be run on MacOS or Windows  
+> Unknown if this needs to be run on MacOS or Windows 
+
 `Init` configures the shell to recognize and utilize conda. Essential for activating environments and using conda commands
 ```bash
 conda init
