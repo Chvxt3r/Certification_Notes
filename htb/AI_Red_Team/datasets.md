@@ -84,5 +84,9 @@ Transforms the raw data into a suitable format for machine learning.
 - `LabelEncoder` - for integer codes (may imply unintended order).
 - `HashingEncoder` - or frequency-based methods to handle high-cardinality featurs and control feature space size.
 > After encoding, verify that the transformed features are meaningful and do not introduce artificial ordering.  
-### Handling Skewed Data (Unevenly distributed values, usually clustered at one end with a few outliers stretching out the distribution)
+### Handling Skewed Data
+- Skew occurs when the values are unvevenly distributed, often clustering near one end, with a few outliers stretching out the distribution
+- Scaling the skewed values helps model better capture patterns in the data.
+- Common scaling transform is to apply a `log` transform to compress large values more than small ones, resulting in a more balanced distribution and reduce the impact of outliers.  
+### Data Splitting
 
