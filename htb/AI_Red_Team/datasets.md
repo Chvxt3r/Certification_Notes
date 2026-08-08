@@ -89,4 +89,8 @@ Transforms the raw data into a suitable format for machine learning.
 - Scaling the skewed values helps model better capture patterns in the data.
 - Common scaling transform is to apply a `log` transform to compress large values more than small ones, resulting in a more balanced distribution and reduce the impact of outliers.  
 ### Data Splitting
+- Split the dataset into 3 subsets (Training, Validation, and testing)  
+** Training Set - Used to fit the model. Typicall 60-80% of the entire dataset  
+** Validation Set - Used for tuning hyperparamters and model selection. 10-20% of the entire dataset
+** Test Set - Used after model selections and turning are complete. Remaining 10-20% of the dataset  
 
