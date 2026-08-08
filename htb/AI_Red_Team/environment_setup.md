@@ -90,7 +90,7 @@ conda activate ai
 conda deactivate
 ```
 # Essential for this (HTB) use case
-:warning: Conda may not include everytool needed. `pip` is still available if a tool is not available in conda
+:warning: Conda may not include every tool needed. `pip` is still available if a tool is not available in conda
 ## Core package installation
 ```bash
 conda install -y numpy scipy pandas scikit-learn matplotlib seaborn transformers datasets tokenizers accelerate evaluate optimum huggingface_hub nltk category_encoders
