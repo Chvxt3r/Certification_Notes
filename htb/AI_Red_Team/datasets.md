@@ -61,7 +61,8 @@ Transforms the raw data into a suitable format for machine learning.
 * Data Integration: Merging and aggregating data from multiple sources
 * Data Formatting: Converting data types and reshaping data structures.
 
-## Handling Invalid Entries
+## Data Cleaning
+### Handling Invalid Entries
 - Dropping Invalid Entires  
 ** This is the most straightforward approach and simply discards any entries with an error.  
 ** Generally preferred when data accuracy is paramount, and the loss of some data doesn't significantly compromise the overall analysis.  
@@ -73,4 +74,15 @@ Transforms the raw data into a suitable format for machine learning.
 ** For categorical columns, use the most frequent value.  
 ** `SimpleImputer` can be used for simple scenarios, but more sophisticated datasets may need `KNNImputer` or `IterativeImputer`.  
 ** Once imputation is done, apply domain knowledge to solve any entries still missing.
+
+## Data Transformation - Improving the representation and distribution of features
+### Encoding - Converting categorical values into numeric form
+- `OneHotEncoder` - for binary indicator features that represent each category seperately.  
+** Takes a categorical feature(like "color") and converts it into a set of new binary featurs.  
+** ex. Color contains red, green, and blue. One-hot encoding would remove Color, and create color_red, color_blue, and color_green, set to 1 or 0 depending on the original color.  
+** prevents models from misinterpreting category values as numeric hierarchies, but can increase the number of featurs if the category has alot of unique values.
+- `LabelEncoder` - for integer codes (may imply unintended order).
+- `HashingEncoder` - or frequency-based methods to handle high-cardinality featurs and control feature space size.
+> After encoding, verify that the transofmred features are meaningful and do not introduce artificial ordering.  
+### Handling Skewed Data (Unevenly distributed values, usually clustered at one end with a few outliers stretching out the distribution)
 
