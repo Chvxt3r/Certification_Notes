@@ -68,4 +68,9 @@ Transforms the raw data into a suitable format for machine learning.
 ** Not always feasible with a small dataset or invalid entries consititute a significant amount of the data.  
 
 - Imputing missing values  
-** `imputing` is the process of replacing missing or invalid values in the dataset with estimated values
+** `imputing` is the process of replacing missing or invalid values in the dataset with estimated values.  
+** For basic numeric columns, simple methods such as median or mean work best.  
+** For categorical columns, use the most frequent value.  
+** `SimpleImputer` can be used for simple scenarios, but more sophisticated datasets may need `KNNImputer` or `IterativeImputer`.  
+** Once imputation is done, apply domain knowledge to solve any entries still missing.
+
