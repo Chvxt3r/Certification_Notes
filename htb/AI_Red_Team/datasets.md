@@ -115,3 +115,14 @@ Transforms the raw data into a suitable format for machine learning.
 ** Computed as `2 * (precision * recall) / (precision + recall).  
 ** Useful for tasks involving class imbalance.
 
+### Additional Considerations
+- Specificity: Measures how effectively the model identifies negatives
+- AUC: Indicates the model's discriminative capability at various thresholds
+- Matthews Correlation Coefficient: Usefule for highly imbalanced datasets.
+- Confusion Matrix: Summarizes predicitons versus true labels, offering a comprehensive view of performance.
+
+### Contextualizing the Metrics
+* Are these metrics consistent across the data?
+* Does the dataset represent real-world conditions, including class-imbalance?
+* Are external factors accounted for? (Example: The real cost of false positives/negatives)
+
