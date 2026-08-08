@@ -1,4 +1,4 @@
-# Installation
+# Conda Installation
 ## Windows
 Install Scoop
 ```powershell
@@ -103,3 +103,24 @@ pip install requests requests_toolbelt
 ```bash
 conda update --all
 ```
+
+# JupyterLab
+## Installation
+Use `conda` to install
+```bash
+conda install -y jupyter jupyterlab notebook ipykernel 
+```
+:warning: Make sure you are in your virtual environment
+## Running
+Fromw within your virtual environment:
+```bash
+jupyter lab
+```
+Opens in a browser
+:warning: Obviously this will not work over ssh, unless you are accessing from another computer.
+
+> URL for accessing Jupyter Lab: `http://<host/IP>:8888
+
+:warning: If access from another computer, you will need the token from the startup messaging, and then you can set a password
+
+
