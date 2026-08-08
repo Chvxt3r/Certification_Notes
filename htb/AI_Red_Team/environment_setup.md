@@ -1,7 +1,5 @@
-# AI Environment Setup
-
-## Installation
-### Windows
+# Installation
+## Windows
 Install Scoop
 ```powershell
 Set-ExecutionPolicy RemoteSigned -scope CurrentUser # Allow scripts to run
@@ -21,7 +19,7 @@ Verify
 conda --version
 ```
 
-### MacOS
+## MacOS
 Install `Homebrew`
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -34,7 +32,7 @@ Verify
 ```
 conda --version
 ```
-### Linux
+## Linux
 Can install miniconda direct
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
