@@ -117,6 +117,7 @@ Fromw within your virtual environment:
 jupyter lab
 ```
 Opens in a browser
+
 :warning: Obviously this will not work over ssh, unless you are accessing from another computer.
 
 > URL for accessing Jupyter Lab: `http://<host/IP>:8888
