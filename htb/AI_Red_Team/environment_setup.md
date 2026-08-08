@@ -128,7 +128,7 @@ Restarting the Jupyter Lab Kernel
 > Useful if things become cluttered  
 
 1. Open the `Kernel` menu in the tool bar
-2. Choose `Restart Kernel` to restart the kernel and save your outputs, or `Restart Kernel and Clear All Outputs` to remove your previous outputs and start from scratch
+2. Choose `Restart Kernel` to restart the kernel and save your outputs, or `Restart Kernel and Clear All Outputs` to remove your previous outputs and start from scratch  
 :warning: If clearing outputs, and any code blocks depend on previously run code blocks, you'll have to re-run the previous code blocks
 
 
