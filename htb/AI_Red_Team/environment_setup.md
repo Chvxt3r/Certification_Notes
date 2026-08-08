@@ -47,3 +47,11 @@ Verify
 ```bash
 conda --version
 ```
+
+## Init
+> Unknown if this needs to be run on MacOS or Windows
+`Init` configures the shell to recognize and utilize conda. Essential for activating environments and using conda commands
+```bash
+conda init
+```
+:warning You may need to restart your shell for the changes to take effect.
