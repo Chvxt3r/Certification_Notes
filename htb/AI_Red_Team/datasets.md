@@ -23,3 +23,22 @@ Structured collections of data used for analysis and model training.
 |`Representativeness`|The dataset should be representative of the population it aims to model. A biased or unrepresentative dataset can lead to biased models.|A facial recognition system's dataset should include a diverse range of faces from different ethnicities, ages, and genders.|
 |`Balance`|The dataset should be balanced, especially for classification tasks. Imbalanced datasets can lead to biased models that perform poorly on minority classes.|Techniques like oversampling, undersampling, or generating synthetic data can help balance the dataset.|
 |`Size`|The dataset should be large enough to capture the complexity of the problem. Small datasets may not provide enough information for the model to learn effectively.|However, large datasets can also be computationally expensive and require more powerful hardware.|
+
+## Dataset Challenges and Considerations
+Note potential difficulties such as:
+* mix of numerical or categorical data
+* Missing value and invalid entries, requiring cleaning
+* numeric columns containing strings, which will need to be converted or moved
+* Unknown values that must be standardized or otherwise addressed.
+
+## Evaluating a Dataset
+- Loading into a pandas dataframe makes inspecting, manipulating, and preparing the dataset more straightforward.
+```python
+import pandas as pd
+
+# Load the dataset
+data = pd.read_csv("./demo_dataset.csv")
+```
+:warning: This code assumes we are working with a `.csv`. Alter the code to fit your data
+
+- Exploring
