@@ -53,3 +53,15 @@ print(data.info())
 print(data.isnull().sum())
 ```
 -- The `info()` method reveals the datasets shape, column names, data types, and how many entries are present for each column.
+
+# Data Preprocessing
+Transforms the raw data into a suitable format for machine learning.
+* Data Cleaning: Fixing missing values, removing duplicates, and smoothing noisy data.
+* Data Transoformation: Normalizing, encoding, scaling, and reducing data.
+* Data Integration: Merging and aggregating data from multiple sources
+* Data Formatting: Converting data types and reshaping data structures.
+
+## Handling Invalid Entries
+- Dropping Invalid Entires
+- Imputing missing values
+** `imputing` is the process of replacing missing or invalid values in the dataset with estimated values
