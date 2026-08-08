@@ -107,19 +107,19 @@ Transforms the raw data into a suitable format for machine learning.
 
 ### Recall
 - Measures the models ability to identify all positive instances.  
-** Computed as `true positives / (true positives + false negatives).  
+** Computed as `true positives / (true positives + false negatives)`.  
 ** High recall reduces risk of missing critical cases
 
 ### F1-score
 - harmonic mean of precision and recall. Higher score indicates balance of precision and recall.  
-** Computed as `2 * (precision * recall) / (precision + recall).  
+** Computed as `2 * (precision * recall) / (precision + recall)`.  
 ** Useful for tasks involving class imbalance.
 
 ### Additional Considerations
-- Specificity: Measures how effectively the model identifies negatives
-- AUC: Indicates the model's discriminative capability at various thresholds
-- Matthews Correlation Coefficient: Usefule for highly imbalanced datasets.
-- Confusion Matrix: Summarizes predicitons versus true labels, offering a comprehensive view of performance.
+- `Specificity`: Measures how effectively the model identifies negatives
+- `AUC`: Indicates the model's discriminative capability at various thresholds
+- `Matthews Correlation Coefficient`: Usefule for highly imbalanced datasets.
+- `Confusion Matrix`: Summarizes predicitons versus true labels, offering a comprehensive view of performance.
 
 ### Contextualizing the Metrics
 * Are these metrics consistent across the data?
