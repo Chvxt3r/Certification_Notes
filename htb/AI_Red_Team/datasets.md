@@ -15,5 +15,5 @@ Structured collections of data used for analysis and model training.
 
 ## Attributes of a "Good" Dataset
 |Attribute|Description|Example|
-|#########|###########|#######|
+|---------|-----------|-------|
 |`Relevance`|The data should be relevant to the problem at hand. Irrelevant data can introduce noise and reduce model performance.|Text data from social media posts is more relevant than stock market prices for a sentiment analysis task.|
