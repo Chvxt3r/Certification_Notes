@@ -126,3 +126,8 @@ Transforms the raw data into a suitable format for machine learning.
 * Does the dataset represent real-world conditions, including class-imbalance?
 * Are external factors accounted for? (Example: The real cost of false positives/negatives)
 
+
+# Useful Links
+[Packet Capture DataSet from HTB](https://academy.hackthebox.com/storage/modules/292/demo_dataset.zip)
+[Packet Capture DataSet in this repo](https://github.com/Chvxt3r/Certification_Notes/blob/main/htb/AI_Red_Team/demo_dataset.zip)
+[My Jupyter Notebook from this section](https://github.com/Chvxt3r/Certification_Notes/blob/main/htb/AI_Red_Team/DataSets.ipynb)
