@@ -124,8 +124,7 @@ Jupyter Lab opens in a browser
 
 :warning: If accessing from another computer, you will need the token from the startup messaging, and then you can set a password
 
-Restarting the Jupyter Lab Kernel
-> Useful if things become cluttered  
+Restarting the Jupyter Lab Kernel (Useful if things become cluttered)
 
 1. Open the `Kernel` menu in the tool bar
 2. Choose `Restart Kernel` to restart the kernel and save your outputs, or `Restart Kernel and Clear All Outputs` to remove your previous outputs and start from scratch  
