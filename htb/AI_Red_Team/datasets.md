@@ -41,4 +41,15 @@ data = pd.read_csv("./demo_dataset.csv")
 ```
 :warning: This code assumes we are working with a `.csv`. Alter the code to fit your data
 
-- Exploring
+- Exploring - Now we can evaluate the dataset to find and correct any anomolies
+```python
+# Display the first few ros
+print(data.head())
+
+# Get a summary of the column data types and non-null counts
+print(data.info())
+
+# Identify Columns with missing values
+print(data.isnull().sum())
+```
+-- The `info()` method reveals the datasets shape, column names, data types, and how many entries are present for each column.
