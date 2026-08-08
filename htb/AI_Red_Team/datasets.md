@@ -97,21 +97,21 @@ Transforms the raw data into a suitable format for machine learning.
 ## Evaluation Metrics
 ### Accuracy
 - Proportion of correct predictions out of all predictions made.  
-** Computed as `(true positives + true negatives) / (all instances)`.
+** Computed as `(true positives + true negatives) / (all instances)`.  
 ** Can be misleading in cases of class imbalance  
 
 ### Precision
 - Measures how often the models predicted positives are truly positive.  
-** Computed as `true positives / (true positives + false positives)`.
+** Computed as `true positives / (true positives + false positives)`.  
 ** High precision reduces false alarms
 
 ### Recall
 - Measures the models ability to identify all positive instances.  
-** Computed as `true positives / (true positives + false negatives).
+** Computed as `true positives / (true positives + false negatives).  
 ** High recall reduces risk of missing critical cases
 
 ### F1-score
 - harmonic mean of precision and recall. Higher score indicates balance of precision and recall.  
-** Computed as `2 * (precision * recall) / (precision + recall).
+** Computed as `2 * (precision * recall) / (precision + recall).  
 ** Useful for tasks involving class imbalance.
 
