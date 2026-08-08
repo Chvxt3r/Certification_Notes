@@ -104,7 +104,7 @@ pip install requests requests_toolbelt
 conda update --all
 ```
 
-# JupyterLab
+# Jupyter Lab
 ## Installation
 Use `conda` to install
 ```bash
@@ -122,6 +122,5 @@ Jupyter Lab opens in a browser
 
 > URL for accessing Jupyter Lab: `http://<host/IP>:8888`
 
-:warning: If access from another computer, you will need the token from the startup messaging, and then you can set a password
-
+:warning: If accessing from another computer, you will need the token from the startup messaging, and then you can set a password
 
