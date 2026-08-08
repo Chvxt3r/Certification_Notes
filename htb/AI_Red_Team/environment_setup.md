@@ -116,11 +116,11 @@ Fromw within your virtual environment:
 ```bash
 jupyter lab
 ```
-Opens in a browser
+Jupyter Lab opens in a browser
 
 :warning: Obviously this will not work over ssh, unless you are accessing from another computer.
 
-> URL for accessing Jupyter Lab: `http://<host/IP>:8888
+> URL for accessing Jupyter Lab: `http://<host/IP>:8888`
 
 :warning: If access from another computer, you will need the token from the startup messaging, and then you can set a password
 
