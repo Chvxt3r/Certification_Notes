@@ -63,5 +63,9 @@ Transforms the raw data into a suitable format for machine learning.
 
 ## Handling Invalid Entries
 - Dropping Invalid Entires
+** This is the most straightforward approach and simply discards any entries with an error.
+** Generally preferred when data accuracy is paramount, and the loss of some data doesn't significantly compromise the overall analysis.
+** Not always feasible with a small dataset or invalid entries consititute a significant amount of the data.
+
 - Imputing missing values  
 ** `imputing` is the process of replacing missing or invalid values in the dataset with estimated values
