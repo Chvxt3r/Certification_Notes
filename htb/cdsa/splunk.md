@@ -97,3 +97,7 @@ index="main" EventCode=4662 | rex max_match=0 "[^%](?<guid>{.*})" | table guid
 ** `table guid` displays the extracted GUIDs in the output.  
 ** `max_match=0` option ensures all occurences are extracted from each event.  
 * By default, `rex` only extracts the first occurence. see `max_match=0` above.
+
+
+# References
+[Splunk Command quick reference](https://help.splunk.com/en/splunk-enterprise/spl-search-reference/9.4/quick-reference/command-quick-reference)
