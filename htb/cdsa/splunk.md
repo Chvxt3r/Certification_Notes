@@ -131,8 +131,9 @@ index="main" earliest=-7d EventCode !=1
 ```spl
 index="main" sourcetype="WinEventLog:Sysmon" (EventCode=1 OR EventCode=3) | transaction Image startswith=eval(EventCode=1) endswith=eval(EventCode=3) maxspan=1m | table Image |  dedup Image 
 ```
-** `| transaction Image startswith=eval(EventCode=1) endswith=eval(EventCode=3) maxspan=1m`: `transaction` command is used to group events based on the `Image` field. The grouping is subject o the conditions that it starts with an event where the EventCode is 1, and ends with an event where the EventCode is 3, and the maximum time between them is 1 minute.  
-** Basically, this query identies a sequence of activies (process creation followed by a network connection) associated with the same executable or script within a 1 minute window. Presents the results in a table, and ensures the executables/scripts present are unique. ***Valuable in Threat Hunting***  
+** `| transaction Image startswith=eval(EventCode=1) endswith=eval(EventCode=3) maxspan=1m`: `transaction` command is used to group events based on the `Image` field. The grouping is subject to the conditions that it starts with an event where the EventCode is 1, and ends with an event where the EventCode is 3, and the maximum time between them is 1 minute.  
+** Basically, this query identies a sequence of activies (process creation followed by a network connection) associated with the same executable or script within a 1 minute window. Presents the results in a table, and ensures the executables/scripts present are unique.   
+** ***Valuable in Threat Hunting***  
 
 ## Subsearches
 * Search nested inside another search
