@@ -238,7 +238,7 @@ index=* sourcetype=* | rare limit=10 field1, field2, field3
 
 
 # References
-[Splunk Command quick reference](https://help.splunk.com/en/splunk-enterprise/spl-search-reference/9.4/quick-reference/command-quick-reference)
+[Splunk Command quick reference](https://help.splunk.com/en/splunk-enterprise/spl-search-reference/9.4/quick-reference/command-quick-reference)  
 [Walkthrough of the Scenario by Javier Uribe](https://jjeuribe.github.io/posts/hackthebox-intrusion-detection-with-splunk/)
 # Useful Queries (Add to cheatsheet)
 
