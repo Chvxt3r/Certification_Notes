@@ -144,6 +144,15 @@ index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 NOT [ search index="mai
 ** `[ search index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | top limit=100 Image | fields Image ]`: The subsearch. Fetches the Process Creation events, then uses `top` to return the 100 most common process names.  
 ** This query can be used to highlight unusal or rare process.  
 
+# How to identify the available data (or, how do I know what to search for?)
+## Using SPL
+* `eventcount`
+    ```spl
+    | eventcount summarize=false index=* | table index
+    ```
+    ** Counts events in all indexes, `summarize=false` display counts for each index separately, `table` displays the table.   
+    ** Basically, How do I find the available indexes?  
+
 
 
 
