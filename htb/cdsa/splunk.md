@@ -90,10 +90,10 @@ index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | eval Process_Path=low
 index="main" EventCode=4662 | rex max_match=0 "[^%](?<guid>{.*})" | table guid
 ```
 * `index="main" EventCode=4662` filters the events to those in the main index with the event code equal to 4662
-* `rex max_match=0 "[^%](?<guid>{.*})"` uses rex to extract values matchin the patter from the events fields.
-** `{.*}` looks for substrings that begin with `{` and end with `}`
-** `[^%] ensures that the match does not begin with a `%`
-**  The captured value within the curly braces `{.*}` is assigned to the name capture group `guid`
-** `table guid` displays the extracted GUIDs in the output.
-** `max_match=0` option ensures all occurences are extracted from each event.
+* `rex max_match=0 "[^%](?<guid>{.*})"` uses rex to extract values matchin the patter from the events fields.  
+** `{.*}` looks for substrings that begin with `{` and end with `}`  
+** `[^%]` ensures that the match does not begin with a `%`  
+**  The captured value within the curly braces `{.*}` is assigned to the name capture group `guid`  
+** `table guid` displays the extracted GUIDs in the output.  
+** `max_match=0` option ensures all occurences are extracted from each event.  
 * By default, `rex` only extracts the first occurence. see `max_match=0` above.
