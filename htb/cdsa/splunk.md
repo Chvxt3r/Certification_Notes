@@ -135,6 +135,13 @@ index="main" sourcetype="WinEventLog:Sysmon" (EventCode=1 OR EventCode=3) | tran
 ** Basically, this query identies a sequence of activies (process creation followed by a network connection) associated with the same executable or script within a 1 minute window. Presents the results in a table, and ensures the executables/scripts present are unique. ***Valuable in Threat Hunting***  
 
 ## Subsearches
+* Search nested inside another search
+```spl
+index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 NOT [ search index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | top limit=100 Image | fields Image ] | table _time, Image, CommandLine, User, ComputerName
+```
+** `NOT`: the main search will exclude the results of the subsearch from it's results.  
+** `[ search index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | top limit=100 Image | fields Image ]`: The subsearch. Fetches the Process Creation events, then uses `top` to return the 100 most common process names.  
+** This query can be used to highlight unusal or rare process.  
 
 
 
