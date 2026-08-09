@@ -239,3 +239,15 @@ index=* sourcetype=* | rare limit=10 field1, field2, field3
 
 # References
 [Splunk Command quick reference](https://help.splunk.com/en/splunk-enterprise/spl-search-reference/9.4/quick-reference/command-quick-reference)
+
+# Useful Queries (Add to cheatsheet)
+
+* Find all computers access by a user
+```spl
+index=your_index_name sourcetype=WinEventLog:Security EventCode=4624 Account_Name="<account name>" | stats dc(ComputerName) as distinct_computers
+```
+
+* Identify the account with the highest number of KRB ticket requests
+```spl
+index=your_index EventCode=4768 | stats count by Account_Name | sort -count | head 1
+```
