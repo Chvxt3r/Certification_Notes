@@ -98,6 +98,32 @@ index="main" EventCode=4662 | rex max_match=0 "[^%](?<guid>{.*})" | table guid
 ** `max_match=0` option ensures all occurences are extracted from each event.  
 * By default, `rex` only extracts the first occurence. see `max_match=0` above.
 
+## `lookup`
+* Lookup table (csv) has to be added in the splunk settings for this to work. (Settings -> Lookups -> Lookup Table Files -> New Look Table File)
+```spl
+index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | eval filename=mvdedup(split(Image, "\\")) | eval filename=mvindex(filename, -1) | eval filename=lower(filename) | lookup malware_lookup.csv filename OUTPUTNEW is_malware | table filename, is_malware | dedup filename, is_malware
+```
+** `index="main" sourcetype="WinEventLog:Sysmon" EventCode=1`: This command is the search criteria. It is pulling from the `main` index where the sourcetype is `WinEventLog:Sysmon` and the `EventCode` is `1`. The Sysmon `EventCode` of `1` indicates a process creation event.  
+** `| eval filename=mvdedup(split(Image, "\\"))`: This command is splitting the `Image` field, which contains the file path, into multiple elements at each backslash and making it a multivalue field. The `mvdedup` function is used to eliminate any duplicates in this multivalue field.  
+** `| eval filename=mvindex(filename, -1)`: Here, the `mvindex` function is being used to select the last element of the multivalue field generated in the previous step. In the context of a file path, this would typically be the actual file name.  
+** `| eval filename=lower(filename)`: This command is taking the `filename` field and converting it into lowercase using the lower function. This is done to ensure the search is not case-sensitive and to standardize the data.  
+** `| lookup malware_lookup.csv filename OUTPUTNEW is_malware`: This command is performing a lookup operation. The `lookup` command is taking the `filename` field, and checking if it matches any entries in the `malware_lookup.csv` lookup table. If there is a match, it appends a new field, `is_malware`, to the event, indicating whether the process is flagged as malicious.  
+** `| table filename, is_malware`: The `table` command is used to format the output, in this case showing only the `filename` and `is_malware` fields in a tabular format.  
+** `| dedup filename, is_malware`: This command eliminates any duplicate events based on the `filename` and `is_malware` fields. In other words, if there are multiple identical entries for the `filename` and `is_malware` fields in the search results, the `dedup` command will retain only the first occurrence and remove all subsequent duplicates.  
+
+## `inputlookup`
+
+
+
+
+
+
+
+
+
+
+
+
 
 # References
 [Splunk Command quick reference](https://help.splunk.com/en/splunk-enterprise/spl-search-reference/9.4/quick-reference/command-quick-reference)
