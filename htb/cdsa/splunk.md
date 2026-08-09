@@ -6,6 +6,9 @@
 
 # SPL (Splunk Processing Languarge)
 ## Basic Searching
+* 'search' commmand is implicit in the commands, but can be included.
+* Supports Boolean operators ('AND', 'OR', and 'NOT')
+
 ```spl
 # Search the main index for all events containing the word "Unknown"
 index="main" "UNKNOWN"
