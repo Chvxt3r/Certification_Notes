@@ -4,7 +4,7 @@
 
 ![splunk architecture2](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/218/102.png)
 
-# SPL (Splunk Processing Language)
+# SPL (Splunk Processing Language) Commands and Searches
 ## Basic Searching
 * `search` commmand is implicit in the commands, but can be included.
 * Supports Boolean operators (`AND`, `OR`, and `NOT`)
@@ -112,10 +112,29 @@ index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | eval filename=mvdedup
 ** `| dedup filename, is_malware`: This command eliminates any duplicate events based on the `filename` and `is_malware` fields. In other words, if there are multiple identical entries for the `filename` and `is_malware` fields in the search results, the `dedup` command will retain only the first occurrence and remove all subsequent duplicates.  
 
 ## `inputlookup`
+* Retrieves data froma lookup file without joining it to a search. Basically just displays the contents of a lookup file.
+```spl
+| inputlookup malware_lookup.csv
+```
 
+## `Time Range`
+* used to select a time range. (You can also use the time range picker in the web interface)
+```spl
+# Selecting from index "main" earliest entry should be negative 7 days from now, all events not EventCode 1
 
+index="main" earliest=-7d EventCode !=1
+```
 
+## `Transaction`
+* Used to group event that share common characteristics into transactions.
+* Often used to track sessions or activies that span across multiple events.
+```spl
+index="main" sourcetype="WinEventLog:Sysmon" (EventCode=1 OR EventCode=3) | transaction Image startswith=eval(EventCode=1) endswith=eval(EventCode=3) maxspan=1m | table Image |  dedup Image 
+```
+** `| transaction Image startswith=eval(EventCode=1) endswith=eval(EventCode=3) maxspan=1m`: `transaction` command is used to group events based on the `Image` field. The grouping is subject o the conditions that it starts with an event where the EventCode is 1, and ends with an event where the EventCode is 3, and the maximum time between them is 1 minute.  
+** Basically, this query identies a sequence of activies (process creation followed by a network connection) associated with the same executable or script within a 1 minute window. Presents the results in a table, and ensures the executables/scripts present are unique. ***Valuable in Threat Hunting***  
 
+## Subsearches
 
 
 
