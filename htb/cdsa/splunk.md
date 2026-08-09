@@ -199,7 +199,7 @@ sourcetype="WinEventLog:Security" | fieldsummary
 ```spl
 index=* sourcetype=* | bucket _time span=1d | stats count by _time, index, sourcetype | sort - _time
 ```  
-    ** Sometimes, we might want to know how events are distributed over time. This query retrieves all data `(index=* sourcetype=*)`, then `bucket` command is used to group the events based on the `_time` field into 1-day buckets. The `stats` command then counts the number of events for each day (`_time`), `index`, and `sourcetype`. Lastly, the `sort` command sorts the result in descending order of `_time`.  
+** Sometimes, we might want to know how events are distributed over time. This query retrieves all data `(index=* sourcetype=*)`, then `bucket` command is used to group the events based on the `_time` field into 1-day buckets. The `stats` command then counts the number of events for each day (`_time`), `index`, and `sourcetype`. Lastly, the `sort` command sorts the result in descending order of `_time`.  
 
 * `rare`
 ```spl
