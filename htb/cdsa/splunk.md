@@ -153,6 +153,82 @@ index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 NOT [ search index="mai
     ** Counts events in all indexes, `summarize=false` display counts for each index separately, `table` displays the table.   
     ** Basically, How do I find the available indexes?  
 
+* `metadata`
+    ```spl
+    | metadata type=sourcetypes
+    ```
+    ** `metadata` provides statistics surrounding specified index fields, in this example, sourcetypes.  
+    ** basically, How do I find all of the different sourcetypes?  
+
+    ```spl
+    # Returns metadata about the sourcetypes
+    | metadata type=sourcetypes index=* | table sourcetype
+    ```
+    ```spl
+    # Returns a list of all data sources in the environment
+    | metadate type=sourcetypes index=* | table source
+    ```
+* Finding Fields
+```spl
+# Returns the raw data in table form for the specifice sourcetype
+
+sourcetype="WinEventLog:Security" | table _raw
+
+# See all fields in a source type, including the non-default fields.
+# Generates a table with all fields available in the source type.
+
+sourcetype="WinEventLog:Security" | table *
+```
+:warning: The above commands can generate a very large table. Better way is below
+
+* Better approach is using the `fields` command
+```spl
+sourcetype="WinEventLog:Security" | fields Account_Name, EventCode | table Account_Name, EventCode
+```
+
+* To see a list of field names only
+```spl
+# Returns a table that includes every field found in the events returned by the search
+# in this case, WinEventLog:Security
+
+sourcetype="WinEventLog:Security" | fieldsummary
+```
+:warning: Values provided by `fieldsummary` are based on events returned by our search. If you need to see all of them, you're going to have to make sure you have a long enough time range to capture them all.
+
+* How events are distributed over time
+```spl
+index=* sourcetype=* | bucket _time span=1d | stats count by _time, index, sourcetype | sort - _time
+```
+    ** Sometimes, we might want to know how events are distributed over time. This query retrieves all data `(index=* sourcetype=*)`, then `bucket` command is used to group the events based on the `_time` field into 1-day buckets. The `stats` command then counts the number of events for each day (`_time`), `index`, and `sourcetype`. Lastly, the `sort` command sorts the result in descending order of `_time`.  
+
+* `rare`
+```spl
+# This command finds the 10 rarest combinations of indexes and sourcetypes
+
+index=* sourcetype=* | rare limit=10, index, sourcetype
+
+# This command finds the 20 least common values of the ParentImage field
+
+index="main" | rare limit=2- useother=f ParentImage
+```
+* Detailed Summary of fields
+```spl
+# This search shows a summary of all fields (fieldsummary), filters out fields that appear in less than 100 events (where count < 100), and then displays a table (table) showing the field name, total count, and distinct count.
+
+index=* sourcetype=* | fieldsummary | where count < 100 | table field, count, distinct_count
+```
+* Using `sistats to explore event diversity
+```spl
+# This command counts the number of events per index, sourcetype, source, and host, which can provide us a clear picture of the diversity and distribution of our data.
+
+index=* | sistats count by index, sourcetype, source, host
+```
+```spl
+# The rare command can also be used to find uncommon combinations of field values
+
+index=* sourcetype=* | rare limit=10 field1, field2, field3
+```
+## Leveraging Splunks User interface
 
 
 
