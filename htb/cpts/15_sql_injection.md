@@ -48,6 +48,7 @@ and Waalaa, we have an injection
 
 # Query Logic Subversion
 ## Auth Bypass
+In auth bypass, the trick is the `WHERE` conditions interaction with `AND` and `OR`. With the `AND` condition both statements must be true, but with the `OR` condition, only one statement needs to be true.
 
 Consider a type unsanitized query for authentication
 ```sql
@@ -107,3 +108,5 @@ Next, the `OR` is evaulated:
 * `'1'='1'` condition is irrelevant in this example because we just needed to get the `OR` in there.
 > we just need at least part of the `OR` to evaulate to `True`
 
+### Additional Resources
+![Infosec Mastery](https://www.youtube.com/watch?v=zEWQD4OwGZs)
