@@ -71,7 +71,7 @@ To verify if the page is even vulnerable to injection, try inserting one of the 
 
 In our example above, injecting a single quote throws a syntax error, because we have an odd number of quotes in our query.
 
-## OR Injection
+## `OR` Injection
 * Most Important: We always need the query to return `true`, regardless of the username and password entered
 * Critical to this, is the MySQL Operation Precedenct, which states an `AND` is always evaluated before an `OR`. This means that if there is at least one `true` condition along with an `OR` operator, the condition will evaluate to true.
 
@@ -109,4 +109,4 @@ Next, the `OR` is evaulated:
 > we just need at least part of the `OR` to evaulate to `True`
 
 ### Additional Resources
-![Infosec Mastery](https://www.youtube.com/watch?v=zEWQD4OwGZs)
+[Infosec Mastery](https://www.youtube.com/watch?v=zEWQD4OwGZs)
