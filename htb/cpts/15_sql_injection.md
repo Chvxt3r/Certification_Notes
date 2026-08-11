@@ -109,8 +109,17 @@ Next, the `OR` is evaulated:
 > we just need at least part of the `OR` to evaulate to `True`
 
 ## Using Comments
+2 Types of comments available to use:
+* `-- `
+> Note: the 2 dashes `-- ` is not enough to start a comment. You have to have a space after it. This might be url encoded as `--+`. You may also see this as `-- -` (3 dashes with a space between the 2nd and 3rd dash.  
 
+* `#`
+> Note: The `#` cannot be passed in the url of a browser, it will need to be url encoded as `%23`
 
+We want our query to look something like this:
+```sql
+SELECT * FROM logins WHERE username='admin'-- ' AND password='something';
+```
 
 
 ## Additional Resources
