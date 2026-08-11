@@ -149,9 +149,11 @@ SELECT * FROM logins WHERE (username='test' OR id=5)-- AND password=test
 ```
 This get's us in because we changed the parenthetical `AND` into an `OR` and just entered an arbitrary ID, then commented out the rest of the query.
 
-
-
-
-
 ## Additional Resources
-[Infosec Mastery](https://www.youtube.com/watch?v=zEWQD4OwGZs)
+[Infosec Mastery](https://www.youtube.com/watch?v=zEWQD4OwGZs)  
+
+# Union Clause
+## Definition
+The Union clause is used to combine results from multipl `SELECT` statements
+
+continue from section 11 SQL Injection Fundamentals
