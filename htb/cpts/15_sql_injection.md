@@ -120,6 +120,7 @@ We want our query to look something like this:
 ```sql
 SELECT * FROM logins WHERE username='admin'-- ' AND password='something';
 ```
+As you can see in the syntax highlighting, the rest of the query was commented out, so as long as the username is correct, the `WHERE` will return to `TRUE`
 
 
 ## Additional Resources
