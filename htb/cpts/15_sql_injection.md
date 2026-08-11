@@ -99,7 +99,7 @@ Query in plain english:
 
 Why this works:
 `AND` is evaluated first:
-* `'1'='1' is `TRUE`
+* `'1'='1'` is `TRUE`
 * `PASSWORD='something'` is `FALSE`
 * The result of the `AND` condition is `FALSE` because `true AND false` is `False`
 
@@ -108,5 +108,10 @@ Next, the `OR` is evaulated:
 * `'1'='1'` condition is irrelevant in this example because we just needed to get the `OR` in there.
 > we just need at least part of the `OR` to evaulate to `True`
 
-### Additional Resources
+## Using Comments
+
+
+
+
+## Additional Resources
 [Infosec Mastery](https://www.youtube.com/watch?v=zEWQD4OwGZs)
