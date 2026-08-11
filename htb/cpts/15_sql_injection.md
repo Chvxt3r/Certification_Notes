@@ -37,10 +37,11 @@ and Waalaa, we have an injection
  ![types of injections](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/33/types_of_sqli.jpg)
 
 ## Definitions
-In-Band - Output of both the intended and the new query printed directly on the front-end and can be directly read.
-    Union Based - have to specify the exact location (such as a column), which we can read, so the query will direct the output there.
-    Error Based - Used when we can see SQL errors on the front end, so we intentionally cause an error that returns the output we need.
-Blind - Output not printed and must be retrieved, character by character.
-    Boolean Based - Use SQL conditional statements to control whether the page returns any output at all if our conditional statement returns true
-    Time Based - Use SQL conditional statements to delay the page response if the conditional statement returns true using the `Sleep()` function
-Out-of-band - No access to the output whatsoever. Must use a proxy to read the data. i.e., DNS Record
+* In-Band - Output of both the intended and the new query printed directly on the front-end and can be directly read.  
+    ** Union Based - have to specify the exact location (such as a column), which we can read, so the query will direct the output there.  
+    ** Error Based - Used when we can see SQL errors on the front end, so we intentionally cause an error that returns the output we need.  
+* Blind - Output not printed and must be retrieved, character by character.  
+    ** Boolean Based - Use SQL conditional statements to control whether the page returns any output at all if our conditional statement returns true  
+    ** Time Based - Use SQL conditional statements to delay the page response if the conditional statement returns true using the `Sleep()` function  
+* Out-of-band - No access to the output whatsoever. Must use a proxy to read the data. i.e., DNS Record  
+    ** 
