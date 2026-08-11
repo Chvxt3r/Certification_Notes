@@ -88,7 +88,7 @@ So let's modify our query:
 ```sql
 SELECT * FROM logins WHERE username='admin or '1'='1'' AND password='something';
 ```
-:warning The above query fails with a syntax error, because too many quotes.
+:warning: The above query fails with a syntax error, because too many quotes.
 
 So our username entry needs to look like `admin or '1'='1` to preserve the original quotes, resulting in:
 ```sql
