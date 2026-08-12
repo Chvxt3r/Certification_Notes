@@ -224,3 +224,4 @@ SELECT * FROM products where product_id = '1' UNION SELECT username, password, 3
 ```
 :warning: Your junk data must fit the same datatype as the column you're trying to fill. The easiest way around this, is to just use `NULL`, as `NULL` fits all data types.
 
+continue on section 12
