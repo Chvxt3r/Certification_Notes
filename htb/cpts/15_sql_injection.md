@@ -154,6 +154,73 @@ This get's us in because we changed the parenthetical `AND` into an `OR` and jus
 
 # Union Clause
 ## Definition
-The Union clause is used to combine results from multipl `SELECT` statements
+The Union clause is used to combine results from multiple `SELECT` statements
 
-continue from section 11 SQL Injection Fundamentals
+Example:
+```sql
+# From the ports table
+mysql> SELECT * FROM ports;
+
++----------+-----------+
+| code     | city      |
++----------+-----------+
+| CN SHA   | Shanghai  |
+| SG SIN   | Singapore |
+| ZZ-21    | Shenzhen  |
++----------+-----------+
+3 rows in set (0.00 sec)
+
+# From the ships table
+mysql> SELECT * FROM ships;
+
++----------+-----------+
+| Ship     | city      |
++----------+-----------+
+| Morrison | New York  |
++----------+-----------+
+1 rows in set (0.00 sec)
+
+# From Both using a UNION
+sql> SELECT * FROM ports UNION SELECT * FROM ships;
+
++----------+-----------+
+| code     | city      |
++----------+-----------+
+| CN SHA   | Shanghai  |
+| SG SIN   | Singapore |
+| Morrison | New York  |
+| ZZ-21    | Shenzhen  |
++----------+-----------+
+4 rows in set (0.00 sec)
+```
+
+## Even Columns
+`UNION` statements can only work on `SELECT` statements with an even number of columns. If ports has 2 columns, ships must have 2 columns, else you'll throw an error.
+
+Example: This fails because we're only selecting one column and our `UNION` returns 2 columns
+```sql
+mysql> SELECT city FROM ports UNION SELECT * FROM ships;
+
+ERROR 1222 (21000): The used SELECT statements have a different number of columns
+```
+
+Example: This works if the products table has 2 columns.
+```sql
+SELECT * from products where product_id = '1' UNION SELECT username, password from passwords-- '
+```
+
+Example: If the products table has 3 columns, we could just select 2 columsn and it would work.
+```sql
+SELECT product_id, description from products where product_id = '1' UNION SELECT username, password from passwords-- '
+```
+## Uneven columns
+Normally, we won't be so lucky that our tables have a matching number of columns
+
+Solution: Fill your query with junk data.
+
+Take our `products` table above that has 3 columns, filling with junk data might look something like this.
+```sql
+SELECT * FROM products where product_id = '1' UNION SELECT username, password, 3 from password-- '
+```
+:warning: Your junk data must fit the same datatype as the column you're trying to fill. The easiest way around this, is to just use `NULL`, as `NULL` fits all data types.
+
