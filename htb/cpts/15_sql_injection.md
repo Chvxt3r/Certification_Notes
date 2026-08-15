@@ -280,3 +280,10 @@ We can use the following queries to determine if the DB is MySQL:
 |`SELECT POWER(1,1)`|When we only have numeric output|`1`|Error with all other DBMS|
 |`SELECT SLEEP(5)`|Blind/No Output|Delays page response for 5 seconds and returns `0`|Will not delay response with other DBMS|
 
+## INFORMATION_SCHEMA Database
+For us to properly form our queries and locate the data we are after, we need the following info:
+* List of DB's
+* List of tables within each DB
+* List of columns within each table
+
+:note: We cannot directly select a table form another DB with a select statement
