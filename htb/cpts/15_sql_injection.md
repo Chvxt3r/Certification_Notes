@@ -268,3 +268,15 @@ cn' UNION select 1,@@version,3,4-- -
 # Displays the version in the 2nd column
 ```
 By cycling the `@@version` function into the columns, we can determine which columns are displayed.
+
+# Database Enumeration
+## MySQL Fingerprinting
+We first need to identify the DBMS we are up against. If the HTTP responses indicate a linux webserver, there's a pretty good bet we're dealing with MySQL. If they indicate IIS, there's a pretty good chance we're dealing with MSSQL. These could be wrong though, but it makes a good starting point.
+
+We can use the following queries to determine if the DB is MySQL:
+|Payload|When to Use|Expected Output|Wrong Output|
+|-------|-----------|---------------|------------|
+|`Select @@Version|When we have full query Output|MySQL Version 'ie. `10.3..22-MariaDB-1ubuntu1`'|In MSSQL, it returns MSSQL version. Errors with other DBMS|
+|`SELECT POWER(1,1)|When we only have numeric output|`1`|Error with all other DBMS|
+|`SELECT SLEEP(5)|Blind/No Output|Delays page response for 5 seconds and returns `0`|Will not delay response with other DBMS|
+
