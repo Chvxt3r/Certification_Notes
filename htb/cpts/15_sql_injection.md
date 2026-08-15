@@ -286,4 +286,4 @@ For us to properly form our queries and locate the data we are after, we need th
 * List of tables within each DB
 * List of columns within each table
 
-:note: We cannot directly select a table form another DB with a select statement
+>Note: We cannot directly select a table form another DB with a select statement
