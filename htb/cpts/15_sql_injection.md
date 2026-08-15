@@ -276,7 +276,7 @@ We first need to identify the DBMS we are up against. If the HTTP responses indi
 We can use the following queries to determine if the DB is MySQL:
 |Payload|When to Use|Expected Output|Wrong Output|
 |-------|-----------|---------------|------------|
-|`Select @@Version|When we have full query Output|MySQL Version 'ie. `10.3..22-MariaDB-1ubuntu1`'|In MSSQL, it returns MSSQL version. Errors with other DBMS|
-|`SELECT POWER(1,1)|When we only have numeric output|`1`|Error with all other DBMS|
-|`SELECT SLEEP(5)|Blind/No Output|Delays page response for 5 seconds and returns `0`|Will not delay response with other DBMS|
+|`Select @@Version`|When we have full query Output|MySQL Version 'ie. `10.3..22-MariaDB-1ubuntu1`'|In MSSQL, it returns MSSQL version. Errors with other DBMS|
+|`SELECT POWER(1,1)`|When we only have numeric output|`1`|Error with all other DBMS|
+|`SELECT SLEEP(5)`|Blind/No Output|Delays page response for 5 seconds and returns `0`|Will not delay response with other DBMS|
 
