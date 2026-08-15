@@ -444,7 +444,7 @@ SQL Example of writing arbitrary strings to a file
 ```sql
 select 'this is a test' INTO OUTFILE '/tmp/test.txt';
 ```
-> Tip: Advanced file exports utilize the 'FROM_BASE64("base64_data")' function in order to be able to write long/advanced files, including binary data.  
+> Tip: Advanced file exports utilize the 'FROM_BASE64("base64_data")' function in order to be able to write long/advanced files, including binary data.   
 
 Injection Example writing 'file written successfully' into file /var/www/html/proof.txt
 ```sql
