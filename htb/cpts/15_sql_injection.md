@@ -257,4 +257,14 @@ cn' UNION select 1,2,3--
 cn' UNION select 1,2,3,4-- 
 # This gets us results, so we know we have 4 columns
 ```
+## Location of Injection
+Query's may return multiple columns, but not all of the columns may be displayed. We have to make sure we inject our query into a column that is printed to the page.
+> :Note: this is a benefit of using numbers if possible to identify the columns
 
+We can use the `@@version` command to identify displayed columns
+Example: A Table with 4 columsn
+```sql
+cn' UNION select 1,@@version,3,4-- -
+# Displays the version in the 2nd column
+```
+By cycling the `@@version` function into the columns, we can determine which columns are displayed.
