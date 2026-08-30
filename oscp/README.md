@@ -3,6 +3,9 @@
 This our work plan for gaining the OSCP+ Certification
 
 ## Syllabus
+
+[Original Download](https://cdn.sanity.io/files/t7y0tkf4/production/7b2930618d2d091960bdf990c5a9ff4dc14a20a8.pdf?dl=PEN-200_FEB-2026.pdf)
+
 |Course|Description|
 |------|-----------|
 |Introduction to CyberSecurity |Master the core concepts, technologies, and best practices that form the bedrock of cybersecurity, providing a solid foundation for your pen testing journey| 
